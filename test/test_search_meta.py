@@ -6,7 +6,7 @@ from typing import Literal
 
 from pydantic import ValidationError
 
-from docling_core.search.meta import Meta
+from sds_core.search.meta import Meta
 
 
 def test_meta():

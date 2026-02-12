@@ -2,8 +2,8 @@ from pathlib import Path
 
 import PIL.Image
 
-from docling_core.transforms.visualizer.table_visualizer import TableVisualizer
-from docling_core.types.doc.document import DoclingDocument
+from sds_core.transforms.visualizer.table_visualizer import TableVisualizer
+from sds_core.types.doc.document import DoclingDocument
 
 from .test_data_gen_flag import GEN_TEST_DATA
 

@@ -4,9 +4,9 @@ import json
 from pathlib import Path
 from typing import Any
 
-from docling_core.transforms.serializer.azure import AzureDocSerializer, AzureParams
-from docling_core.types.doc.base import BoundingBox, CoordOrigin, Size
-from docling_core.types.doc.document import (
+from sds_core.transforms.serializer.azure import AzureDocSerializer, AzureParams
+from sds_core.types.doc.base import BoundingBox, CoordOrigin, Size
+from sds_core.types.doc.document import (
     DocItemLabel,
     DoclingDocument,
     ProvenanceItem,

@@ -1,5 +1,5 @@
-from docling_core.types.doc.base import BoundingBox
-from docling_core.types.doc.document import TableData
+from sds_core.types.doc.base import BoundingBox
+from sds_core.types.doc.document import TableData
 
 # Table bbox - defines region of a table, everything outside will be ignored
 table_bbox: BoundingBox = BoundingBox(l=0, t=0, r=100, b=175)

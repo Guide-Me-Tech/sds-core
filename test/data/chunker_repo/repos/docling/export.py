@@ -4,8 +4,8 @@ from typing import Any, Union
 
 from docling.datamodel.document import ConversionResult, Page
 
-from docling_core.types.doc import BoundingBox, CoordOrigin
-from docling_core.types.legacy_doc.base import BaseCell, BaseText, Ref, Table
+from sds_core.types.doc import BoundingBox, CoordOrigin
+from sds_core.types.legacy_doc.base import BaseCell, BaseText, Ref, Table
 
 _log = logging.getLogger(__name__)
 

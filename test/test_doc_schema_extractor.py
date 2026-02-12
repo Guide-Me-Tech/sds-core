@@ -4,7 +4,7 @@ import json
 
 from pydantic import ValidationError
 
-from docling_core.types.legacy_doc.document import CCSDocument
+from sds_core.types.legacy_doc.document import CCSDocument
 
 
 def test_ccs_document_update():

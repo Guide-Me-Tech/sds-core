@@ -15,7 +15,7 @@ from pydantic import (
     field_serializer,
 )
 
-from docling_core.types.doc import (
+from sds_core.types.doc import (
     BoundingBox,
     DocItemLabel,
     NodeItem,
@@ -23,8 +23,8 @@ from docling_core.types.doc import (
     Size,
     TableCell,
 )
-from docling_core.types.doc.base import PydanticSerCtxKey, round_pydantic_float
-from docling_core.types.doc.page import SegmentedPdfPage, TextCell
+from sds_core.types.doc.base import PydanticSerCtxKey, round_pydantic_float
+from sds_core.types.doc.page import SegmentedPdfPage, TextCell
 
 if TYPE_CHECKING:
     from docling.backend.pdf_backend import PdfPageBackend

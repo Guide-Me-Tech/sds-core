@@ -1,8 +1,8 @@
 import pytest
 from pydantic import ValidationError
 
-from docling_core.types.doc import DocItemLabel, DoclingDocument, TrackSource
-from docling_core.types.legacy_doc.base import Prov, S3Reference
+from sds_core.types.doc import DocItemLabel, DoclingDocument, TrackSource
+from sds_core.types.legacy_doc.base import Prov, S3Reference
 
 
 def test_s3_reference():

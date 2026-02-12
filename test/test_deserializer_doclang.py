@@ -2,12 +2,12 @@ from pathlib import Path
 
 import pytest
 
-from docling_core.experimental.doclang import (
+from sds_core.experimental.doclang import (
     DoclangDeserializer,
     DoclangDocSerializer,
     DoclangParams,
 )
-from docling_core.types.doc import (
+from sds_core.types.doc import (
     BoundingBox,
     DocItemLabel,
     DoclingDocument,
@@ -19,7 +19,7 @@ from docling_core.types.doc import (
     TableCell,
     TableData,
 )
-from docling_core.types.doc.labels import CodeLanguageLabel
+from sds_core.types.doc.labels import CodeLanguageLabel
 from test.test_serialization_doctag import verify
 from test.test_serialization_doclang import add_list_section, add_texts_section
 

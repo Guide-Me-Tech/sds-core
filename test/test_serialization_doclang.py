@@ -5,7 +5,7 @@ from typing import Optional
 
 import pytest
 
-from docling_core.experimental.doclang import (
+from sds_core.experimental.doclang import (
     ContentType,
     EscapeMode,
     DoclangDocSerializer,
@@ -13,7 +13,7 @@ from docling_core.experimental.doclang import (
     DoclangVocabulary,
     WrapMode,
 )
-from docling_core.types.doc import (
+from sds_core.types.doc import (
     BoundingBox,
     CodeLanguageLabel,
     CoordOrigin,

@@ -5,14 +5,14 @@ import pytest
 from pydantic import BaseModel
 from typing_extensions import override
 
-from docling_core.transforms.serializer.base import SerializationResult
-from docling_core.transforms.serializer.common import create_ser_result
-from docling_core.transforms.serializer.markdown import (
+from sds_core.transforms.serializer.base import SerializationResult
+from sds_core.transforms.serializer.common import create_ser_result
+from sds_core.transforms.serializer.markdown import (
     MarkdownDocSerializer,
     MarkdownMetaSerializer,
     MarkdownParams,
 )
-from docling_core.types.doc import (
+from sds_core.types.doc import (
     BaseMeta,
     DocItem,
     DocItemLabel,

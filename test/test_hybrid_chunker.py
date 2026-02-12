@@ -5,20 +5,20 @@ import pytest
 import tiktoken
 from transformers import AutoTokenizer
 
-from docling_core.transforms.chunker.base import BaseChunker
-from docling_core.transforms.chunker.hierarchical_chunker import (
+from sds_core.transforms.chunker.base import BaseChunker
+from sds_core.transforms.chunker.hierarchical_chunker import (
     ChunkingDocSerializer,
     ChunkingSerializerProvider,
     DocChunk,
     HierarchicalChunker,
 )
-from docling_core.transforms.chunker.hybrid_chunker import HybridChunker
-from docling_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
-from docling_core.transforms.chunker.tokenizer.openai import OpenAITokenizer
-from docling_core.transforms.serializer.markdown import MarkdownTableSerializer
-from docling_core.types.doc import DoclingDocument as DLDocument
-from docling_core.types.doc.document import DoclingDocument
-from docling_core.types.doc.labels import DocItemLabel
+from sds_core.transforms.chunker.hybrid_chunker import HybridChunker
+from sds_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
+from sds_core.transforms.chunker.tokenizer.openai import OpenAITokenizer
+from sds_core.transforms.serializer.markdown import MarkdownTableSerializer
+from sds_core.types.doc import DoclingDocument as DLDocument
+from sds_core.types.doc.document import DoclingDocument
+from sds_core.types.doc.labels import DocItemLabel
 
 from .test_data_gen_flag import GEN_TEST_DATA
 

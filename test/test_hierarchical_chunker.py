@@ -1,14 +1,14 @@
 import json
 
-from docling_core.transforms.chunker import HierarchicalChunker
-from docling_core.transforms.chunker.hierarchical_chunker import (
+from sds_core.transforms.chunker import HierarchicalChunker
+from sds_core.transforms.chunker.hierarchical_chunker import (
     ChunkingDocSerializer,
     ChunkingSerializerProvider,
     DocChunk,
 )
-from docling_core.transforms.serializer.markdown import MarkdownTableSerializer
-from docling_core.types.doc import DoclingDocument as DLDocument
-from docling_core.types.doc.document import DoclingDocument
+from sds_core.transforms.serializer.markdown import MarkdownTableSerializer
+from sds_core.types.doc import DoclingDocument as DLDocument
+from sds_core.types.doc.document import DoclingDocument
 
 from .test_data_gen_flag import GEN_TEST_DATA
 

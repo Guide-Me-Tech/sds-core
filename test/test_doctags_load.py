@@ -3,8 +3,8 @@ from pathlib import Path
 
 from PIL import Image as PILImage
 
-from docling_core.types.doc import DoclingDocument
-from docling_core.types.doc.document import DocTagsDocument
+from sds_core.types.doc import DoclingDocument
+from sds_core.types.doc.document import DocTagsDocument
 
 from .test_data_gen_flag import GEN_TEST_DATA
 

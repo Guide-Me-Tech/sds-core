@@ -9,9 +9,9 @@ from pathlib import Path
 
 import yaml
 
-from docling_core.transforms.serializer.latex import LaTeXDocSerializer, LaTeXParams
-from docling_core.types.doc.base import ImageRefMode
-from docling_core.types.doc.document import DoclingDocument
+from sds_core.transforms.serializer.latex import LaTeXDocSerializer, LaTeXParams
+from sds_core.types.doc.base import ImageRefMode
+from sds_core.types.doc.document import DoclingDocument
 
 from .test_data_gen_flag import GEN_TEST_DATA
 

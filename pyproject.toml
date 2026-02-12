@@ -59,10 +59,10 @@ issues = "https://github.com/docling-project/docling-core/issues"
 changelog = "https://github.com/docling-project/docling-core/blob/main/CHANGELOG.md"
 
 [project.scripts]
-# validate = "docling_core.utils.validate:main"  # use python -m docling_core.utils.validate
-# generate_jsonschema = "docling_core.utils.generate_jsonschema:main"  # use python -m docling_core.utils.generate_jsonschema
-# generate_docs = "docling_core.utils.generate_docs:main"  # use python -m docling_core.utils.generate_docs
-docling-view = "docling_core.cli.view:app"
+# validate = "sds_core.utils.validate:main"  # use python -m sds_core.utils.validate
+# generate_jsonschema = "sds_core.utils.generate_jsonschema:main"  # use python -m sds_core.utils.generate_jsonschema
+# generate_docs = "sds_core.utils.generate_docs:main"  # use python -m sds_core.utils.generate_docs
+docling-view = "sds_core.cli.view:app"
 
 [project.optional-dependencies]
 chunking = [
@@ -124,8 +124,8 @@ dev = [
 package = true
 
 [tool.setuptools.packages.find]
-where = [".", "docling_core/resources/schemas"]
-include = ["docling_core*"]
+where = [".", "sds_core/resources/schemas"]
+include = ["sds_core*"]
 namespaces = true
 
 [tool.setuptools.package-data]

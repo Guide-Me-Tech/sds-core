@@ -8,15 +8,15 @@ from typing import Optional
 import git
 import pytest
 
-from docling_core.transforms.chunker.code_chunking._utils import _get_file_extensions
-from docling_core.transforms.chunker.code_chunking.code_chunk import CodeChunk
-from docling_core.transforms.chunker.code_chunking.standard_code_chunking_strategy import (
+from sds_core.transforms.chunker.code_chunking._utils import _get_file_extensions
+from sds_core.transforms.chunker.code_chunking.code_chunk import CodeChunk
+from sds_core.transforms.chunker.code_chunking.standard_code_chunking_strategy import (
     StandardCodeChunkingStrategy,
 )
-from docling_core.transforms.chunker.hierarchical_chunker import HierarchicalChunker
-from docling_core.types.doc import DoclingDocument, DocumentOrigin
-from docling_core.types.doc.labels import CodeLanguageLabel, DocItemLabel
-from docling_core.utils.legacy import _create_hash
+from sds_core.transforms.chunker.hierarchical_chunker import HierarchicalChunker
+from sds_core.types.doc import DoclingDocument, DocumentOrigin
+from sds_core.types.doc.labels import CodeLanguageLabel, DocItemLabel
+from sds_core.utils.legacy import _create_hash
 
 from .test_data_gen_flag import GEN_TEST_DATA
 

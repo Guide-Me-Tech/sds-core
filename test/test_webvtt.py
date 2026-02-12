@@ -9,7 +9,7 @@ import warnings
 import pytest
 from pydantic import ValidationError
 
-from docling_core.types.doc.webvtt import (
+from sds_core.types.doc.webvtt import (
     WebVTTCueBlock,
     WebVTTCueComponentWithTerminator,
     WebVTTCueInternalText,

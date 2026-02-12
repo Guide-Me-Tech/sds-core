@@ -12,7 +12,7 @@ from docling.datamodel.document import InputDocument
 from lxml import etree
 from typing_extensions import TypedDict, override
 
-from docling_core.types.doc import (
+from sds_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,

@@ -7,13 +7,13 @@ from typing import Optional
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from docling_core.types.base import (
+from sds_core.types.base import (
     CollectionNameTypeT,
     DescriptionAnalyticsT,
     IdentifierTypeT,
     LanguageT,
 )
-from docling_core.types.legacy_doc.document import (
+from sds_core.types.legacy_doc.document import (
     CCSDocument,
     CCSDocumentDescription,
     Publication,

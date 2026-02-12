@@ -7,7 +7,7 @@ from typing import Literal
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from docling_core.types.base import (
+from sds_core.types.base import (
     CollectionDocumentInfo,
     CollectionInfo,
     CollectionRecordInfo,
@@ -16,8 +16,8 @@ from docling_core.types.base import (
     Log,
     StrictDateTime,
 )
-from docling_core.types.legacy_doc.document import CCSDocumentDescription
-from docling_core.types.rec.record import RecordDescription
+from sds_core.types.legacy_doc.document import CCSDocumentDescription
+from sds_core.types.rec.record import RecordDescription
 
 
 def test_identifier():

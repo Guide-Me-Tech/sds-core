@@ -2,20 +2,20 @@ from pathlib import Path
 
 import pytest
 
-from docling_core.transforms.chunker import (
+from sds_core.transforms.chunker import (
     CodeLanguageLabel,
     HierarchicalChunker,
     HybridChunker,
     StandardCodeChunkingStrategy,
 )
-from docling_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
-from docling_core.transforms.serializer.markdown import (
+from sds_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
+from sds_core.transforms.serializer.markdown import (
     MarkdownDocSerializer,
     MarkdownParams,
 )
-from docling_core.types.doc.base import Size
-from docling_core.types.doc.document import DoclingDocument, DocumentOrigin
-from docling_core.types.doc.labels import DocItemLabel
+from sds_core.types.doc.base import Size
+from sds_core.types.doc.document import DoclingDocument, DocumentOrigin
+from sds_core.types.doc.labels import DocItemLabel
 
 
 @pytest.fixture

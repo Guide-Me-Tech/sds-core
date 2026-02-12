@@ -5,8 +5,8 @@ import json
 from pydantic import Field
 from requests import Response
 
-from docling_core.utils.alias import AliasModel
-from docling_core.utils.file import resolve_source_to_path, resolve_source_to_stream
+from sds_core.utils.alias import AliasModel
+from sds_core.utils.file import resolve_source_to_path, resolve_source_to_stream
 
 
 def test_alias_model() -> None:

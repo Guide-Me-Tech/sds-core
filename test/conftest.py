@@ -7,8 +7,8 @@ from PIL import Image as PILImage
 from PIL import ImageDraw
 from pydantic import AnyUrl
 
-from docling_core.types import DoclingDocument
-from docling_core.types.doc import (
+from sds_core.types import DoclingDocument
+from sds_core.types.doc import (
     CodeLanguageLabel,
     DocItemLabel,
     Formatting,

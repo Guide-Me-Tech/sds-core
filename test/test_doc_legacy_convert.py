@@ -2,9 +2,9 @@ from pathlib import Path
 
 import yaml
 
-from docling_core.types.doc import DoclingDocument
-from docling_core.types.legacy_doc.document import ExportedCCSDocument as DsDocument
-from docling_core.utils.legacy import (
+from sds_core.types.doc import DoclingDocument
+from sds_core.types.legacy_doc.document import ExportedCCSDocument as DsDocument
+from sds_core.utils.legacy import (
     docling_document_to_legacy,
     legacy_to_docling_document,
 )

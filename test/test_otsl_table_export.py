@@ -1,4 +1,4 @@
-from docling_core.types.doc.document import DoclingDocument, TableCell, TableData
+from sds_core.types.doc.document import DoclingDocument, TableCell, TableData
 
 
 def test_table_export_to_otsl():

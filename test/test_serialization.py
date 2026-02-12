@@ -4,22 +4,22 @@ from pathlib import Path
 
 import pytest
 
-from docling_core.transforms.serializer.common import _DEFAULT_LABELS
-from docling_core.transforms.serializer.html import (
+from sds_core.transforms.serializer.common import _DEFAULT_LABELS
+from sds_core.transforms.serializer.html import (
     HTMLDocSerializer,
     HTMLOutputStyle,
     HTMLParams,
 )
-from docling_core.transforms.serializer.markdown import (
+from sds_core.transforms.serializer.markdown import (
     MarkdownDocSerializer,
     MarkdownParams,
     MarkdownTableSerializer,
     OrigListItemMarkerMode,
 )
-from docling_core.transforms.serializer.webvtt import WebVTTDocSerializer
-from docling_core.transforms.visualizer.layout_visualizer import LayoutVisualizer
-from docling_core.types.doc.base import ImageRefMode
-from docling_core.types.doc.document import (
+from sds_core.transforms.serializer.webvtt import WebVTTDocSerializer
+from sds_core.transforms.visualizer.layout_visualizer import LayoutVisualizer
+from sds_core.types.doc.base import ImageRefMode
+from sds_core.types.doc.document import (
     DescriptionAnnotation,
     DoclingDocument,
     PictureItem,
@@ -28,7 +28,7 @@ from docling_core.types.doc.document import (
     TableData,
     TextItem,
 )
-from docling_core.types.doc.labels import DocItemLabel
+from sds_core.types.doc.labels import DocItemLabel
 
 from .test_data_gen_flag import GEN_TEST_DATA
 

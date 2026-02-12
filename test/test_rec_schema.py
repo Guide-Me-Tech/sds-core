@@ -7,11 +7,11 @@ from typing import Literal
 import pytest
 from pydantic import ValidationError
 
-from docling_core.types.rec.attribute import Attribute
-from docling_core.types.rec.predicate import Predicate
-from docling_core.types.rec.record import Record
-from docling_core.types.rec.statement import Statement
-from docling_core.types.rec.subject import Subject
+from sds_core.types.rec.attribute import Attribute
+from sds_core.types.rec.predicate import Predicate
+from sds_core.types.rec.record import Record
+from sds_core.types.rec.statement import Statement
+from sds_core.types.rec.subject import Subject
 
 
 class TestCxsModel(unittest.TestCase):

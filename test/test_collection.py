@@ -5,8 +5,8 @@ import glob
 import pytest
 from pydantic import ValidationError
 
-from docling_core.types import Generic, Record
-from docling_core.types.legacy_doc.document import ExportedCCSDocument as Document
+from sds_core.types import Generic, Record
+from sds_core.types.legacy_doc.document import ExportedCCSDocument as Document
 
 GENERATE = False
 

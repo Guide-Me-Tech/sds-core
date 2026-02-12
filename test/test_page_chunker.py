@@ -1,9 +1,9 @@
 import json
 from pathlib import Path
 
-from docling_core.transforms.chunker.hierarchical_chunker import DocChunk
-from docling_core.transforms.chunker.page_chunker import PageChunker
-from docling_core.types.doc.document import DoclingDocument
+from sds_core.transforms.chunker.hierarchical_chunker import DocChunk
+from sds_core.transforms.chunker.page_chunker import PageChunker
+from sds_core.types.doc.document import DoclingDocument
 
 from .test_data_gen_flag import GEN_TEST_DATA
 

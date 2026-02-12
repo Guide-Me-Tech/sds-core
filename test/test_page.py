@@ -3,8 +3,8 @@ import math
 import numpy as np
 import pytest
 
-from docling_core.types.doc import CoordOrigin
-from docling_core.types.doc.page import BoundingRectangle
+from sds_core.types.doc import CoordOrigin
+from sds_core.types.doc.page import BoundingRectangle
 
 SQRT_2 = math.sqrt(2)
 

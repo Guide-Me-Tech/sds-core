@@ -72,5 +72,5 @@ The documentation pages are stored in [docs](./docs/) folder and are updated at 
 To generate the documentation on-demand, run:
 
 ```bash
-uv run python -m docling_core.utils.generate_docs docs
+uv run python -m sds_core.utils.generate_docs docs
 ```

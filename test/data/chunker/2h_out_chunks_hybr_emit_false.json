@@ -3,7 +3,7 @@
         {
             "text": "Foo",
             "meta": {
-                "schema_name": "docling_core.transforms.chunker.DocMeta",
+                "schema_name": "sds_core.transforms.chunker.DocMeta",
                 "version": "1.0.0",
                 "doc_items": [
                     {

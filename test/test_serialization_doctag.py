@@ -2,11 +2,11 @@
 
 from pathlib import Path
 
-from docling_core.transforms.serializer.doctags import (
+from sds_core.transforms.serializer.doctags import (
     DocTagsDocSerializer,
     DocTagsParams,
 )
-from docling_core.types.doc import DocItemLabel, DoclingDocument, TableData
+from sds_core.types.doc import DocItemLabel, DoclingDocument, TableData
 
 from .test_serialization import verify
 

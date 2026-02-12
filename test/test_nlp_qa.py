@@ -6,7 +6,7 @@ import unittest
 import pytest
 from pydantic import ValidationError
 
-from docling_core.types.nlp.qa import QAPair
+from sds_core.types.nlp.qa import QAPair
 
 
 class TestQAPair(unittest.TestCase):

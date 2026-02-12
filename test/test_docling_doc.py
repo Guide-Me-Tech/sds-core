@@ -12,7 +12,7 @@ import yaml
 from PIL import Image as PILImage
 from pydantic import AnyUrl, BaseModel, ValidationError
 
-from docling_core.types.doc import (
+from sds_core.types.doc import (
     BoundingBox,
     CodeItem,
     ContentLayer,
@@ -48,7 +48,7 @@ from docling_core.types.doc import (
     TextItem,
     TitleItem,
 )
-from docling_core.types.doc.document import CURRENT_VERSION, PageItem
+from sds_core.types.doc.document import CURRENT_VERSION, PageItem
 
 from .test_data_gen_flag import GEN_TEST_DATA
 

@@ -15,9 +15,9 @@ from transformers import (
     AutoTokenizer,
     PreTrainedTokenizerBase,
 )
-from docling_core.types.doc import DoclingDocument, ImageRef
-from docling_core.types.doc.base import ImageRefMode
-from docling_core.experimental.doclang import (
+from sds_core.types.doc import DoclingDocument, ImageRef
+from sds_core.types.doc.base import ImageRefMode
+from sds_core.experimental.doclang import (
     ContentType,
     EscapeMode,
     DoclangSerializationMode,
