@@ -1,4 +1,4 @@
-# This is a Fork of Docling-Core package of [Docling Project](https://github.com/docling-project/docling-core)
+# This is a Fork of Docling-Core package of [Docling Project](https://github.com/docling-project).
 
 # Sds Core
 
