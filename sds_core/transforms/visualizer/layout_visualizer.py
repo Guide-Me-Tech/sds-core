@@ -16,7 +16,7 @@ from sds_core.types.doc import (
     CoordOrigin,
     DocItem,
     DocItemLabel,
-    DoclingDocument,
+    SdsDocument,
     TextCell,
 )
 
@@ -144,7 +144,7 @@ class LayoutVisualizer(BaseVisualizer):
 
     def _draw_doc_layout(
         self,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         images: Optional[dict[Optional[int], Image]] = None,
         included_content_layers: Optional[set[ContentLayer]] = None,
     ):
@@ -224,7 +224,7 @@ class LayoutVisualizer(BaseVisualizer):
     def get_visualization(
         self,
         *,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs,
     ) -> dict[Optional[int], Image]:
         """Get visualization of the document as images by page."""

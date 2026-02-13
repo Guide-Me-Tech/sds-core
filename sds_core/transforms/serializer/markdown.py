@@ -41,7 +41,7 @@ from sds_core.types.doc.document import (
     DescriptionMetaField,
     DocItem,
     DocItemLabel,
-    DoclingDocument,
+    SdsDocument,
     FloatingItem,
     Formatting,
     FormItem,
@@ -127,7 +127,7 @@ class MarkdownTextSerializer(BaseModel, BaseTextSerializer):
         *,
         item: TextItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         is_inline_scope: bool = False,
         visited: Optional[set[str]] = None,  # refs of visited items
         **kwargs: Any,
@@ -262,7 +262,7 @@ class MarkdownMetaSerializer(BaseModel, BaseMetaSerializer):
         self,
         *,
         item: NodeItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serialize the item's meta."""
@@ -296,7 +296,7 @@ class MarkdownMetaSerializer(BaseModel, BaseMetaSerializer):
             elif isinstance(field_val, MoleculeMetaField):
                 txt = field_val.smi
             elif isinstance(field_val, TabularChartMetaField):
-                temp_doc = DoclingDocument(name="temp")
+                temp_doc = SdsDocument(name="temp")
                 temp_table = temp_doc.add_table(data=field_val.chart_data)
                 table_content = temp_table.export_to_markdown(temp_doc).strip()
                 if table_content:
@@ -320,7 +320,7 @@ class MarkdownAnnotationSerializer(BaseModel, BaseAnnotationSerializer):
         self,
         *,
         item: DocItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serialize the item's annotations."""
@@ -396,7 +396,7 @@ class MarkdownTableSerializer(BaseTableSerializer):
         *,
         item: TableItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -464,7 +464,7 @@ class MarkdownPictureSerializer(BasePictureSerializer):
         *,
         item: PictureItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -505,7 +505,7 @@ class MarkdownPictureSerializer(BasePictureSerializer):
             # Check if picture has attached PictureTabularChartData
             tabular_chart_annotations = [ann for ann in item.annotations if isinstance(ann, PictureTabularChartData)]
             if len(tabular_chart_annotations) > 0:
-                temp_doc = DoclingDocument(name="temp")
+                temp_doc = SdsDocument(name="temp")
                 temp_table = temp_doc.add_table(data=tabular_chart_annotations[0].chart_data)
                 md_table_content = temp_table.export_to_markdown(temp_doc)
                 if len(md_table_content) > 0:
@@ -517,7 +517,7 @@ class MarkdownPictureSerializer(BasePictureSerializer):
     def _serialize_image_part(
         self,
         item: PictureItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         image_mode: ImageRefMode,
         image_placeholder: str,
         **kwargs: Any,
@@ -569,7 +569,7 @@ class MarkdownKeyValueSerializer(BaseKeyValueSerializer):
         *,
         item: KeyValueItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -592,7 +592,7 @@ class MarkdownFormSerializer(BaseFormSerializer):
         *,
         item: FormItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -615,7 +615,7 @@ class MarkdownListSerializer(BaseModel, BaseListSerializer):
         *,
         item: ListGroup,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         is_inline_scope: bool = False,
         visited: Optional[set[str]] = None,  # refs of visited items
@@ -666,7 +666,7 @@ class MarkdownInlineSerializer(BaseInlineSerializer):
         *,
         item: InlineGroup,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         visited: Optional[set[str]] = None,  # refs of visited items
         **kwargs: Any,
@@ -693,7 +693,7 @@ class MarkdownFallbackSerializer(BaseFallbackSerializer):
         *,
         item: NodeItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""

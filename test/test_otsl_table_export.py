@@ -1,4 +1,4 @@
-from sds_core.types.doc.document import DoclingDocument, TableCell, TableData
+from sds_core.types.doc.document import SdsDocument, TableCell, TableData
 
 
 def test_table_export_to_otsl():
@@ -266,7 +266,7 @@ def test_table_export_to_otsl():
     )
 
     # ======================================
-    doc = DoclingDocument(name="test_otsl")
+    doc = SdsDocument(name="test_otsl")
     data = TableData(num_rows=num_rows, num_cols=num_cols, table_cells=data_table_cells)
     doc.add_table(data=data)
 

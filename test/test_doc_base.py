@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from sds_core.types.doc import DocItemLabel, DoclingDocument, TrackSource
+from sds_core.types.doc import DocItemLabel, SdsDocument, TrackSource
 from sds_core.types.legacy_doc.base import Prov, S3Reference
 
 
@@ -72,7 +72,7 @@ def test_track_source():
             end_time=11.0,
         )
 
-    doc = DoclingDocument(name="Unknown")
+    doc = SdsDocument(name="Unknown")
     item = doc.add_text(text="Hello world", label=DocItemLabel.TEXT, source=valid_track)
     assert item.source
     assert len(item.source) == 1

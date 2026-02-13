@@ -6,7 +6,7 @@ from typing import Optional
 from PIL.Image import Image
 from pydantic import BaseModel
 
-from sds_core.types.doc import DoclingDocument
+from sds_core.types.doc import SdsDocument
 
 
 class BaseVisualizer(BaseModel, ABC):
@@ -16,7 +16,7 @@ class BaseVisualizer(BaseModel, ABC):
     def get_visualization(
         self,
         *,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs,
     ) -> dict[Optional[int], Image]:
         """Get visualization of the document as images by page."""

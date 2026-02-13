@@ -6,7 +6,7 @@ from sds_core.transforms.serializer.doctags import (
     DocTagsDocSerializer,
     DocTagsParams,
 )
-from sds_core.types.doc import DocItemLabel, DoclingDocument, TableData
+from sds_core.types.doc import DocItemLabel, SdsDocument, TableData
 
 from .test_serialization import verify
 
@@ -15,14 +15,14 @@ from .test_serialization import verify
 # ===============================
 
 
-def serialize_doctags(doc: DoclingDocument, **param_overrides) -> str:
+def serialize_doctags(doc: SdsDocument, **param_overrides) -> str:
     params = DocTagsParams(**param_overrides)
     ser = DocTagsDocSerializer(doc=doc, params=params)
     return ser.serialize().text
 
 
 def test_no_content_suppresses_caption_and_table_cell_text():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
 
     # Add a caption text item
     cap = doc.add_text(label=DocItemLabel.CAPTION, text="Table Caption Text")
@@ -47,7 +47,7 @@ def test_no_content_suppresses_caption_and_table_cell_text():
 
 
 def test_no_content_suppresses_figure_caption_text():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     cap = doc.add_text(label=DocItemLabel.CAPTION, text="Figure Caption Text")
     doc.add_picture(caption=cap)
 
@@ -56,7 +56,7 @@ def test_no_content_suppresses_figure_caption_text():
 
 
 def test_list_items_not_double_wrapped_when_no_content():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     lst = doc.add_list_group()
     doc.add_list_item("Item A", parent=lst)
     doc.add_list_item("Item B", parent=lst)
@@ -77,7 +77,7 @@ def test_list_items_not_double_wrapped_when_no_content():
 
 def test_doctags_inline_loc_tags():
     src = Path("./test/data/doc/2408.09869v3_enriched.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = DocTagsDocSerializer(doc=doc)
     actual = ser.serialize().text
@@ -94,7 +94,7 @@ def test_doctags_rich_table(rich_table_doc):
 
 def test_doctags_inline_and_formatting():
     src = Path("./test/data/doc/inline_and_formatting.yaml")
-    doc = DoclingDocument.load_from_yaml(src)
+    doc = SdsDocument.load_from_yaml(src)
 
     ser = DocTagsDocSerializer(doc=doc)
     actual = ser.serialize().text
@@ -103,7 +103,7 @@ def test_doctags_inline_and_formatting():
 
 def test_doctags_meta():
     src = Path("./test/data/doc/dummy_doc_with_meta.yaml")
-    doc = DoclingDocument.load_from_yaml(src)
+    doc = SdsDocument.load_from_yaml(src)
 
     ser = DocTagsDocSerializer(doc=doc)
     actual = ser.serialize().text

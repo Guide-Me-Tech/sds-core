@@ -21,7 +21,7 @@ from sds_core.transforms.visualizer.layout_visualizer import LayoutVisualizer
 from sds_core.types.doc.base import ImageRefMode
 from sds_core.types.doc.document import (
     DescriptionAnnotation,
-    DoclingDocument,
+    SdsDocument,
     PictureItem,
     RefItem,
     TableCell,
@@ -61,7 +61,7 @@ def verify(exp_file: Path, actual: str):
 
 def test_md_cross_page_list_page_break():
     src = Path("./test/data/doc/activities.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = MarkdownDocSerializer(
         doc=doc,
@@ -78,7 +78,7 @@ def test_md_cross_page_list_page_break():
 
 def test_md_checkboxes():
     src = Path("./test/data/doc/checkboxes.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = MarkdownDocSerializer(
         doc=doc,
@@ -95,7 +95,7 @@ def test_md_checkboxes():
 
 def test_md_cross_page_list_page_break_none():
     src = Path("./test/data/doc/activities.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = MarkdownDocSerializer(
         doc=doc,
@@ -112,7 +112,7 @@ def test_md_cross_page_list_page_break_none():
 
 def test_md_cross_page_list_page_break_empty():
     src = Path("./test/data/doc/activities.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = MarkdownDocSerializer(
         doc=doc,
@@ -129,7 +129,7 @@ def test_md_cross_page_list_page_break_empty():
 
 def test_md_cross_page_list_page_break_non_empty():
     src = Path("./test/data/doc/activities.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = MarkdownDocSerializer(
         doc=doc,
@@ -146,7 +146,7 @@ def test_md_cross_page_list_page_break_non_empty():
 
 def test_md_cross_page_list_page_break_p2():
     src = Path("./test/data/doc/activities.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = MarkdownDocSerializer(
         doc=doc,
@@ -163,7 +163,7 @@ def test_md_cross_page_list_page_break_p2():
 
 def test_md_charts():
     src = Path("./test/data/doc/barchart.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = MarkdownDocSerializer(
         doc=doc,
@@ -177,7 +177,7 @@ def test_md_charts():
 
 def test_md_inline_and_formatting():
     src = Path("./test/data/doc/inline_and_formatting.yaml")
-    doc = DoclingDocument.load_from_yaml(src)
+    doc = SdsDocument.load_from_yaml(src)
 
     ser = MarkdownDocSerializer(
         doc=doc,
@@ -191,7 +191,7 @@ def test_md_inline_and_formatting():
 
 def test_md_pb_placeholder_and_page_filter():
     src = Path("./test/data/doc/2408.09869v3_enriched.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     # NOTE ambiguous case
     ser = MarkdownDocSerializer(
@@ -225,7 +225,7 @@ def test_md_list_item_markers(sample_doc):
 
 def test_md_mark_meta_true():
     src = Path("./test/data/doc/2408.09869v3_enriched.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = MarkdownDocSerializer(
         doc=doc,
@@ -243,7 +243,7 @@ def test_md_mark_meta_true():
 
 def test_md_mark_meta_false():
     src = Path("./test/data/doc/2408.09869v3_enriched.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = MarkdownDocSerializer(
         doc=doc,
@@ -299,7 +299,7 @@ def test_md_legacy_annotations_mark_false(sample_doc):
 
 def test_md_nested_lists():
     src = Path("./test/data/doc/polymers.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = MarkdownDocSerializer(doc=doc)
     actual = ser.serialize().text
@@ -317,7 +317,7 @@ def test_md_rich_table(rich_table_doc):
 def test_md_single_row_table():
     exp_file = Path("./test/data/doc/single_row_table.gt.md")
     words = ["foo", "bar"]
-    doc = DoclingDocument(name="")
+    doc = SdsDocument(name="")
     row_idx = 0
     table = doc.add_table(data=TableData(num_rows=1, num_cols=len(words)))
     for col_idx, word in enumerate(words):
@@ -336,8 +336,9 @@ def test_md_single_row_table():
     actual = ser.serialize().text
     verify(exp_file=exp_file, actual=actual)
 
+
 def test_md_pipe_in_table():
-    doc = DoclingDocument(name="Pipe in Table")
+    doc = SdsDocument(name="Pipe in Table")
     table = doc.add_table(data=TableData(num_rows=1, num_cols=1))
     # TODO: properly handle nested tables, for now just escape the pipe
     doc.add_table_cell(
@@ -348,7 +349,7 @@ def test_md_pipe_in_table():
             start_col_offset_idx=0,
             end_col_offset_idx=1,
             text="Fruits | Veggies",
-        )
+        ),
     )
     ser = doc.export_to_markdown()
     assert ser == "| Fruits &#124; Veggies   |\n|-------------------------|"
@@ -380,7 +381,7 @@ def test_md_compact_table():
 def test_md_traverse_pictures():
     """Test traverse_pictures parameter to include text inside PictureItems."""
 
-    doc = DoclingDocument(name="Test Document")
+    doc = SdsDocument(name="Test Document")
     doc.add_text(label=DocItemLabel.PARAGRAPH, text="Text before picture")
     picture = doc.add_picture()
 
@@ -438,7 +439,7 @@ def test_md_traverse_pictures():
 
 def test_html_charts():
     src = Path("./test/data/doc/barchart.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = HTMLDocSerializer(
         doc=doc,
@@ -452,7 +453,7 @@ def test_html_charts():
 
 def test_html_cross_page_list_page_break():
     src = Path("./test/data/doc/activities.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = HTMLDocSerializer(
         doc=doc,
@@ -466,7 +467,7 @@ def test_html_cross_page_list_page_break():
 
 def test_html_cross_page_list_page_break_p1():
     src = Path("./test/data/doc/activities.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = HTMLDocSerializer(
         doc=doc,
@@ -481,7 +482,7 @@ def test_html_cross_page_list_page_break_p1():
 
 def test_html_cross_page_list_page_break_p2():
     src = Path("./test/data/doc/activities.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = HTMLDocSerializer(
         doc=doc,
@@ -496,7 +497,7 @@ def test_html_cross_page_list_page_break_p2():
 
 def test_html_split_page():
     src = Path("./test/data/doc/2408.09869v3_enriched.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = HTMLDocSerializer(
         doc=doc,
@@ -511,7 +512,7 @@ def test_html_split_page():
 
 def test_html_split_page_p2():
     src = Path("./test/data/doc/2408.09869v3_enriched.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = HTMLDocSerializer(
         doc=doc,
@@ -527,7 +528,7 @@ def test_html_split_page_p2():
 
 def test_html_split_page_p2_with_visualizer():
     src = Path("./test/data/doc/2408.09869v3_enriched.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = HTMLDocSerializer(
         doc=doc,
@@ -553,7 +554,7 @@ def test_html_split_page_p2_with_visualizer():
 
 def test_html_split_page_no_page_breaks():
     src = Path("./test/data/doc/2408.09869_p1.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = HTMLDocSerializer(
         doc=doc,
@@ -568,7 +569,7 @@ def test_html_split_page_no_page_breaks():
 
 def test_html_include_annotations_false():
     src = Path("./test/data/doc/2408.09869v3_enriched.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = HTMLDocSerializer(
         doc=doc,
@@ -588,7 +589,7 @@ def test_html_include_annotations_false():
 
 def test_html_include_annotations_true():
     src = Path("./test/data/doc/2408.09869v3_enriched.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = HTMLDocSerializer(
         doc=doc,
@@ -624,7 +625,7 @@ def test_html_list_item_markers(sample_doc):
 
 def test_html_nested_lists():
     src = Path("./test/data/doc/polymers.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = HTMLDocSerializer(doc=doc)
     actual = ser.serialize().text
@@ -641,7 +642,7 @@ def test_html_rich_table(rich_table_doc):
 
 def test_html_inline_and_formatting():
     src = Path("./test/data/doc/inline_and_formatting.yaml")
-    doc = DoclingDocument.load_from_yaml(src)
+    doc = SdsDocument.load_from_yaml(src)
 
     ser = HTMLDocSerializer(doc=doc)
     actual = ser.serialize().text
@@ -665,7 +666,7 @@ def test_html_inline_and_formatting():
 )
 def test_webvtt(file_name):
     src = Path(f"./test/data/doc/{file_name}.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = WebVTTDocSerializer(doc=doc)
     actual = ser.serialize().text

@@ -19,7 +19,7 @@ key_value_items: []
 name: test_comments
 pages: {}
 pictures: []
-schema_name: DoclingDocument
+schema_name: SdsDocument
 tables: []
 texts:
 - children: []

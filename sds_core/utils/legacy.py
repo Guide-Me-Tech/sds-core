@@ -11,7 +11,7 @@ from sds_core.types.doc import (
     CoordOrigin,
     DocItem,
     DocItemLabel,
-    DoclingDocument,
+    SdsDocument,
     DocumentOrigin,
     GroupItem,
     ListItem,
@@ -102,8 +102,8 @@ def doc_item_label_to_legacy_name(label: DocItemLabel):
     return label.value
 
 
-def sds_document_to_legacy(doc: DoclingDocument, fallback_filaname: str = "file"):
-    """Convert a DoclingDocument to the legacy format."""
+def sds_document_to_legacy(doc: SdsDocument, fallback_filaname: str = "file"):
+    """Convert a SdsDocument to the legacy format."""
     title = ""
     desc: DsDocumentDescription = DsDocumentDescription(logs=[])
 
@@ -341,8 +341,8 @@ def sds_document_to_legacy(doc: DoclingDocument, fallback_filaname: str = "file"
     return legacy_doc
 
 
-def legacy_to_sds_document(legacy_doc: DsDocument) -> DoclingDocument:  # noqa: C901
-    """Convert a legacy document to DoclingDocument.
+def legacy_to_sds_document(legacy_doc: DsDocument) -> SdsDocument:  # noqa: C901
+    """Convert a legacy document to SdsDocument.
 
     It is known that the following content will not be preserved in the transformation:
     - name of labels (upper vs lower case)
@@ -371,7 +371,7 @@ def legacy_to_sds_document(legacy_doc: DsDocument) -> DoclingDocument:  # noqa: 
     )
     doc_name = Path(origin.filename).stem
 
-    doc: DoclingDocument = DoclingDocument(name=doc_name, origin=origin)
+    doc: SdsDocument = SdsDocument(name=doc_name, origin=origin)
 
     # define pages
     if legacy_doc.page_dimensions is not None:

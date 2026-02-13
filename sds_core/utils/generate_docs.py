@@ -1,4 +1,4 @@
-"""Generate documentation of Docling types as JSON schema.
+"""Generate documentation of Sds types as JSON schema.
 
 Example:
     python sds_core/utils/generate_docs.py /tmp/sds_core_files
@@ -14,7 +14,7 @@ from typing import Final
 
 from sds_core.utils.generate_jsonschema import generate_json_schema
 
-MODELS: Final = ["DoclingDocument", "Record", "Generic"]
+MODELS: Final = ["SdsDocument", "Record", "Generic"]
 
 
 def _prepare_directory(folder: str, clean: bool = False) -> None:
@@ -36,7 +36,7 @@ def _prepare_directory(folder: str, clean: bool = False) -> None:
 
 
 def generate_collection_jsonschema(folder: str):
-    """Generate the JSON schema of Docling collections and export them to a folder.
+    """Generate the JSON schema of Sds collections and export them to a folder.
 
     Args:
         folder: The name of the directory.
@@ -48,7 +48,7 @@ def generate_collection_jsonschema(folder: str):
 
 
 def main() -> None:
-    """Generate the JSON Schema of Docling collections and export documentation."""
+    """Generate the JSON Schema of Sds collections and export documentation."""
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         "directory",

@@ -1,7 +1,7 @@
 [project]
 name = "sds-core"
 version = "2.65.0"  # DO NOT EDIT, updated automatically
-description = "A python library to define and validate data types in Docling."
+description = "A python library to define and validate data types in Sds."
 license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["sds", "discovery", "etl", "information retrieval", "analytics", "database", "database schema", "schema", "JSON"]

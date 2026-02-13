@@ -19,7 +19,7 @@ from sds_core.types.doc import (
     CoordOrigin,
     DescriptionMetaField,
     DocItemLabel,
-    DoclingDocument,
+    SdsDocument,
     Formatting,
     PictureClassificationLabel,
     PictureClassificationMetaField,
@@ -35,7 +35,7 @@ from sds_core.types.doc import (
 from test.test_serialization import verify
 
 
-def add_texts_section(doc: DoclingDocument):
+def add_texts_section(doc: SdsDocument):
     doc.add_text(label=DocItemLabel.TEXT, text="Simple text")
     inline1 = doc.add_inline_group()
     doc.add_text(
@@ -54,7 +54,8 @@ def add_texts_section(doc: DoclingDocument):
         parent=inline1,
     )
 
-def add_list_section(doc: DoclingDocument):
+
+def add_list_section(doc: SdsDocument):
     doc.add_page(page_no=1, size=Size(width=100, height=100), image=None)
     prov = ProvenanceItem(
         page_no=1,
@@ -130,6 +131,7 @@ def add_list_section(doc: DoclingDocument):
 
     doc.add_list_item(text="final element", parent=lg)
 
+
 # ===============================
 # Doclang unit-tests
 # ===============================
@@ -137,19 +139,10 @@ def add_list_section(doc: DoclingDocument):
 
 def test_create_closing_token_from_opening_tag_simple():
     assert DoclangVocabulary.create_closing_token(token="<text>") == "</text>"
-    assert (
-        DoclangVocabulary.create_closing_token(token='\n  <heading level="2">  ')
-        == "</heading>"
-    )
-    assert (
-        DoclangVocabulary.create_closing_token(token=' <list ordered="true"> ')
-        == "</list>"
-    )
+    assert DoclangVocabulary.create_closing_token(token='\n  <heading level="2">  ') == "</heading>"
+    assert DoclangVocabulary.create_closing_token(token=' <list ordered="true"> ') == "</list>"
     # Inline with attribute
-    assert (
-        DoclangVocabulary.create_closing_token(token=' <inline class="code"> ')
-        == "</inline>"
-    )
+    assert DoclangVocabulary.create_closing_token(token=' <inline class="code"> ') == "</inline>"
 
 
 def test_create_closing_token_returns_existing_closing():
@@ -190,13 +183,13 @@ def test_create_closing_token_invalid_inputs(bad):
 # ===============================
 
 
-def serialize_doclang(doc: DoclingDocument, params: Optional[DoclangParams] = None) -> str:
+def serialize_doclang(doc: SdsDocument, params: Optional[DoclangParams] = None) -> str:
     ser = DoclangDocSerializer(doc=doc, params=params or DoclangParams())
     return ser.serialize().text
 
 
 def test_list_items_not_double_wrapped_when_no_content():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     lst = doc.add_list_group()
     doc.add_list_item("Item A", parent=lst)
     doc.add_list_item("Item B", parent=lst)
@@ -215,7 +208,7 @@ def test_list_items_not_double_wrapped_when_no_content():
 
 def test_doclang():
     src = Path("./test/data/doc/ddoc_0.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     # Human readable, indented and with content
     params = DoclangParams()
@@ -251,14 +244,14 @@ def test_doclang():
 
 def test_doclang_meta():
     src = Path("./test/data/doc/dummy_doc_with_meta.yaml")
-    doc = DoclingDocument.load_from_yaml(src)
+    doc = SdsDocument.load_from_yaml(src)
 
     ser = DoclangDocSerializer(doc=doc)
     actual = ser.serialize().text
     verify(exp_file=src.with_suffix(".gt.dclg.xml"), actual=actual)
 
 
-def _create_escape_test_doc(inp_doc: DoclingDocument):
+def _create_escape_test_doc(inp_doc: SdsDocument):
     doc = inp_doc.model_copy(deep=True)
     doc.add_text(label=DocItemLabel.TEXT, text="Simple text")
     doc.add_text(label=DocItemLabel.TEXT, text="    4 leading spaces, 1 trailing ")
@@ -293,7 +286,7 @@ def _create_escape_test_doc(inp_doc: DoclingDocument):
     return doc
 
 
-def test_cdata_always(sample_doc: DoclingDocument):
+def test_cdata_always(sample_doc: SdsDocument):
     """Test cdata_always mode."""
     doc = _create_escape_test_doc(sample_doc)
     serializer = DoclangDocSerializer(
@@ -309,7 +302,7 @@ def test_cdata_always(sample_doc: DoclingDocument):
     verify(exp_file=exp_file, actual=ser_txt)
 
 
-def test_cdata_when_needed(sample_doc: DoclingDocument):
+def test_cdata_when_needed(sample_doc: SdsDocument):
     """Test cdata_when_needed mode."""
     doc = _create_escape_test_doc(sample_doc)
     serializer = DoclangDocSerializer(
@@ -326,58 +319,48 @@ def test_cdata_when_needed(sample_doc: DoclingDocument):
 
 def test_strikethrough_formatting():
     """Test strikethrough formatting serialization."""
-    doc = DoclingDocument(name="test")
+    doc = SdsDocument(name="test")
     formatting = Formatting(strikethrough=True)
     doc.add_text(label=DocItemLabel.TEXT, text="Strike text", formatting=formatting)
 
-    result = serialize_doclang(
-        doc, params=DoclangParams(add_location=False)
-    )
+    result = serialize_doclang(doc, params=DoclangParams(add_location=False))
     assert "<strikethrough>Strike text</strikethrough>" in result
 
 
 def test_subscript_formatting():
     """Test subscript formatting serialization."""
-    doc = DoclingDocument(name="test")
+    doc = SdsDocument(name="test")
     formatting = Formatting(script=Script.SUB)
     doc.add_text(label=DocItemLabel.TEXT, text="H2O", formatting=formatting)
 
-    result = serialize_doclang(
-        doc, params=DoclangParams(add_location=False)
-    )
+    result = serialize_doclang(doc, params=DoclangParams(add_location=False))
     assert "<subscript>H2O</subscript>" in result
 
 
 def test_superscript_formatting():
     """Test superscript formatting serialization."""
-    doc = DoclingDocument(name="test")
+    doc = SdsDocument(name="test")
     formatting = Formatting(script=Script.SUPER)
     doc.add_text(label=DocItemLabel.TEXT, text="x^2", formatting=formatting)
 
-    result = serialize_doclang(
-        doc, params=DoclangParams(add_location=False)
-    )
+    result = serialize_doclang(doc, params=DoclangParams(add_location=False))
     assert "<superscript>x^2</superscript>" in result
 
 
 def test_combined_formatting():
     """Test combined formatting (bold + italic)."""
-    doc = DoclingDocument(name="test")
+    doc = SdsDocument(name="test")
     formatting = Formatting(bold=True, italic=True)
     doc.add_text(label=DocItemLabel.TEXT, text="Bold and italic", formatting=formatting)
 
-    result = serialize_doclang(
-        doc, params=DoclangParams(add_location=False)
-    )
+    result = serialize_doclang(doc, params=DoclangParams(add_location=False))
     # When both bold and italic are applied, they should be nested
     assert "<bold>" in result
     assert "<italic>" in result
     assert "Bold and italic" in result
 
 
-
-
-def _create_content_filtering_doc(inp_doc: DoclingDocument):
+def _create_content_filtering_doc(inp_doc: SdsDocument):
     doc = inp_doc.model_copy(deep=True)
     doc.add_page(page_no=1, size=Size(width=100, height=100), image=None)
     prov = ProvenanceItem(
@@ -385,18 +368,14 @@ def _create_content_filtering_doc(inp_doc: DoclingDocument):
         bbox=BoundingBox.from_tuple((1, 2, 3, 4), origin=CoordOrigin.BOTTOMLEFT),
         charspan=(0, 2),
     )
-    pic = doc.add_picture(
-        caption=doc.add_text(label=DocItemLabel.CAPTION, text="Picture Caption")
-    )
+    pic = doc.add_picture(caption=doc.add_text(label=DocItemLabel.CAPTION, text="Picture Caption"))
     pic.prov = [prov]
     pic.meta = PictureMeta(
         summary=SummaryMetaField(text="Picture Summary"),
         description=DescriptionMetaField(text="Picture Description"),
     )
 
-    chart = doc.add_picture(
-        caption=doc.add_text(label=DocItemLabel.CAPTION, text="Picture Caption")
-    )
+    chart = doc.add_picture(caption=doc.add_text(label=DocItemLabel.CAPTION, text="Picture Caption"))
     chart.prov = [prov]
     chart.meta = PictureMeta(
         summary=SummaryMetaField(text="Picture Summary"),
@@ -423,7 +402,7 @@ def _create_content_filtering_doc(inp_doc: DoclingDocument):
     return doc
 
 
-def test_content_allow_all_types(sample_doc: DoclingDocument):
+def test_content_allow_all_types(sample_doc: SdsDocument):
     doc = _create_content_filtering_doc(sample_doc)
     serializer = DoclangDocSerializer(
         doc=doc,
@@ -437,7 +416,7 @@ def test_content_allow_all_types(sample_doc: DoclingDocument):
     verify(exp_file=exp_file, actual=ser_txt)
 
 
-def test_content_allow_no_types(sample_doc: DoclingDocument):
+def test_content_allow_no_types(sample_doc: SdsDocument):
     doc = _create_content_filtering_doc(sample_doc)
     serializer = DoclangDocSerializer(
         doc=doc,
@@ -450,7 +429,7 @@ def test_content_allow_no_types(sample_doc: DoclingDocument):
     verify(exp_file=exp_file, actual=ser_txt)
 
 
-def test_content_allow_specific_types(sample_doc: DoclingDocument):
+def test_content_allow_specific_types(sample_doc: SdsDocument):
     doc = _create_content_filtering_doc(sample_doc)
     serializer = DoclangDocSerializer(
         doc=doc,
@@ -469,7 +448,7 @@ def test_content_allow_specific_types(sample_doc: DoclingDocument):
     verify(exp_file=exp_file, actual=ser_txt)
 
 
-def test_content_block_specific_types(sample_doc: DoclingDocument):
+def test_content_block_specific_types(sample_doc: SdsDocument):
     doc = _create_content_filtering_doc(sample_doc)
     blocked_types = {
         ContentType.TABLE,
@@ -487,7 +466,7 @@ def test_content_block_specific_types(sample_doc: DoclingDocument):
 
 
 def test_inline_group():
-    doc = DoclingDocument(name="test")
+    doc = SdsDocument(name="test")
     doc.add_page(page_no=1, size=Size(width=100, height=100), image=None)
     prov = ProvenanceItem(
         page_no=1,
@@ -530,7 +509,7 @@ def test_inline_group():
 
 
 def test_mini_inline():
-    doc = DoclingDocument(name="test")
+    doc = SdsDocument(name="test")
     ul = doc.add_list_group()
     li = doc.add_list_item(text="", parent=ul)
     inl = doc.add_inline_group(parent=li)
@@ -550,8 +529,9 @@ def test_mini_inline():
     exp_file = Path("./test/data/doc/mini_inline.gt.dclg.xml")
     verify(exp_file=exp_file, actual=ser_txt)
 
+
 def _create_wrapping_test_doc():
-    doc = DoclingDocument(name="test")
+    doc = SdsDocument(name="test")
     doc.add_page(page_no=1, size=Size(width=100, height=100), image=None)
     prov = ProvenanceItem(
         page_no=1,
@@ -572,6 +552,7 @@ def _create_wrapping_test_doc():
 
     return doc
 
+
 def test_content_wrapping_mode_when_needed():
     doc = _create_wrapping_test_doc()
     ser = DoclangDocSerializer(
@@ -584,6 +565,7 @@ def test_content_wrapping_mode_when_needed():
     ser_txt = ser_res.text
     exp_file = Path("./test/data/doc/wrapping_when_needed.gt.dclg.xml")
     verify(exp_file=exp_file, actual=ser_txt)
+
 
 def test_content_wrapping_mode_always():
     doc = _create_wrapping_test_doc()
@@ -598,8 +580,9 @@ def test_content_wrapping_mode_always():
     exp_file = Path("./test/data/doc/wrapping_always.gt.dclg.xml")
     verify(exp_file=exp_file, actual=ser_txt)
 
+
 def test_vlm_mode():
-    doc = DoclingDocument(name="test")
+    doc = SdsDocument(name="test")
     add_texts_section(doc)
     add_list_section(doc)
 
@@ -616,6 +599,7 @@ def test_vlm_mode():
     exp_file = Path("./test/data/doc/vlm_mode.gt.dclg.xml")
     verify(exp_file=exp_file, actual=ser_txt)
 
+
 def test_rich_cells(rich_table_doc):
     ser = DoclangDocSerializer(
         doc=rich_table_doc,
@@ -628,7 +612,7 @@ def test_rich_cells(rich_table_doc):
 
 
 def _create_simple_prov_doc():
-    doc = DoclingDocument(name="")
+    doc = SdsDocument(name="")
     doc.add_page(page_no=1, size=Size(width=100, height=100), image=None)
     prov = ProvenanceItem(
         page_no=1,
@@ -639,8 +623,9 @@ def _create_simple_prov_doc():
     doc.add_text(label=DocItemLabel.TEXT, text="World", prov=prov)
     return doc
 
+
 def test_checkboxes():
-    doc = DoclingDocument(name="")
+    doc = SdsDocument(name="")
     doc.add_text(label=DocItemLabel.CHECKBOX_UNSELECTED, text="TODO")
     doc.add_text(label=DocItemLabel.CHECKBOX_SELECTED, text="DONE")
     ser = DoclangDocSerializer(doc=doc)
@@ -648,6 +633,7 @@ def test_checkboxes():
     ser_txt = ser_res.text
     exp_file = Path("./test/data/doc/checkboxes.out.dclg.xml")
     verify(exp_file=exp_file, actual=ser_txt)
+
 
 def test_def_prov_512():
     doc = _create_simple_prov_doc()

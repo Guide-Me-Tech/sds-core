@@ -8,7 +8,7 @@ from sds_core.transforms.serializer.azure import AzureDocSerializer, AzureParams
 from sds_core.types.doc.base import BoundingBox, CoordOrigin, Size
 from sds_core.types.doc.document import (
     DocItemLabel,
-    DoclingDocument,
+    SdsDocument,
     ProvenanceItem,
 )
 
@@ -80,7 +80,7 @@ def _verify_json(exp_file: Path, actual_json: str) -> None:
 def test_azure_serialize_activities_doc():
     """Serialize a GT document (activities.json) and verify Azure JSON output."""
     src = Path("./test/data/doc/activities.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = AzureDocSerializer(doc=doc, params=AzureParams(indent=2))
     actual_json = ser.serialize().text
@@ -96,7 +96,7 @@ def test_azure_serialize_activities_doc():
     _verify_json(exp_file=src.with_suffix(".gt.azure.json"), actual_json=actual_json)
 
 
-def test_azure_serialize_construct_doc_minimal_prov(sample_doc: DoclingDocument):
+def test_azure_serialize_construct_doc_minimal_prov(sample_doc: SdsDocument):
     """Serialize a constructed document with minimal provenance to Azure JSON.
 
     The sample_doc fixture does not attach provenance or pages; here we add a

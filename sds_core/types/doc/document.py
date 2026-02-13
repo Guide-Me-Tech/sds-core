@@ -1,4 +1,4 @@
-"""Models for the Docling Document data type."""
+"""Models for the Sds Document data type."""
 
 import base64
 import copy
@@ -349,7 +349,7 @@ class TableCell(BaseModel):
 
         return data
 
-    def _get_text(self, doc: Optional["DoclingDocument"] = None, **kwargs: Any) -> str:
+    def _get_text(self, doc: Optional["SdsDocument"] = None, **kwargs: Any) -> str:
         return self.text
 
 
@@ -359,7 +359,7 @@ class RichTableCell(TableCell):
     ref: "RefItem"
 
     @override
-    def _get_text(self, doc: Optional["DoclingDocument"] = None, **kwargs: Any) -> str:
+    def _get_text(self, doc: Optional["SdsDocument"] = None, **kwargs: Any) -> str:
         from sds_core.transforms.serializer.markdown import MarkdownDocSerializer
 
         if doc is not None:
@@ -418,7 +418,7 @@ class TableData(BaseModel):  # TBD
 
         return table_data
 
-    def remove_rows(self, indices: list[int], doc: Optional["DoclingDocument"] = None) -> list[list[TableCell]]:
+    def remove_rows(self, indices: list[int], doc: Optional["SdsDocument"] = None) -> list[list[TableCell]]:
         """Remove rows from the table by their indices.
 
         :param indices: list[int]: A list of indices of the rows to remove. (Starting from 0)
@@ -471,7 +471,7 @@ class TableData(BaseModel):  # TBD
 
         return all_removed_cells
 
-    def pop_row(self, doc: Optional["DoclingDocument"] = None) -> list[TableCell]:
+    def pop_row(self, doc: Optional["SdsDocument"] = None) -> list[TableCell]:
         """Remove and return the last row from the table.
 
         :returns: list[TableCell]: A list of TableCell objects representing the popped row.
@@ -481,7 +481,7 @@ class TableData(BaseModel):  # TBD
 
         return self.remove_row(self.num_rows - 1, doc=doc)
 
-    def remove_row(self, row_index: int, doc: Optional["DoclingDocument"] = None) -> list[TableCell]:
+    def remove_row(self, row_index: int, doc: Optional["SdsDocument"] = None) -> list[TableCell]:
         """Remove a row from the table by its index.
 
         :param row_index: int: The index of the row to remove. (Starting from 0)
@@ -1037,7 +1037,7 @@ class RefItem(BaseModel):
         """Get the path of the reference."""
         return self.cref.split("/")
 
-    def resolve(self, doc: "DoclingDocument"):
+    def resolve(self, doc: "SdsDocument"):
         """Resolve the path in the document."""
         path_components = self.cref.split("/")
         if (num_comps := len(path_components)) == 3:
@@ -1437,7 +1437,7 @@ class NodeItem(BaseModel):
         """get_ref."""
         return RefItem(cref=self.self_ref)
 
-    def _get_parent_ref(self, doc: "DoclingDocument", stack: list[int]) -> Optional[RefItem]:
+    def _get_parent_ref(self, doc: "SdsDocument", stack: list[int]) -> Optional[RefItem]:
         """get_parent_ref."""
         if len(stack) == 0:
             return self.parent
@@ -1447,7 +1447,7 @@ class NodeItem(BaseModel):
 
         return None
 
-    def _delete_child(self, doc: "DoclingDocument", stack: list[int]) -> bool:
+    def _delete_child(self, doc: "SdsDocument", stack: list[int]) -> bool:
         """Delete child node in tree."""
         if len(stack) == 1 and stack[0] < len(self.children):
             del self.children[stack[0]]
@@ -1458,7 +1458,7 @@ class NodeItem(BaseModel):
 
         return False
 
-    def _update_child(self, doc: "DoclingDocument", stack: list[int], new_ref: RefItem) -> bool:
+    def _update_child(self, doc: "SdsDocument", stack: list[int], new_ref: RefItem) -> bool:
         """Update child node in tree."""
         if len(stack) == 1 and stack[0] < len(self.children):
             # ensure the parent is correct
@@ -1473,7 +1473,7 @@ class NodeItem(BaseModel):
 
         return False
 
-    def _add_child(self, doc: "DoclingDocument", stack: list[int], new_ref: RefItem) -> bool:
+    def _add_child(self, doc: "SdsDocument", stack: list[int], new_ref: RefItem) -> bool:
         """Append child to node identified by stack."""
         if len(stack) == 0:
             # ensure the parent is correct
@@ -1490,7 +1490,7 @@ class NodeItem(BaseModel):
 
     def _add_sibling(
         self,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         stack: list[int],
         new_ref: RefItem,
         after: bool = True,
@@ -1539,7 +1539,7 @@ class ListGroup(GroupItem):
         """patch_ordered."""
         return GroupLabel.LIST if value == GroupLabel.ORDERED_LIST else value
 
-    def first_item_is_enumerated(self, doc: "DoclingDocument"):
+    def first_item_is_enumerated(self, doc: "SdsDocument"):
         """Whether the first list item is enumerated."""
         return (
             len(self.children) > 0
@@ -1593,7 +1593,7 @@ class DocItem(NodeItem):
 
     def get_location_tokens(
         self,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         new_line: str = "",  # deprecated
         xsize: int = 500,
         ysize: int = 500,
@@ -1619,7 +1619,7 @@ class DocItem(NodeItem):
 
         return location
 
-    def get_image(self, doc: "DoclingDocument", prov_index: int = 0) -> Optional[PILImage.Image]:
+    def get_image(self, doc: "SdsDocument", prov_index: int = 0) -> Optional[PILImage.Image]:
         """Returns the image of this DocItem.
 
         The function returns None if this DocItem has no valid provenance or
@@ -1699,7 +1699,7 @@ class TextItem(DocItem):
 
     def export_to_doctags(
         self,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         new_line: str = "",  # deprecated
         xsize: int = 500,
         ysize: int = 500,
@@ -1708,7 +1708,7 @@ class TextItem(DocItem):
     ):
         r"""Export text element to document tokens format.
 
-        :param doc: "DoclingDocument":
+        :param doc: "SdsDocument":
         :param new_line: str (Default value = "")  Deprecated
         :param xsize: int:  (Default value = 500)
         :param ysize: int:  (Default value = 500)
@@ -1753,7 +1753,7 @@ class SectionHeaderItem(TextItem):
 
     def export_to_doctags(
         self,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         new_line: str = "",  # deprecated
         xsize: int = 500,
         ysize: int = 500,
@@ -1762,7 +1762,7 @@ class SectionHeaderItem(TextItem):
     ):
         r"""Export text element to document tokens format.
 
-        :param doc: "DoclingDocument":
+        :param doc: "SdsDocument":
         :param new_line: str (Default value = "")  Deprecated
         :param xsize: int:  (Default value = 500)
         :param ysize: int:  (Default value = 500)
@@ -1806,14 +1806,14 @@ class FloatingItem(DocItem):
     footnotes: list[RefItem] = []
     image: Optional[ImageRef] = None
 
-    def caption_text(self, doc: "DoclingDocument") -> str:
+    def caption_text(self, doc: "SdsDocument") -> str:
         """Computes the caption as a single text."""
         text = ""
         for cap in self.captions:
             text += cap.resolve(doc).text
         return text
 
-    def get_image(self, doc: "DoclingDocument", prov_index: int = 0) -> Optional[PILImage.Image]:
+    def get_image(self, doc: "SdsDocument", prov_index: int = 0) -> Optional[PILImage.Image]:
         """Returns the image corresponding to this FloatingItem.
 
         This function returns the PIL image from self.image if one is available.
@@ -1841,7 +1841,7 @@ class CodeItem(FloatingItem, TextItem):
 
     def export_to_doctags(
         self,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         new_line: str = "",  # deprecated
         xsize: int = 500,
         ysize: int = 500,
@@ -1850,7 +1850,7 @@ class CodeItem(FloatingItem, TextItem):
     ):
         r"""Export text element to document tokens format.
 
-        :param doc: "DoclingDocument":
+        :param doc: "SdsDocument":
         :param new_line: str (Default value = "")  Deprecated
         :param xsize: int:  (Default value = 500)
         :param ysize: int:  (Default value = 500)
@@ -2017,7 +2017,7 @@ class PictureItem(FloatingItem):
 
     def export_to_markdown(
         self,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         add_caption: bool = True,  # deprecated
         image_mode: ImageRefMode = ImageRefMode.EMBEDDED,
         image_placeholder: str = "<!-- image -->",
@@ -2045,7 +2045,7 @@ class PictureItem(FloatingItem):
 
     def export_to_html(
         self,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         add_caption: bool = True,
         image_mode: ImageRefMode = ImageRefMode.PLACEHOLDER,
     ) -> str:
@@ -2071,7 +2071,7 @@ class PictureItem(FloatingItem):
 
     def export_to_doctags(
         self,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         new_line: str = "",  # deprecated
         xsize: int = 500,
         ysize: int = 500,
@@ -2081,7 +2081,7 @@ class PictureItem(FloatingItem):
     ):
         r"""Export picture to document tokens format.
 
-        :param doc: "DoclingDocument":
+        :param doc: "SdsDocument":
         :param new_line: str (Default value = "")  Deprecated
         :param xsize: int:  (Default value = 500)
         :param ysize: int:  (Default value = 500)
@@ -2173,7 +2173,7 @@ class TableItem(FloatingItem):
 
             return self
 
-    def export_to_dataframe(self, doc: Optional["DoclingDocument"] = None) -> pd.DataFrame:
+    def export_to_dataframe(self, doc: Optional["SdsDocument"] = None) -> pd.DataFrame:
         """Export the table as a Pandas DataFrame."""
         if doc is None:
             _logger.warning("Usage of TableItem.export_to_dataframe() without `doc` argument is deprecated.")
@@ -2217,7 +2217,7 @@ class TableItem(FloatingItem):
 
         return table
 
-    def export_to_markdown(self, doc: Optional["DoclingDocument"] = None) -> str:
+    def export_to_markdown(self, doc: Optional["SdsDocument"] = None) -> str:
         """Export the table as markdown."""
         if doc is not None:
             from sds_core.transforms.serializer.markdown import (
@@ -2260,7 +2260,7 @@ class TableItem(FloatingItem):
 
     def export_to_html(
         self,
-        doc: Optional["DoclingDocument"] = None,
+        doc: Optional["SdsDocument"] = None,
         add_caption: bool = True,
     ) -> str:
         """Export the table as html."""
@@ -2278,7 +2278,7 @@ class TableItem(FloatingItem):
 
     def export_to_otsl(
         self,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         add_cell_location: bool = True,
         add_cell_text: bool = True,
         xsize: int = 500,
@@ -2383,7 +2383,7 @@ class TableItem(FloatingItem):
 
     def export_to_doctags(
         self,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         new_line: str = "",  # deprecated
         xsize: int = 500,
         ysize: int = 500,
@@ -2394,7 +2394,7 @@ class TableItem(FloatingItem):
     ):
         r"""Export table to document tokens format.
 
-        :param doc: "DoclingDocument":
+        :param doc: "SdsDocument":
         :param new_line: str (Default value = "")  Deprecated
         :param xsize: int:  (Default value = 500)
         :param ysize: int:  (Default value = 500)
@@ -2490,7 +2490,7 @@ class KeyValueItem(FloatingItem):
 
     def export_to_document_tokens(
         self,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         new_line: str = "",  # deprecated
         xsize: int = 500,
         ysize: int = 500,
@@ -2499,7 +2499,7 @@ class KeyValueItem(FloatingItem):
     ):
         r"""Export key value item to document tokens format.
 
-        :param doc: "DoclingDocument":
+        :param doc: "SdsDocument":
         :param new_line: str (Default value = "")  Deprecated
         :param xsize: int:  (Default value = 500)
         :param ysize: int:  (Default value = 500)
@@ -2559,16 +2559,16 @@ class PageItem(BaseModel):
     page_no: int
 
 
-class DoclingDocument(BaseModel):
-    """DoclingDocument."""
+class SdsDocument(BaseModel):
+    """SdsDocument."""
 
-    schema_name: typing.Literal["DoclingDocument"] = "DoclingDocument"
+    schema_name: typing.Literal["SdsDocument"] = "SdsDocument"
     version: Annotated[str, StringConstraints(pattern=VERSION_PATTERN, strict=True)] = CURRENT_VERSION
     name: str  # The working name of this document, without extensions
     # (could be taken from originating doc, or just "Untitled 1")
     origin: Optional[DocumentOrigin] = (
-        None  # DoclingDocuments may specify an origin (converted to DoclingDocument).
-        # This is optional, e.g. a DoclingDocument could also be entirely
+        None  # SdsDocuments may specify an origin (converted to SdsDocument).
+        # This is optional, e.g. a SdsDocument could also be entirely
         # generated from synthetic data.
     )
 
@@ -4379,8 +4379,8 @@ class DoclingDocument(BaseModel):
         start_inclusive: bool = True,
         end_inclusive: bool = True,
         delete: bool = False,
-    ) -> "DoclingDocument":
-        """Extracts NodeItems and children in the range from the start NodeItem to the end as a new DoclingDocument.
+    ) -> "SdsDocument":
+        """Extracts NodeItems and children in the range from the start NodeItem to the end as a new SdsDocument.
 
         :param start: NodeItem:  The starting NodeItem of the range (must be a direct child of the document body)
         :param end: NodeItem:  The ending NodeItem of the range  (must be a direct child of the document body)
@@ -4388,7 +4388,7 @@ class DoclingDocument(BaseModel):
         :param end_inclusive: bool:  (Default value = True):  If True, the end NodeItem will also be extracted
         :param delete: bool:  (Default value = False):  If True, extracted items are deleted in the original document
 
-        :returns: DoclingDocument: A new document containing the extracted NodeItems and their children
+        :returns: SdsDocument: A new document containing the extracted NodeItems and their children
         """
         if not start.parent == end.parent:
             raise ValueError("Start and end NodeItems must have the same parent to extract a range.")
@@ -4410,7 +4410,7 @@ class DoclingDocument(BaseModel):
                 "Start NodeItem must come before or be the same as the end NodeItem in the document structure."
             )
 
-        new_doc = DoclingDocument(name=f"{self.name}- Extracted Range")
+        new_doc = SdsDocument(name=f"{self.name}- Extracted Range")
 
         ref_items = start_parent.children[start_index:end_index]
         node_items = [ref.resolve(self) for ref in ref_items]
@@ -4429,13 +4429,13 @@ class DoclingDocument(BaseModel):
 
     def insert_document(
         self,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         sibling: NodeItem,
         after: bool = True,
     ) -> None:
-        """Inserts the content from the body of a DoclingDocument into this document at a specific position.
+        """Inserts the content from the body of a SdsDocument into this document at a specific position.
 
-        :param doc: DoclingDocument: The document whose content will be inserted
+        :param doc: SdsDocument: The document whose content will be inserted
         :param sibling: NodeItem: The NodeItem after/before which the new items will be inserted
         :param after: bool: If True, insert after the sibling; if False, insert before (Default value = True)
 
@@ -4447,12 +4447,12 @@ class DoclingDocument(BaseModel):
 
     def add_document(
         self,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         parent: Optional[NodeItem] = None,
     ) -> None:
-        """Adds the content from the body of a DoclingDocument to this document under a specific parent.
+        """Adds the content from the body of a SdsDocument to this document under a specific parent.
 
-        :param doc: DoclingDocument: The document whose content will be added
+        :param doc: SdsDocument: The document whose content will be added
         :param parent: Optional[NodeItem]: The parent NodeItem under which new items are added (Default value = None)
 
         :returns: None
@@ -4464,13 +4464,13 @@ class DoclingDocument(BaseModel):
     def add_node_items(
         self,
         node_items: list[NodeItem],
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         parent: Optional[NodeItem] = None,
     ) -> None:
         """Adds multiple NodeItems and their children under a parent in this document.
 
         :param node_items: list[NodeItem]: The NodeItems to be added
-        :param doc: DoclingDocument: The document to which the NodeItems and their children belong
+        :param doc: SdsDocument: The document to which the NodeItems and their children belong
         :param parent: Optional[NodeItem]: The parent NodeItem under which new items are added (Default value = None)
 
         :returns: None
@@ -4498,14 +4498,14 @@ class DoclingDocument(BaseModel):
         self,
         sibling: NodeItem,
         node_items: list[NodeItem],
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
         after: bool = True,
     ) -> None:
         """Insert multiple NodeItems and their children at a specific position in the document.
 
         :param sibling: NodeItem: The NodeItem after/before which the new items will be inserted
         :param node_items: list[NodeItem]: The NodeItems to be inserted
-        :param doc: DoclingDocument: The document to which the NodeItems and their children belong
+        :param doc: SdsDocument: The document to which the NodeItems and their children belong
         :param after: bool: If True, insert after the sibling; if False, insert before (Default value = True)
 
         :returns: None
@@ -4547,13 +4547,13 @@ class DoclingDocument(BaseModel):
         self,
         node_items: list[NodeItem],
         parent_ref: RefItem,
-        doc: "DoclingDocument",
+        doc: "SdsDocument",
     ) -> list[RefItem]:
         """Append node item copies (with their children) from a different document to the content of this document.
 
         :param node_items: list[NodeItem]: The NodeItems to be appended
         :param parent_ref: RefItem: The reference of the parent of the new items in this document
-        :param doc: DoclingDocument: The document from which the NodeItems are taken
+        :param doc: SdsDocument: The document from which the NodeItems are taken
 
         :returns: list[RefItem]: A list of references to the newly added items in this document
         """
@@ -4704,13 +4704,13 @@ class DoclingDocument(BaseModel):
 
         return result
 
-    def _with_embedded_pictures(self) -> "DoclingDocument":
+    def _with_embedded_pictures(self) -> "SdsDocument":
         """Document with embedded images.
 
         Creates a copy of this document where all pictures referenced
         through a file URI are turned into base64 embedded form.
         """
-        result: DoclingDocument = copy.deepcopy(self)
+        result: SdsDocument = copy.deepcopy(self)
 
         for ix, (item, level) in enumerate(result.iterate_items(with_groups=True)):
             if isinstance(item, PictureItem):
@@ -4731,13 +4731,13 @@ class DoclingDocument(BaseModel):
         image_dir: Path,
         page_no: Optional[int],
         reference_path: Optional[Path] = None,
-    ) -> "DoclingDocument":
+    ) -> "SdsDocument":
         """Document with images as refs.
 
         Creates a copy of this document where all picture data is
         saved to image_dir and referenced through file URIs.
         """
-        result: DoclingDocument = copy.deepcopy(self)
+        result: SdsDocument = copy.deepcopy(self)
 
         img_count = 0
         image_dir.mkdir(parents=True, exist_ok=True)
@@ -4841,14 +4841,14 @@ class DoclingDocument(BaseModel):
             json.dump(out, fw, indent=indent)
 
     @classmethod
-    def load_from_json(cls, filename: Union[str, Path]) -> "DoclingDocument":
+    def load_from_json(cls, filename: Union[str, Path]) -> "SdsDocument":
         """load_from_json.
 
-        :param filename: The filename to load a saved DoclingDocument from a .json.
+        :param filename: The filename to load a saved SdsDocument from a .json.
         :type filename: Path
 
-        :returns: The loaded DoclingDocument.
-        :rtype: DoclingDocument
+        :returns: The loaded SdsDocument.
+        :rtype: SdsDocument
 
         """
         if isinstance(filename, str):
@@ -4880,20 +4880,20 @@ class DoclingDocument(BaseModel):
             yaml.dump(out, fw, default_flow_style=default_flow_style)
 
     @classmethod
-    def load_from_yaml(cls, filename: Union[str, Path]) -> "DoclingDocument":
+    def load_from_yaml(cls, filename: Union[str, Path]) -> "SdsDocument":
         """load_from_yaml.
 
         Args:
-            filename: The filename to load a YAML-serialized DoclingDocument from.
+            filename: The filename to load a YAML-serialized SdsDocument from.
 
         Returns:
-            DoclingDocument: the loaded DoclingDocument
+            SdsDocument: the loaded SdsDocument
         """
         if isinstance(filename, str):
             filename = Path(filename)
         with open(filename, encoding="utf-8") as f:
             data = yaml.load(f, Loader=yaml.SafeLoader)
-        return DoclingDocument.model_validate(data)
+        return SdsDocument.model_validate(data)
 
     def export_to_dict(
         self,
@@ -5262,9 +5262,9 @@ class DoclingDocument(BaseModel):
     @staticmethod
     def load_from_doctags(  # noqa: C901
         doctag_document: DocTagsDocument, document_name: str = "Document"
-    ) -> "DoclingDocument":
-        r"""Load Docling document from lists of DocTags and Images."""
-        # Maps the recognized tag to a Docling label.
+    ) -> "SdsDocument":
+        r"""Load Sds document from lists of DocTags and Images."""
+        # Maps the recognized tag to a Sds label.
         # Code items will be given DocItemLabel.CODE
         tag_to_doclabel = {
             "title": DocItemLabel.TITLE,
@@ -5290,7 +5290,7 @@ class DoclingDocument(BaseModel):
             "key_value_region": DocItemLabel.KEY_VALUE_REGION,
         }
 
-        doc = DoclingDocument(name=document_name)
+        doc = SdsDocument(name=document_name)
 
         def extract_bounding_box(text_chunk: str) -> Optional[BoundingBox]:
             """Extract <loc_...> coords from the chunk, normalized by / 500."""
@@ -5356,7 +5356,7 @@ class DoclingDocument(BaseModel):
                 # Other
                 PictureClassificationLabel.OTHER,
                 PictureClassificationLabel.PICTURE_GROUP,
-                # Legacy SmolDocling labels
+                # Legacy SmolSds labels
                 "line",
                 "dot_line",
                 "vbar_categorical",
@@ -5478,7 +5478,7 @@ class DoclingDocument(BaseModel):
             page_no: int,
             tag_name: str,
             doc_label: DocItemLabel,
-            doc: DoclingDocument,
+            doc: SdsDocument,
             parent: Optional[NodeItem],
         ):
             # For everything else, treat as text
@@ -5533,7 +5533,7 @@ class DoclingDocument(BaseModel):
                     content_layer=content_layer,
                 )
 
-        # doc = DoclingDocument(name="Document")
+        # doc = SdsDocument(name="Document")
         for pg_idx, doctag_page in enumerate(doctag_document.pages):
             page_doctags = doctag_page.tokens
             image = doctag_page.image
@@ -5559,7 +5559,7 @@ class DoclingDocument(BaseModel):
                blocks in the entire string (multi-line friendly)
                in the order they appear.
             2. For each chunk, extracts bounding box (if any) and inner text.
-            3. Adds the item to a DoclingDocument structure with the right label.
+            3. Adds the item to a SdsDocument structure with the right label.
             4. Tracks bounding boxes+color in a separate list for later visualization.
             """
 
@@ -6173,7 +6173,7 @@ class DoclingDocument(BaseModel):
         def get_item_list(self, key: str) -> list[NodeItem]:
             return getattr(self, key)
 
-        def index(self, doc: "DoclingDocument", page_nrs: Optional[set[int]] = None) -> None:
+        def index(self, doc: "SdsDocument", page_nrs: Optional[set[int]] = None) -> None:
             if page_nrs is not None and (unavailable_page_nrs := page_nrs - set(doc.pages.keys())):
                 raise ValueError(f"The following page numbers are not present in the document: {unavailable_page_nrs}")
 
@@ -6308,26 +6308,26 @@ class DoclingDocument(BaseModel):
         self.name = doc_index.get_name()
 
     def _normalize_references(self) -> None:
-        doc_index = DoclingDocument._DocIndex()
+        doc_index = SdsDocument._DocIndex()
         doc_index.index(doc=self)
         self._update_from_index(doc_index)
 
-    def filter(self, page_nrs: Optional[set[int]] = None) -> "DoclingDocument":
+    def filter(self, page_nrs: Optional[set[int]] = None) -> "SdsDocument":
         """Create a new document based on the provided filter parameters."""
-        doc_index = DoclingDocument._DocIndex()
+        doc_index = SdsDocument._DocIndex()
         doc_index.index(doc=self, page_nrs=page_nrs)
-        res_doc = DoclingDocument(name=self.name)
+        res_doc = SdsDocument(name=self.name)
         res_doc._update_from_index(doc_index)
         return res_doc
 
     @classmethod
-    def concatenate(cls, docs: Sequence["DoclingDocument"]) -> "DoclingDocument":
+    def concatenate(cls, docs: Sequence["SdsDocument"]) -> "SdsDocument":
         """Concatenate multiple documents into a single document."""
-        doc_index = DoclingDocument._DocIndex()
+        doc_index = SdsDocument._DocIndex()
         for doc in docs:
             doc_index.index(doc=doc)
 
-        res_doc = DoclingDocument(name=" + ".join([doc.name for doc in docs]))
+        res_doc = SdsDocument(name=" + ".join([doc.name for doc in docs]))
         res_doc._update_from_index(doc_index)
         return res_doc
 
@@ -6338,7 +6338,7 @@ class DoclingDocument(BaseModel):
             else:
                 warnings.warn(str(error))
 
-        def validate_furniture(doc: DoclingDocument):
+        def validate_furniture(doc: SdsDocument):
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=DeprecationWarning)
                 has_furniture_children = len(doc.furniture.children) > 0
@@ -6347,7 +6347,7 @@ class DoclingDocument(BaseModel):
                     ValueError(f"Deprecated furniture node {doc.furniture.self_ref} has children"),
                 )
 
-        def validate_list_group(doc: DoclingDocument, item: ListGroup):
+        def validate_list_group(doc: SdsDocument, item: ListGroup):
             for ref in item.children:
                 child = ref.resolve(doc)
                 if not isinstance(child, ListItem):
@@ -6357,7 +6357,7 @@ class DoclingDocument(BaseModel):
                         ),
                     )
 
-        def validate_list_item(doc: DoclingDocument, item: ListItem):
+        def validate_list_item(doc: SdsDocument, item: ListItem):
             if item.parent is None:
                 _handle(
                     ValueError(f"ListItem {item.self_ref} has no parent"),
@@ -6367,7 +6367,7 @@ class DoclingDocument(BaseModel):
                     ValueError(f"ListItem {item.self_ref} has non-ListGroup parent: {item.parent.cref}"),
                 )
 
-        def validate_group(doc: DoclingDocument, item: GroupItem):
+        def validate_group(doc: SdsDocument, item: GroupItem):
             if item.parent and not item.children:  # tolerate empty body, but not other groups
                 _handle(
                     ValueError(f"Group {item.self_ref} has no children"),

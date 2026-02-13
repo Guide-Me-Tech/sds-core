@@ -21,7 +21,7 @@ key_value_items: []
 name: test_multiple_comments
 pages: {}
 pictures: []
-schema_name: DoclingDocument
+schema_name: SdsDocument
 tables: []
 texts:
 - children: []

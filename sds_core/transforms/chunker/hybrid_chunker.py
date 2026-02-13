@@ -35,7 +35,7 @@ from sds_core.transforms.serializer.base import (
     BaseDocSerializer,
     BaseSerializerProvider,
 )
-from sds_core.types import DoclingDocument
+from sds_core.types import SdsDocument
 
 
 def _get_default_tokenizer():
@@ -287,7 +287,7 @@ class HybridChunker(BaseChunker):
 
     def chunk(
         self,
-        dl_doc: DoclingDocument,
+        dl_doc: SdsDocument,
         **kwargs: Any,
     ) -> Iterator[BaseChunk]:
         r"""Chunk the provided document.

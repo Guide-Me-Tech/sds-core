@@ -5,7 +5,7 @@ from collections.abc import Iterator
 from typing import Any
 
 from sds_core.transforms.chunker.code_chunking.code_chunk import CodeChunk
-from sds_core.types.doc.document import CodeItem, DoclingDocument
+from sds_core.types.doc.document import CodeItem, SdsDocument
 
 
 class BaseCodeChunkingStrategy(ABC):
@@ -16,7 +16,7 @@ class BaseCodeChunkingStrategy(ABC):
         self,
         *,
         item: CodeItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> Iterator[CodeChunk]:
         """Chunk a single code item."""

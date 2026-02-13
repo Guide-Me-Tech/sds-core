@@ -31,7 +31,7 @@ from sds_core.types.doc.document import (
     ContentLayer,
     DocItem,
     DocItemLabel,
-    DoclingDocument,
+    SdsDocument,
     Formatting,
     FormItem,
     InlineGroup,
@@ -131,7 +131,7 @@ class WebVTTTextSerializer(BaseModel, BaseTextSerializer):
         *,
         item: TextItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         is_inline_scope: bool = False,
         visited: set[str] | None = None,
         **kwargs: Any,
@@ -172,7 +172,7 @@ class _WebVTTTableSerializer(BaseTableSerializer):
         *,
         item: TableItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         _ = (item, doc_serializer, doc, kwargs)
@@ -188,7 +188,7 @@ class _WebVTTPictureSerializer(BasePictureSerializer):
         *,
         item: PictureItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         _ = (item, doc_serializer, doc, kwargs)
@@ -204,7 +204,7 @@ class _WebVTTKeyValueSerializer(BaseKeyValueSerializer):
         *,
         item: KeyValueItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         _ = (item, doc_serializer, doc, kwargs)
@@ -220,7 +220,7 @@ class _WebVTTFormSerializer(BaseFormSerializer):
         *,
         item: FormItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         _ = (item, doc_serializer, doc, kwargs)
@@ -236,7 +236,7 @@ class _WebVTTFallbackSerializer(BaseFallbackSerializer):
         *,
         item: NodeItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         _ = (item, doc_serializer, doc, kwargs)
@@ -252,7 +252,7 @@ class _WebVTTListSerializer(BaseModel, BaseListSerializer):
         *,
         item: ListGroup,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         is_inline_scope: bool = False,
         **kwargs: Any,
@@ -270,7 +270,7 @@ class WebVTTInlineSerializer(BaseInlineSerializer):
         *,
         item: InlineGroup,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         visited: set[str] | None = None,
         **kwargs: Any,
@@ -307,7 +307,7 @@ class _WebVTTMetaSerializer(BaseModel, BaseMetaSerializer):
         self,
         *,
         item: NodeItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         _ = (doc, item, kwargs)
@@ -322,7 +322,7 @@ class _WebVTTAnnotationSerializer(BaseModel, BaseAnnotationSerializer):
         self,
         *,
         item: DocItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         _ = (doc, item, kwargs)

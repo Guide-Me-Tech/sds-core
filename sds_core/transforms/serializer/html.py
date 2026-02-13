@@ -50,7 +50,7 @@ from sds_core.types.doc.document import (
     DescriptionAnnotation,
     DescriptionMetaField,
     DocItem,
-    DoclingDocument,
+    SdsDocument,
     FloatingItem,
     FormItem,
     FormulaItem,
@@ -137,7 +137,7 @@ class HTMLTextSerializer(BaseModel, BaseTextSerializer):
         *,
         item: TextItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         is_inline_scope: bool = False,
         visited: Optional[set[str]] = None,
         **kwargs: Any,
@@ -251,7 +251,7 @@ class HTMLTextSerializer(BaseModel, BaseTextSerializer):
         item: DocItem,
         text: str,
         orig: str,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         image_mode: ImageRefMode,
         formula_to_mathml: bool,
         is_inline_scope: bool,
@@ -304,7 +304,7 @@ class HTMLTextSerializer(BaseModel, BaseTextSerializer):
 
         return '<div class="formula-not-decoded">Formula not decoded</div>'
 
-    def _get_formula_image_fallback(self, *, item: DocItem, orig: str, doc: DoclingDocument) -> Optional[str]:
+    def _get_formula_image_fallback(self, *, item: DocItem, orig: str, doc: SdsDocument) -> Optional[str]:
         """Try to get an image fallback for a formula."""
         item_image = item.get_image(doc=doc)
         if item_image is not None:
@@ -322,7 +322,7 @@ class HTMLTableSerializer(BaseTableSerializer):
         *,
         item: TableItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed table item to HTML."""
@@ -396,7 +396,7 @@ class HTMLPictureSerializer(BasePictureSerializer):
         *,
         item: PictureItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Export picture to HTML format."""
@@ -469,7 +469,7 @@ class HTMLPictureSerializer(BasePictureSerializer):
             # Check if picture has attached PictureTabularChartData
             tabular_chart_annotations = [ann for ann in item.annotations if isinstance(ann, PictureTabularChartData)]
             if len(tabular_chart_annotations) > 0:
-                temp_doc = DoclingDocument(name="temp")
+                temp_doc = SdsDocument(name="temp")
                 temp_table = temp_doc.add_table(data=tabular_chart_annotations[0].chart_data)
                 html_table_content = temp_table.export_to_html(temp_doc)
                 if len(html_table_content) > 0:
@@ -615,7 +615,7 @@ class HTMLKeyValueSerializer(BaseKeyValueSerializer):
         *,
         item: KeyValueItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed key-value item to HTML."""
@@ -652,7 +652,7 @@ class HTMLFormSerializer(BaseFormSerializer):
         *,
         item: FormItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed form item to HTML."""
@@ -689,7 +689,7 @@ class HTMLListSerializer(BaseModel, BaseListSerializer):
         *,
         item: ListGroup,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         is_inline_scope: bool = False,
         visited: Optional[set[str]] = None,  # refs of visited items
@@ -724,7 +724,7 @@ class HTMLInlineSerializer(BaseInlineSerializer):
         *,
         item: InlineGroup,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         visited: Optional[set[str]] = None,  # refs of visited items
         **kwargs: Any,
@@ -760,7 +760,7 @@ class HTMLFallbackSerializer(BaseFallbackSerializer):
         *,
         item: NodeItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Fallback serializer for items not handled by other serializers."""
@@ -783,7 +783,7 @@ class HTMLMetaSerializer(BaseModel, BaseMetaSerializer):
         self,
         *,
         item: NodeItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serialize the item's meta."""
@@ -817,7 +817,7 @@ class HTMLMetaSerializer(BaseModel, BaseMetaSerializer):
             elif isinstance(field_val, MoleculeMetaField):
                 txt = field_val.smi
             elif isinstance(field_val, TabularChartMetaField):
-                temp_doc = DoclingDocument(name="temp")
+                temp_doc = SdsDocument(name="temp")
                 temp_table = temp_doc.add_table(data=field_val.chart_data)
                 table_content = temp_table.export_to_html(temp_doc).strip()
                 if table_content:
@@ -841,7 +841,7 @@ class HTMLAnnotationSerializer(BaseModel, BaseAnnotationSerializer):
         self,
         *,
         item: DocItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed annotation to HTML format."""
@@ -1095,9 +1095,9 @@ class HTMLDocSerializer(DocSerializer):
             if self.doc.name:
                 head_parts.append(f"<title>{html.escape(self.doc.name)}</title>")
             else:
-                head_parts.append("<title>Docling Document</title>")
+                head_parts.append("<title>Sds Document</title>")
 
-            head_parts.append('<meta name="generator" content="Docling HTML Serializer"/>')
+            head_parts.append('<meta name="generator" content="Sds HTML Serializer"/>')
 
         # Add default styles or custom CSS
         if params.css_styles:

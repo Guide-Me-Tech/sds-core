@@ -3,7 +3,7 @@ from pathlib import Path
 
 from sds_core.transforms.chunker.hierarchical_chunker import DocChunk
 from sds_core.transforms.chunker.page_chunker import PageChunker
-from sds_core.types.doc.document import DoclingDocument
+from sds_core.types.doc.document import SdsDocument
 
 from .test_data_gen_flag import GEN_TEST_DATA
 
@@ -21,7 +21,7 @@ def _process(act_data, exp_path_str):
 
 def test_page_chunks():
     src = Path("./test/data/doc/cross_page_lists.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     chunker = PageChunker()
 

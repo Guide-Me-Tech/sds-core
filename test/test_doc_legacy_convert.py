@@ -2,7 +2,7 @@ from pathlib import Path
 
 import yaml
 
-from sds_core.types.doc import DoclingDocument
+from sds_core.types.doc import SdsDocument
 from sds_core.types.legacy_doc.document import ExportedCCSDocument as DsDocument
 from sds_core.utils.legacy import (
     sds_document_to_legacy,
@@ -18,7 +18,7 @@ def test_new_to_old():
     with open(filename, "r", encoding="utf-8") as fp:
         dict_from_yaml = yaml.safe_load(fp)
 
-    doc = DoclingDocument.model_validate(dict_from_yaml)
+    doc = SdsDocument.model_validate(dict_from_yaml)
 
     sds_document_to_legacy(doc)
 
@@ -35,6 +35,6 @@ def test_old_to_new():
     else:
         with gt_filepath.open() as gt_fp:
             gt_dict = yaml.safe_load(gt_fp)
-            gt_doc = DoclingDocument.model_validate(gt_dict)
+            gt_doc = SdsDocument.model_validate(gt_dict)
 
         assert doc == gt_doc

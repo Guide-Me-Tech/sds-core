@@ -1,5 +1,5 @@
 {
-  "schema_name": "DoclingDocument",
+  "schema_name": "SdsDocument",
   "version": "1.9.0",
   "name": "Document",
   "furniture": {

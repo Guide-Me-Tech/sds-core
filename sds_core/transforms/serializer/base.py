@@ -9,7 +9,7 @@ from typing_extensions import deprecated
 
 from sds_core.types.doc.document import (
     DocItem,
-    DoclingDocument,
+    SdsDocument,
     FloatingItem,
     FormItem,
     InlineGroup,
@@ -56,7 +56,7 @@ class BaseTextSerializer(ABC):
         *,
         item: TextItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -72,7 +72,7 @@ class BaseTableSerializer(ABC):
         *,
         item: TableItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -88,7 +88,7 @@ class BasePictureSerializer(ABC):
         *,
         item: PictureItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -104,7 +104,7 @@ class BaseKeyValueSerializer(ABC):
         *,
         item: KeyValueItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -120,7 +120,7 @@ class BaseFormSerializer(ABC):
         *,
         item: FormItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -136,7 +136,7 @@ class BaseListSerializer(ABC):
         *,
         item: ListGroup,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -152,7 +152,7 @@ class BaseInlineSerializer(ABC):
         *,
         item: InlineGroup,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -168,7 +168,7 @@ class BaseFallbackSerializer(ABC):
         *,
         item: NodeItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -298,7 +298,7 @@ class BaseSerializerProvider(ABC):
     """Base class for document serializer providers."""
 
     @abstractmethod
-    def get_serializer(self, doc: DoclingDocument) -> BaseDocSerializer:
+    def get_serializer(self, doc: SdsDocument) -> BaseDocSerializer:
         """Get a the associated serializer."""
         ...
 
@@ -311,7 +311,7 @@ class BaseMetaSerializer(ABC):
         self,
         *,
         item: NodeItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the meta of the passed item."""
@@ -331,7 +331,7 @@ class BaseAnnotationSerializer(ABC):
         self,
         *,
         item: DocItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed annotation."""

@@ -147,7 +147,7 @@ origin:
   mimetype: text/markdown
 pages: {}
 pictures: []
-schema_name: DoclingDocument
+schema_name: SdsDocument
 tables: []
 texts:
 - children: []

@@ -383,7 +383,7 @@ pictures:
     page_no: 11
   references: []
   self_ref: '#/pictures/5'
-schema_name: DoclingDocument
+schema_name: SdsDocument
 tables:
 - annotations: []
   captions:

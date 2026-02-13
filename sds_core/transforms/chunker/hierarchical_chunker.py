@@ -25,12 +25,12 @@ from sds_core.transforms.serializer.markdown import (
     MarkdownDocSerializer,
     MarkdownParams,
 )
-from sds_core.types import DoclingDocument as DLDocument
+from sds_core.types import SdsDocument as DLDocument
 from sds_core.types.doc.base import ImageRefMode
 from sds_core.types.doc.document import (
     CodeItem,
     DocItem,
-    DoclingDocument,
+    SdsDocument,
     InlineGroup,
     LevelNumber,
     ListGroup,
@@ -51,7 +51,7 @@ class TripletTableSerializer(BaseTableSerializer):
         *,
         item: TableItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -106,7 +106,7 @@ class ChunkingSerializerProvider(BaseSerializerProvider):
     """Serializer provider used for chunking purposes."""
 
     @override
-    def get_serializer(self, doc: DoclingDocument) -> BaseDocSerializer:
+    def get_serializer(self, doc: SdsDocument) -> BaseDocSerializer:
         """Get the associated serializer."""
         return ChunkingDocSerializer(doc=doc)
 

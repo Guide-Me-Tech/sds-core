@@ -37,7 +37,7 @@ from sds_core.types.doc import (
     CodeItem,
     DescriptionMetaField,
     DocItem,
-    DoclingDocument,
+    SdsDocument,
     FloatingItem,
     Formatting,
     FormItem,
@@ -171,7 +171,7 @@ def _create_location_tokens_for_bbox(
 def _create_location_tokens_for_item(
     *,
     item: "DocItem",
-    doc: "DoclingDocument",
+    doc: "SdsDocument",
     xres: int,
     yres: int,
 ) -> str:
@@ -1046,7 +1046,7 @@ class DoclangListSerializer(BaseModel, BaseListSerializer):
         *,
         item: ListGroup,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         is_inline_scope: bool = False,
         visited: Optional[set[str]] = None,  # refs of visited items
@@ -1354,7 +1354,7 @@ class DoclangTextSerializer(BaseModel, BaseTextSerializer):
         *,
         item: "TextItem",
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         is_inline_scope: bool = False,
         visited: Optional[set[str]] = None,
         **kwargs: Any,
@@ -1367,7 +1367,7 @@ class DoclangTextSerializer(BaseModel, BaseTextSerializer):
         Args:
             item: The text item to serialize.
             doc_serializer: The document serializer instance.
-            doc: The DoclingDocument being serialized.
+            doc: The SdsDocument being serialized.
             visited: Set of already visited item references.
             **kwargs: Additional keyword arguments.
 
@@ -1421,7 +1421,7 @@ class DoclangTextSerializer(BaseModel, BaseTextSerializer):
         *,
         item: "TextItem",
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         is_inline_scope: bool = False,
         visited: Optional[set[str]] = None,
         **kwargs: Any,
@@ -1632,7 +1632,7 @@ class DoclangPictureSerializer(BasePictureSerializer):
         *,
         item: PictureItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -1677,7 +1677,7 @@ class DoclangPictureSerializer(BasePictureSerializer):
                 if item.meta and item.meta.tabular_chart:
                     chart_data = item.meta.tabular_chart.chart_data
                 if chart_data and chart_data.table_cells:
-                    temp_doc = DoclingDocument(name="temp")
+                    temp_doc = SdsDocument(name="temp")
                     temp_table = temp_doc.add_table(data=chart_data)
                     # Reuse the Doclang table emission for chart data
                     params_chart = DoclangParams(
@@ -1730,7 +1730,7 @@ class DoclangTableSerializer(BaseTableSerializer):
         *,
         item: TableItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         params: "DoclangParams",
         **kwargs: Any,
     ) -> str:
@@ -1820,7 +1820,7 @@ class DoclangTableSerializer(BaseTableSerializer):
         *,
         item: TableItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         visited: Optional[set[str]] = None,
         **kwargs: Any,
     ) -> SerializationResult:
@@ -1887,7 +1887,7 @@ class DoclangInlineSerializer(BaseInlineSerializer):
         *,
         item: InlineGroup,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         visited: Optional[set[str]] = None,
         **kwargs: Any,
@@ -1950,7 +1950,7 @@ class DoclangFallbackSerializer(BaseFallbackSerializer):
         *,
         item: NodeItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serialize unsupported nodes by concatenating their textual parts."""
@@ -1970,7 +1970,7 @@ class DoclangKeyValueSerializer(BaseKeyValueSerializer):
         *,
         item: KeyValueItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Return an empty result for key/value items."""
@@ -1986,7 +1986,7 @@ class DoclangFormSerializer(BaseFormSerializer):
         *,
         item: FormItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Return an empty result for form items."""
@@ -2001,7 +2001,7 @@ class DoclangAnnotationSerializer(BaseAnnotationSerializer):
         self,
         *,
         item: DocItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Return an empty result; annotations are handled via meta."""
@@ -2197,14 +2197,14 @@ class DoclangDeserializer(BaseModel):
         self,
         *,
         text: str,
-    ) -> DoclingDocument:
-        """Deserialize Doclang XML into a DoclingDocument.
+    ) -> SdsDocument:
+        """Deserialize Doclang XML into a SdsDocument.
 
         Args:
             text: Doclang XML string to parse.
 
         Returns:
-            A populated `DoclingDocument` parsed from the input.
+            A populated `SdsDocument` parsed from the input.
         """
         try:
             root_node = parseString(text).documentElement
@@ -2219,7 +2219,7 @@ class DoclangDeserializer(BaseModel):
             if candidates:
                 root = cast(Element, candidates[0])
 
-        doc = DoclingDocument(name="Document")
+        doc = SdsDocument(name="Document")
         # TODO revise need for default page & resolution
         # Initialize with a default page so location tokens can be re-emitted
         self._page_no = 0
@@ -2229,12 +2229,12 @@ class DoclangDeserializer(BaseModel):
         return doc
 
     # ------------- Core walkers -------------
-    def _parse_document_root(self, *, doc: DoclingDocument, root: Element) -> None:
+    def _parse_document_root(self, *, doc: SdsDocument, root: Element) -> None:
         for node in root.childNodes:
             if isinstance(node, Element):
                 self._dispatch_element(doc=doc, el=node, parent=None)
 
-    def _dispatch_element(self, *, doc: DoclingDocument, el: Element, parent: Optional[NodeItem]) -> None:
+    def _dispatch_element(self, *, doc: SdsDocument, el: Element, parent: Optional[NodeItem]) -> None:
         name = el.tagName
         if name in {
             DoclangToken.TITLE.value,
@@ -2270,7 +2270,7 @@ class DoclangDeserializer(BaseModel):
         else:
             self._walk_children(doc=doc, el=el, parent=parent)
 
-    def _walk_children(self, *, doc: DoclingDocument, el: Element, parent: Optional[NodeItem]) -> None:
+    def _walk_children(self, *, doc: SdsDocument, el: Element, parent: Optional[NodeItem]) -> None:
         for node in el.childNodes:
             if isinstance(node, Element):
                 # Ignore geometry/meta containers at this level; pass through page breaks
@@ -2312,7 +2312,7 @@ class DoclangDeserializer(BaseModel):
                     return None
         return result
 
-    def _parse_text_like(self, *, doc: DoclingDocument, el: Element, parent: Optional[NodeItem]) -> None:
+    def _parse_text_like(self, *, doc: SdsDocument, el: Element, parent: Optional[NodeItem]) -> None:
         """Parse text-like tokens (title, text, caption, footnotes, code, formula)."""
         element_children = [
             node for node in el.childNodes if isinstance(node, Element) and node.tagName != DoclangToken.LOCATION.value
@@ -2435,7 +2435,7 @@ class DoclangDeserializer(BaseModel):
 
         return "".join(parts), lang_label
 
-    def _parse_heading(self, *, doc: DoclingDocument, el: Element, parent: Optional[NodeItem]) -> None:
+    def _parse_heading(self, *, doc: SdsDocument, el: Element, parent: Optional[NodeItem]) -> None:
         lvl_txt = el.getAttribute(DoclangAttributeKey.LEVEL.value) or "1"
         try:
             level = int(lvl_txt)
@@ -2455,7 +2455,7 @@ class DoclangDeserializer(BaseModel):
             for p in prov_list[1:]:
                 item.prov.append(p)
 
-    def _parse_list(self, *, doc: DoclingDocument, el: Element, parent: Optional[NodeItem]) -> None:
+    def _parse_list(self, *, doc: SdsDocument, el: Element, parent: Optional[NodeItem]) -> None:
         ordered = el.getAttribute(DoclangAttributeKey.ORDERED.value) == DoclangAttributeValue.TRUE.value
         li_group = doc.add_list_group(parent=parent)
         actual_children = [
@@ -2520,7 +2520,7 @@ class DoclangDeserializer(BaseModel):
     def _parse_inline_group(
         self,
         *,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         el: Element,
         parent: Optional[NodeItem],
         nodes: Optional[list[Node]] = None,
@@ -2546,7 +2546,7 @@ class DoclangDeserializer(BaseModel):
                     )
 
     # ------------- Floating groups -------------
-    def _parse_floating_group(self, *, doc: DoclingDocument, el: Element, parent: Optional[NodeItem]) -> None:
+    def _parse_floating_group(self, *, doc: SdsDocument, el: Element, parent: Optional[NodeItem]) -> None:
         cls_val = el.getAttribute(DoclangAttributeKey.CLASS.value)
         if cls_val == DoclangAttributeValue.TABLE.value:
             self._parse_table_group(doc=doc, el=el, parent=parent)
@@ -2555,7 +2555,7 @@ class DoclangDeserializer(BaseModel):
         else:
             self._walk_children(doc=doc, el=el, parent=parent)
 
-    def _parse_table_group(self, *, doc: DoclingDocument, el: Element, parent: Optional[NodeItem]) -> None:
+    def _parse_table_group(self, *, doc: SdsDocument, el: Element, parent: Optional[NodeItem]) -> None:
         caption = self._extract_caption(doc=doc, el=el)
         footnotes = self._extract_footnotes(doc=doc, el=el)
         otsl_el = self._first_child(el, DoclangToken.OTSL.value)
@@ -2582,7 +2582,7 @@ class DoclangDeserializer(BaseModel):
         for ftn in footnotes:
             tbl.footnotes.append(ftn.get_ref())
 
-    def _parse_picture_group(self, *, doc: DoclingDocument, el: Element, parent: Optional[NodeItem]) -> None:
+    def _parse_picture_group(self, *, doc: SdsDocument, el: Element, parent: Optional[NodeItem]) -> None:
         # Extract caption from the floating group
         caption = self._extract_caption(doc=doc, el=el)
         footnotes = self._extract_footnotes(doc=doc, el=el)
@@ -2616,7 +2616,7 @@ class DoclangDeserializer(BaseModel):
                 pic.meta.tabular_chart = TabularChartMetaField(chart_data=td)
 
     # ------------- Helpers -------------
-    def _extract_caption(self, *, doc: DoclingDocument, el: Element) -> Optional[TextItem]:
+    def _extract_caption(self, *, doc: SdsDocument, el: Element) -> Optional[TextItem]:
         cap_el = self._first_child(el, DoclangToken.CAPTION.value)
         if cap_el is None:
             return None
@@ -2633,7 +2633,7 @@ class DoclangDeserializer(BaseModel):
             item.prov.append(p)
         return item
 
-    def _extract_footnotes(self, *, doc: DoclingDocument, el: Element) -> list[TextItem]:
+    def _extract_footnotes(self, *, doc: SdsDocument, el: Element) -> list[TextItem]:
         footnotes: list[TextItem] = []
         for node in el.childNodes:
             if isinstance(node, Element) and node.tagName == DoclangToken.FOOTNOTE.value:
@@ -2725,7 +2725,7 @@ class DoclangDeserializer(BaseModel):
         self,
         texts: list[str],
         tokens: list[str],
-        doc: Optional["DoclingDocument"] = None,
+        doc: Optional["SdsDocument"] = None,
         parent: Optional[NodeItem] = None,
     ) -> tuple[list[TableCell], list[list[str]]]:
         """Parse OTSL interleaved texts+tokens into TableCell list and row tokens."""
@@ -2862,7 +2862,7 @@ class DoclangDeserializer(BaseModel):
         return table_cells, split_row_tokens
 
     def _parse_otsl_table_content(
-        self, otsl_content: str, doc: Optional["DoclingDocument"] = None, parent: Optional[NodeItem] = None
+        self, otsl_content: str, doc: Optional["SdsDocument"] = None, parent: Optional[NodeItem] = None
     ) -> TableData:
         """Parse OTSL content into TableData (inlined from utils)."""
         tokens, mixed = self._otsl_extract_tokens_and_text(otsl_content)
@@ -2949,12 +2949,12 @@ class DoclangDeserializer(BaseModel):
         return "".join(out)
 
     # --------- Location helpers ---------
-    def _ensure_page_exists(self, *, doc: DoclingDocument, page_no: int, resolution: int) -> None:
+    def _ensure_page_exists(self, *, doc: SdsDocument, page_no: int, resolution: int) -> None:
         # If the page already exists, do nothing; otherwise add with a square size based on resolution
         if page_no not in doc.pages:
             doc.add_page(page_no=page_no, size=Size(width=resolution, height=resolution))
 
-    def _extract_provenance(self, *, doc: DoclingDocument, el: Element) -> list[ProvenanceItem]:
+    def _extract_provenance(self, *, doc: SdsDocument, el: Element) -> list[ProvenanceItem]:
         # Collect immediate child <location value=.. resolution=.. /> tokens in groups of 4
         values: list[int] = []
         res_for_group: Optional[int] = None

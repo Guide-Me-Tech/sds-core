@@ -92,7 +92,7 @@ jobs:
           enable-cache: true
       - name: Install package
         run: uv pip install dist/*.whl
-      - name: Load the DoclingDocument package
-        run: python -c 'from sds_core.types.doc import DoclingDocument'
+      - name: Load the SdsDocument package
+        run: python -c 'from sds_core.types.doc import SdsDocument'
       - name: Check if package data is present
         run: python -c 'from importlib import resources; from pathlib import Path; p=Path(resources.files("sds_core").joinpath("resources/schemas/doc/DOC.json")); assert p.exists()'

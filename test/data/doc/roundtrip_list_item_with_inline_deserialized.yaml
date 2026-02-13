@@ -96,7 +96,7 @@ pages:
       height: 512.0
       width: 512.0
 pictures: []
-schema_name: DoclingDocument
+schema_name: SdsDocument
 tables: []
 texts:
 - children: []

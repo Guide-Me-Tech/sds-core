@@ -10,7 +10,7 @@ from sds_core.experimental.doclang import (
 from sds_core.types.doc import (
     BoundingBox,
     DocItemLabel,
-    DoclingDocument,
+    SdsDocument,
     PictureClassificationClass,
     PictureClassificationData,
     ProvenanceItem,
@@ -26,7 +26,7 @@ from test.test_serialization_doclang import add_list_section, add_texts_section
 DO_PRINT: bool = False
 
 
-def _serialize(doc: DoclingDocument) -> str:
+def _serialize(doc: SdsDocument) -> str:
     ser = DoclangDocSerializer(
         doc=doc,
         params=DoclangParams(),
@@ -34,11 +34,11 @@ def _serialize(doc: DoclingDocument) -> str:
     return ser.serialize().text
 
 
-def _deserialize(text: str) -> DoclingDocument:
+def _deserialize(text: str) -> SdsDocument:
     return DoclangDeserializer().deserialize(text=text)
 
 
-def _add_default_page(doc: DoclingDocument):
+def _add_default_page(doc: SdsDocument):
     doc.add_page(page_no=0, size=Size(width=1000, height=1000))
 
 
@@ -51,7 +51,7 @@ def _default_prov() -> ProvenanceItem:
 
 
 def test_roundtrip_text():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     doc.add_text(label=DocItemLabel.TEXT, text="Hello world")
     dt = _serialize(doc)
     doc2 = _deserialize(dt)
@@ -66,7 +66,7 @@ def test_roundtrip_text():
 
 
 def test_roundtrip_title():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     doc.add_title(text="My Title")
     dt = _serialize(doc)
     doc2 = _deserialize(dt)
@@ -81,7 +81,7 @@ def test_roundtrip_title():
 
 
 def test_roundtrip_heading():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     doc.add_heading(text="Section A", level=2)
     dt = _serialize(doc)
     doc2 = _deserialize(dt)
@@ -96,7 +96,7 @@ def test_roundtrip_heading():
 
 
 def test_roundtrip_caption():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     doc.add_text(label=DocItemLabel.CAPTION, text="Cap text")
     dt = _serialize(doc)
     doc2 = _deserialize(dt)
@@ -111,7 +111,7 @@ def test_roundtrip_caption():
 
 
 def test_roundtrip_footnote():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     doc.add_text(label=DocItemLabel.FOOTNOTE, text="Foot note")
     dt = _serialize(doc)
     if DO_PRINT:
@@ -123,7 +123,7 @@ def test_roundtrip_footnote():
 
 
 def test_roundtrip_page_header():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     doc.add_text(label=DocItemLabel.PAGE_HEADER, text="Header")
     dt = _serialize(doc)
     if DO_PRINT:
@@ -135,7 +135,7 @@ def test_roundtrip_page_header():
 
 
 def test_roundtrip_page_footer():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     doc.add_text(label=DocItemLabel.PAGE_FOOTER, text="Footer")
     dt = _serialize(doc)
     if DO_PRINT:
@@ -147,7 +147,7 @@ def test_roundtrip_page_footer():
 
 
 def test_roundtrip_code():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     doc.add_code(text="print('hi')", code_language=CodeLanguageLabel.PYTHON)
     doc.add_code(text='disp("Hello world!")', code_language=CodeLanguageLabel.OCTAVE)
     dt = _serialize(doc)
@@ -162,8 +162,9 @@ def test_roundtrip_code():
     """
     assert dt2.strip() == exp_dt.strip()
 
+
 def test_roundtrip_formula():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     doc.add_formula(text="E=mc^2")
     dt = _serialize(doc)
     if DO_PRINT:
@@ -175,7 +176,7 @@ def test_roundtrip_formula():
 
 
 def test_roundtrip_list_unordered():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     lg = doc.add_list_group()
     doc.add_list_item("A", parent=lg, enumerated=False)
     doc.add_list_item("B", parent=lg, enumerated=False)
@@ -190,7 +191,7 @@ def test_roundtrip_list_unordered():
 
 
 def test_roundtrip_list_ordered():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     lg = doc.add_list_group()
     doc.add_list_item("1", parent=lg, enumerated=True)
     doc.add_list_item("2", parent=lg, enumerated=True)
@@ -204,7 +205,7 @@ def test_roundtrip_list_ordered():
 
 
 def test_roundtrip_picture_with_caption():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     cap = doc.add_text(label=DocItemLabel.CAPTION, text="Fig 1")
     doc.add_picture(caption=cap)
     dt = _serialize(doc)
@@ -219,7 +220,7 @@ def test_roundtrip_picture_with_caption():
 
 
 def test_roundtrip_table_simple():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     td = TableData(num_rows=0, num_cols=2)
     td.add_row(["H1", "H2"])  # header row semantics not required here
     td.add_row(["C1", "C2"])  # data row
@@ -236,7 +237,7 @@ def test_roundtrip_table_simple():
 
 
 def test_roundtrip_table_with_caption():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     # Create a caption and a simple 2x2 table
     cap = doc.add_text(label=DocItemLabel.CAPTION, text="Tbl 1")
     td = TableData(num_rows=0, num_cols=2)
@@ -263,7 +264,7 @@ def test_roundtrip_table_with_caption():
 
 
 def test_roundtrip_text_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     doc.add_text(label=DocItemLabel.TEXT, text="Hello world", prov=_default_prov())
     dt = _serialize(doc)
@@ -280,7 +281,7 @@ def test_roundtrip_text_prov():
 
 
 def test_roundtrip_title_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     doc.add_title(
         text="My Title",
@@ -305,7 +306,7 @@ def test_roundtrip_title_prov():
 
 
 def test_roundtrip_heading_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     doc.add_heading(text="Section A", level=2, prov=_default_prov())
     dt = _serialize(doc)
@@ -319,7 +320,7 @@ def test_roundtrip_heading_prov():
 
 
 def test_roundtrip_caption_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     doc.add_text(label=DocItemLabel.CAPTION, text="Cap text", prov=_default_prov())
     dt = _serialize(doc)
@@ -332,7 +333,7 @@ def test_roundtrip_caption_prov():
 
 
 def test_roundtrip_footnote_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     doc.add_text(label=DocItemLabel.FOOTNOTE, text="Foot note", prov=_default_prov())
     dt = _serialize(doc)
@@ -345,7 +346,7 @@ def test_roundtrip_footnote_prov():
 
 
 def test_roundtrip_page_header_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     doc.add_text(label=DocItemLabel.PAGE_HEADER, text="Header", prov=_default_prov())
     dt = _serialize(doc)
@@ -358,7 +359,7 @@ def test_roundtrip_page_header_prov():
 
 
 def test_roundtrip_page_footer_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     doc.add_text(label=DocItemLabel.PAGE_FOOTER, text="Footer", prov=_default_prov())
     dt = _serialize(doc)
@@ -371,11 +372,9 @@ def test_roundtrip_page_footer_prov():
 
 
 def test_roundtrip_code_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
-    doc.add_code(
-        text="print('hi')", code_language=CodeLanguageLabel.PYTHON, prov=_default_prov()
-    )
+    doc.add_code(text="print('hi')", code_language=CodeLanguageLabel.PYTHON, prov=_default_prov())
     dt = _serialize(doc)
     if DO_PRINT:
         print("\n", dt)
@@ -387,7 +386,7 @@ def test_roundtrip_code_prov():
 
 
 def test_roundtrip_formula_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     doc.add_formula(text="E=mc^2", prov=_default_prov())
     dt = _serialize(doc)
@@ -400,7 +399,7 @@ def test_roundtrip_formula_prov():
 
 
 def test_roundtrip_list_unordered_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     lg = doc.add_list_group()
     prov = _default_prov()
@@ -435,7 +434,7 @@ def test_roundtrip_list_unordered_prov():
 
 
 def test_roundtrip_list_ordered_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     lg = doc.add_list_group()
     prov = _default_prov()
@@ -451,7 +450,7 @@ def test_roundtrip_list_ordered_prov():
 
 
 def test_roundtrip_picture_with_caption_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     cap = doc.add_text(label=DocItemLabel.CAPTION, text="Fig 1", prov=_default_prov())
     doc.add_picture(caption=cap, prov=_default_prov())
@@ -466,7 +465,7 @@ def test_roundtrip_picture_with_caption_prov():
 
 
 def test_roundtrip_table_simple_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     td = TableData(num_rows=0, num_cols=2)
     td.add_row(["H1", "H2"])  # header row semantics not required here
@@ -484,7 +483,7 @@ def test_roundtrip_table_simple_prov():
 
 
 def test_roundtrip_table_with_caption_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     cap = doc.add_text(label=DocItemLabel.CAPTION, text="Tbl 1", prov=_default_prov())
     td = TableData(num_rows=0, num_cols=2)
@@ -509,7 +508,7 @@ def test_roundtrip_table_with_caption_prov():
 
 
 def test_roundtrip_complex_table_with_caption_prov():
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     _add_default_page(doc)
     cap = doc.add_text(label=DocItemLabel.CAPTION, text="Tbl 1", prov=_default_prov())
     td = TableData(num_rows=3, num_cols=4)
@@ -582,7 +581,7 @@ def test_roundtrip_complex_table_with_caption_prov():
 
 def test_roundtrip_nested_list_unordered_in_unordered():
     """Test nested unordered list within unordered list."""
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     lg_outer = doc.add_list_group()
     doc.add_list_item("Outer Item 1", parent=lg_outer, enumerated=False)
 
@@ -619,7 +618,7 @@ def test_roundtrip_nested_list_unordered_in_unordered():
 
 def test_roundtrip_nested_list_ordered_in_ordered():
     """Test nested ordered list within ordered list."""
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     lg_outer = doc.add_list_group()
     doc.add_list_item("Step 1", parent=lg_outer, enumerated=False)
 
@@ -652,7 +651,7 @@ def test_roundtrip_nested_list_ordered_in_ordered():
 
 def test_roundtrip_nested_list_ordered_in_unordered():
     """Test nested ordered list within unordered list."""
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     lg_outer = doc.add_list_group()
     doc.add_list_item("Bullet A", parent=lg_outer, enumerated=False)
 
@@ -686,7 +685,7 @@ def test_roundtrip_nested_list_ordered_in_unordered():
 
 def test_roundtrip_nested_list_unordered_in_ordered():
     """Test nested unordered list within ordered list."""
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
     lg_outer = doc.add_list_group()
     doc.add_list_item("Step 1", parent=lg_outer, enumerated=True)
 
@@ -720,7 +719,7 @@ def test_roundtrip_nested_list_unordered_in_ordered():
 
 def test_roundtrip_deeply_nested_list():
     """Test deeply nested lists (3 levels)."""
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
 
     # Level 1
     lg_level1 = doc.add_list_group()
@@ -766,7 +765,7 @@ def test_roundtrip_deeply_nested_list():
 
 def test_roundtrip_multiple_nested_lists_same_level():
     """Test multiple nested lists at the same level."""
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
 
     lg_outer = doc.add_list_group()
     doc.add_list_item("Item 1", parent=lg_outer, enumerated=False)
@@ -812,43 +811,26 @@ def test_roundtrip_multiple_nested_lists_same_level():
 
 
 def test_roundtrip_list_item_with_inline_group():
-
-
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
 
     add_texts_section(doc)
     add_list_section(doc)
 
     dt = _serialize(doc)
-    exp_ser_file = (
-        Path(__file__).parent
-        / "data"
-        / "doc"
-        / "roundtrip_list_item_with_inline_serialized.dclg.xml"
-    )
+    exp_ser_file = Path(__file__).parent / "data" / "doc" / "roundtrip_list_item_with_inline_serialized.dclg.xml"
     verify(exp_ser_file, dt)
     doc2 = _deserialize(dt)
-    deser_yaml_file = (
-        Path(__file__).parent
-        / "data"
-        / "doc"
-        / "roundtrip_list_item_with_inline_deserialized.yaml"
-    )
+    deser_yaml_file = Path(__file__).parent / "data" / "doc" / "roundtrip_list_item_with_inline_deserialized.yaml"
     doc2.save_as_yaml(deser_yaml_file)
     dt2 = _serialize(doc2)
 
-    exp_dt2_file = (
-        Path(__file__).parent
-        / "data"
-        / "doc"
-        / "roundtrip_list_item_with_inline_reserialized.dclg.xml"
-    )
+    exp_dt2_file = Path(__file__).parent / "data" / "doc" / "roundtrip_list_item_with_inline_reserialized.dclg.xml"
     verify(exp_dt2_file, dt2)
 
 
 def test_roundtrip_table_with_caption_and_footnotes():
     """Test table with caption and multiple footnotes."""
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
 
     # Create caption and footnotes
     cap = doc.add_text(label=DocItemLabel.CAPTION, text="Table 1: Sample Data")
@@ -907,18 +889,14 @@ def test_roundtrip_table_with_caption_and_footnotes():
     assert dt2 == dt
 
 
-@pytest.mark.xfail(
-    reason="Known feature incompletenes in serialization/deseralization for picture classification!"
-)
+@pytest.mark.xfail(reason="Known feature incompletenes in serialization/deseralization for picture classification!")
 def test_roundtrip_picture_with_classification_caption_and_footnotes():
     """Test picture with classification, caption, and multiple footnotes."""
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
 
     # Create caption and footnotes
     cap = doc.add_text(label=DocItemLabel.CAPTION, text="Figure 1: Sample Image")
-    footnote1 = doc.add_text(
-        label=DocItemLabel.FOOTNOTE, text="Image source: Dataset A"
-    )
+    footnote1 = doc.add_text(label=DocItemLabel.FOOTNOTE, text="Image source: Dataset A")
     footnote2 = doc.add_text(label=DocItemLabel.FOOTNOTE, text="Resolution: 1024x768")
 
     # Create classification data
@@ -967,9 +945,7 @@ def test_roundtrip_picture_with_classification_caption_and_footnotes():
     with pytest.warns(DeprecationWarning):
         num_annotations = len(pic.annotations)
     assert num_annotations >= 1
-    classif = next(
-        (a for a in pic.annotations if isinstance(a, PictureClassificationData)), None
-    )
+    classif = next((a for a in pic.annotations if isinstance(a, PictureClassificationData)), None)
     assert classif is not None
     assert classif.provenance == "model-v1"
     assert len(classif.predicted_classes) == 2
@@ -986,19 +962,15 @@ def test_roundtrip_picture_with_classification_caption_and_footnotes():
 
 def test_roundtrip_table_with_rich_cells():
     """Test table with RichTableCells containing paragraphs, lists, and nested tables."""
-    doc = DoclingDocument(name="t")
+    doc = SdsDocument(name="t")
 
     # Create the main table (3x2 grid)
     table = doc.add_table(data=TableData(num_rows=3, num_cols=2))
 
     # Create content for rich cells
     # Cell (0, 0): Multiple paragraphs
-    para1 = doc.add_text(
-        parent=table, label=DocItemLabel.TEXT, text="First paragraph in cell."
-    )
-    para2 = doc.add_text(
-        parent=table, label=DocItemLabel.TEXT, text="Second paragraph in cell."
-    )
+    para1 = doc.add_text(parent=table, label=DocItemLabel.TEXT, text="First paragraph in cell.")
+    para2 = doc.add_text(parent=table, label=DocItemLabel.TEXT, text="Second paragraph in cell.")
 
     # Cell (1, 0): A list
     list_group = doc.add_list_group(parent=table)
@@ -1086,9 +1058,7 @@ def test_roundtrip_table_with_rich_cells():
     assert main_table.data.num_cols == 2
 
     # Verify that we have rich table cells
-    rich_cells = [
-        cell for cell in main_table.data.table_cells if isinstance(cell, RichTableCell)
-    ]
+    rich_cells = [cell for cell in main_table.data.table_cells if isinstance(cell, RichTableCell)]
     assert len(rich_cells) >= 1  # At least one rich cell should be preserved
 
     # Verify round-trip serialization
@@ -1104,20 +1074,18 @@ def test_roundtrip_table_with_rich_cells():
 ############################################
 
 
-def test_constructed_doc(sample_doc: DoclingDocument):
+def test_constructed_doc(sample_doc: SdsDocument):
     doc = sample_doc
 
     dt = _serialize(doc)
     doc2 = _deserialize(dt)
     dt2 = _serialize(doc2)
 
-    exp_reserialized_dt_file = (
-        Path(__file__).parent / "data" / "doc" / "constr_doc_reserialized.dclg.xml"
-    )
+    exp_reserialized_dt_file = Path(__file__).parent / "data" / "doc" / "constr_doc_reserialized.dclg.xml"
     verify(exp_reserialized_dt_file, dt2)
 
 
-def test_constructed_rich_table_doc(rich_table_doc: DoclingDocument):
+def test_constructed_rich_table_doc(rich_table_doc: SdsDocument):
     doc = rich_table_doc
 
     dt = _serialize(doc)
@@ -1127,6 +1095,7 @@ def test_constructed_rich_table_doc(rich_table_doc: DoclingDocument):
     dt2 = _serialize(doc2)
 
     assert dt2 == dt
+
 
 def test_wrapping():
     dt = """
@@ -1181,6 +1150,7 @@ def test_wrapping():
     doc = _deserialize(dt)
     dt2 = _serialize(doc)
     assert dt2.strip() == dt.strip()
+
 
 def test_rich_table_cells():
     dt = """

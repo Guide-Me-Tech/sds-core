@@ -12,7 +12,7 @@ from sds_core.transforms.visualizer.base import BaseVisualizer
 from sds_core.types.doc.document import (
     ContentLayer,
     DocItem,
-    DoclingDocument,
+    SdsDocument,
     PictureItem,
 )
 
@@ -35,7 +35,7 @@ class ReadingOrderVisualizer(BaseVisualizer):
     base_visualizer: Optional[BaseVisualizer] = None
     params: Params = Params()
 
-    def _get_picture_context(self, elem: DocItem, doc: DoclingDocument) -> Optional[str]:
+    def _get_picture_context(self, elem: DocItem, doc: SdsDocument) -> Optional[str]:
         """Get the picture self_ref if element is nested inside a PictureItem, None otherwise."""
         current = elem
         while current.parent is not None:
@@ -93,7 +93,7 @@ class ReadingOrderVisualizer(BaseVisualizer):
 
     def _draw_doc_reading_order(
         self,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         images: Optional[dict[Optional[int], Image]] = None,
     ):
         """Draw the reading order."""
@@ -226,7 +226,7 @@ class ReadingOrderVisualizer(BaseVisualizer):
     def get_visualization(
         self,
         *,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs,
     ) -> dict[Optional[int], Image]:
         """Get visualization of the document as images by page."""

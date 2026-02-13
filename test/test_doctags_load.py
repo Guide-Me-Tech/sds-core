@@ -3,7 +3,7 @@ from pathlib import Path
 
 from PIL import Image as PILImage
 
-from sds_core.types.doc import DoclingDocument
+from sds_core.types.doc import SdsDocument
 from sds_core.types.doc.document import DocTagsDocument
 
 from .test_data_gen_flag import GEN_TEST_DATA
@@ -43,7 +43,7 @@ def test_doctags_load_from_files():
         [Path("test/data/doc/page_with_pic.png")],
     )
 
-    doc = DoclingDocument.load_from_doctags(doctags_doc)
+    doc = SdsDocument.load_from_doctags(doctags_doc)
     exp = "test/data/doc/page_with_pic_from_files.dt.json"
     verify(
         exp_file=exp,
@@ -58,7 +58,7 @@ def test_doctags_load_from_memory():
 
     doctags_doc = DocTagsDocument.from_doctags_and_image_pairs([doctags], [image])
 
-    doc = DoclingDocument.load_from_doctags(doctags_doc)
+    doc = SdsDocument.load_from_doctags(doctags_doc)
 
     exp = "test/data/doc/page_with_pic.dt.json"
     verify(
@@ -71,7 +71,7 @@ def test_doctags_load_without_image():
     with Path("test/data/doc/page_with_pic.dt").open() as file:
         doctags = file.read()
     doctags_doc = DocTagsDocument.from_doctags_and_image_pairs([doctags], None)
-    doc = DoclingDocument.load_from_doctags(doctags_doc)
+    doc = SdsDocument.load_from_doctags(doctags_doc)
     exp = "test/data/doc/page_without_pic.dt.json"
     verify(
         exp_file=exp,
@@ -84,7 +84,7 @@ def test_doctags_load_for_kv_region():
         doctags = file.read()
     image = PILImage.open(Path("test/data/doc/doc_with_kv.png"))
     doctags_doc = DocTagsDocument.from_doctags_and_image_pairs([doctags], [image])
-    doc = DoclingDocument.load_from_doctags(doctags_doc)
+    doc = SdsDocument.load_from_doctags(doctags_doc)
     exp = "test/data/doc/doc_with_kv.dt.json"
     verify(
         exp_file=exp,
@@ -96,7 +96,7 @@ def test_multipage_doctags_load():
     with Path("test/data/doc/2206.01062.yaml.dt").open() as file:
         doctags = file.read()
     doctags_doc = DocTagsDocument.from_multipage_doctags_and_images(doctags, None)
-    doc = DoclingDocument.load_from_doctags(doctags_doc)
+    doc = SdsDocument.load_from_doctags(doctags_doc)
     exp = "test/data/doc/2206.01062.yaml.dt.json"
     verify(
         exp_file=exp,
@@ -109,7 +109,7 @@ def test_doctags_chart():
         [Path("test/data/doc/barchart.dt")],
         [Path("test/data/doc/barchart.png")],
     )
-    doc = DoclingDocument.load_from_doctags(doctags_doc)
+    doc = SdsDocument.load_from_doctags(doctags_doc)
     exp = "test/data/doc/barchart.dt.out.json"
     verify(
         exp_file=exp,
@@ -122,7 +122,7 @@ def test_doctags_table_provenances_and_captions():
         [Path("test/data/doc/01030000000083.dt")],
         [Path("test/data/doc/01030000000083.png")],
     )
-    doc = DoclingDocument.load_from_doctags(doctags_doc)
+    doc = SdsDocument.load_from_doctags(doctags_doc)
     for table in doc.tables:
         assert len(table.prov) > 0
         assert len(table.captions) > 0
@@ -133,7 +133,7 @@ def test_doctags_picture_provenances_and_captions():
         [Path("test/data/doc/01030000000111.dt")],
         [Path("test/data/doc/01030000000111.png")],
     )
-    doc = DoclingDocument.load_from_doctags(doctags_doc)
+    doc = SdsDocument.load_from_doctags(doctags_doc)
     for picture in doc.pictures:
         assert len(picture.prov) > 0
         assert len(picture.captions) > 0
@@ -143,13 +143,13 @@ def test_doctags_inline():
     src_path = Path("test/data/doc/2408.09869v3_enriched.dt")
     with open(src_path) as f:
         doctags = f.read()
-    doc = DoclingDocument.load_from_json("test/data/doc/2408.09869v3_enriched.json")
+    doc = SdsDocument.load_from_json("test/data/doc/2408.09869v3_enriched.json")
 
     doctags_doc = DocTagsDocument.from_multipage_doctags_and_images(
         doctags=doctags,
         images=[pil_img for p in doc.pages if (img_ref := doc.pages[p].image) and (pil_img := img_ref.pil_image)],
     )
-    deser_doc = DoclingDocument.load_from_doctags(doctags_doc)
+    deser_doc = SdsDocument.load_from_doctags(doctags_doc)
     exp = f"{src_path.parent / src_path.stem}.out.dt.json"
     verify(
         exp_file=exp,

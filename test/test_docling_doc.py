@@ -19,7 +19,7 @@ from sds_core.types.doc import (
     CoordOrigin,
     DocItem,
     DocItemLabel,
-    DoclingDocument,
+    SdsDocument,
     DocumentOrigin,
     FloatingItem,
     Formatting,
@@ -555,7 +555,7 @@ def test_reference_doc():
     with open(filename, encoding="utf-8") as fp:
         dict_from_yaml = yaml.safe_load(fp)
 
-    doc = DoclingDocument.model_validate(dict_from_yaml)
+    doc = SdsDocument.model_validate(dict_from_yaml)
 
     # Objects can be accessed
     text_item = doc.texts[0]
@@ -592,7 +592,7 @@ def test_parse_doc():
     with open(filename, encoding="utf-8") as fp:
         dict_from_yaml = yaml.safe_load(fp)
 
-    doc = DoclingDocument.model_validate(dict_from_yaml)
+    doc = SdsDocument.model_validate(dict_from_yaml)
 
     page_break = "<!-- page break -->"
     _test_export_methods(doc, filename=filename, page_break_placeholder=page_break)
@@ -628,7 +628,7 @@ def _test_serialize_and_reload(doc):
     ### Serialize and deserialize stuff
     yaml_dump = yaml.safe_dump(doc.model_dump(mode="json", by_alias=True))
     # print(f"\n\n{yaml_dump}")
-    doc_reload = DoclingDocument.model_validate(yaml.safe_load(yaml_dump))
+    doc_reload = SdsDocument.model_validate(yaml.safe_load(yaml_dump))
 
     yaml_dump_reload = yaml.safe_dump(doc_reload.model_dump(mode="json", by_alias=True))
 
@@ -656,7 +656,7 @@ def _verify_regression_test(pred: str, filename: str, ext: str):
             fw.write(f"{pred}\n")
 
 
-def _test_export_methods(doc: DoclingDocument, filename: str, page_break_placeholder: Optional[str] = None):
+def _test_export_methods(doc: SdsDocument, filename: str, page_break_placeholder: Optional[str] = None):
     # Iterate all elements
     et_pred = doc.export_to_element_tree()
     _verify_regression_test(et_pred, filename=filename, ext="et")
@@ -703,7 +703,7 @@ def _test_export_methods(doc: DoclingDocument, filename: str, page_break_placeho
 
 
 def _construct_bad_doc():
-    doc = DoclingDocument(name="Bad doc")
+    doc = SdsDocument(name="Bad doc")
 
     title = doc.add_text(label=DocItemLabel.TITLE, text="This is the title")
     group = doc.add_group(parent=title, name="chapter 1")
@@ -720,14 +720,14 @@ def _construct_bad_doc():
 
 
 def test_pil_image():
-    doc = DoclingDocument(name="Untitled 1")
+    doc = SdsDocument(name="Untitled 1")
 
     fig_image = PILImage.new(mode="RGB", size=(2, 2), color=(0, 0, 0))
     doc.add_picture(image=ImageRef.from_pil(image=fig_image, dpi=72))
 
     ### Serialize and deserialize the document
     yaml_dump = yaml.safe_dump(doc.model_dump(mode="json", by_alias=True))
-    doc_reload = DoclingDocument.model_validate(yaml.safe_load(yaml_dump))
+    doc_reload = SdsDocument.model_validate(yaml.safe_load(yaml_dump))
     reloaded_fig = doc_reload.pictures[0]
     reloaded_image = reloaded_fig.image.pil_image
 
@@ -761,14 +761,14 @@ def test_image_ref():
 
 
 def test_upgrade_content_layer_from_1_0_0() -> None:
-    doc = DoclingDocument.load_from_json("test/data/doc/2206.01062-1.0.0.json")
+    doc = SdsDocument.load_from_json("test/data/doc/2206.01062-1.0.0.json")
 
     assert doc.version == CURRENT_VERSION
     assert doc.texts[0].content_layer == ContentLayer.FURNITURE
 
     # test that transform_to_content_layer model validator can handle any data type
     class ContentOutput(BaseModel):
-        content: Union[str, DoclingDocument]
+        content: Union[str, SdsDocument]
 
     co = ContentOutput.model_validate_json('{"content": "Random string with version"}')
     assert co
@@ -777,41 +777,41 @@ def test_upgrade_content_layer_from_1_0_0() -> None:
 
 def test_version_doc():
     # default version
-    doc = DoclingDocument(name="Untitled 1")
+    doc = SdsDocument(name="Untitled 1")
     assert doc.version == CURRENT_VERSION
 
     with open("test/data/doc/dummy_doc.yaml", encoding="utf-8") as fp:
         dict_from_yaml = yaml.safe_load(fp)
-    doc = DoclingDocument.model_validate(dict_from_yaml)
+    doc = SdsDocument.model_validate(dict_from_yaml)
     assert doc.version == CURRENT_VERSION
 
     # invalid version
     with pytest.raises(ValidationError, match="NoneType"):
-        DoclingDocument(name="Untitled 1", version=None)
+        SdsDocument(name="Untitled 1", version=None)
     with pytest.raises(ValidationError, match="pattern"):
-        DoclingDocument(name="Untitled 1", version="abc")
+        SdsDocument(name="Untitled 1", version="abc")
 
     # incompatible version (major)
     major_split = CURRENT_VERSION.split(".", 1)
     new_version = f"{int(major_split[0]) + 1}.{major_split[1]}"
     with pytest.raises(ValidationError, match="incompatible"):
-        DoclingDocument(name="Untitled 1", version=new_version)
+        SdsDocument(name="Untitled 1", version=new_version)
 
     # incompatible version (minor)
     minor_split = major_split[1].split(".", 1)
     new_version = f"{major_split[0]}.{int(minor_split[0]) + 1}.{minor_split[1]}"
     with pytest.raises(ValidationError, match="incompatible"):
-        DoclingDocument(name="Untitled 1", version=new_version)
+        SdsDocument(name="Untitled 1", version=new_version)
 
     # compatible version (equal or lower minor)
     patch_split = minor_split[1].split(".", 1)
     comp_version = f"{major_split[0]}.{minor_split[0]}.{int(patch_split[0]) + 1}"
-    doc = DoclingDocument(name="Untitled 1", version=comp_version)
+    doc = SdsDocument(name="Untitled 1", version=comp_version)
     assert doc.version == CURRENT_VERSION
 
 
 def test_formula_mathml():
-    doc = DoclingDocument(name="Dummy")
+    doc = SdsDocument(name="Dummy")
     equation = "\\frac{1}{x}"
     doc.add_text(label=DocItemLabel.FORMULA, text=equation)
 
@@ -828,7 +828,7 @@ def test_formula_mathml():
 
 
 def test_formula_with_missing_fallback():
-    doc = DoclingDocument(name="Dummy")
+    doc = SdsDocument(name="Dummy")
     bbox = BoundingBox.from_tuple((1, 2, 3, 4), origin=CoordOrigin.BOTTOMLEFT)
     prov = ProvenanceItem(page_no=1, bbox=bbox, charspan=(0, 2))
     doc.add_text(label=DocItemLabel.FORMULA, text="", orig="(II.24) 2 Imar", prov=prov)
@@ -846,7 +846,7 @@ def test_formula_with_missing_fallback():
 
 def test_docitem_get_image():
     # Prepare the document
-    doc = DoclingDocument(name="Dummy")
+    doc = SdsDocument(name="Dummy")
 
     page1_image = PILImage.new(mode="RGB", size=(200, 400), color=(0, 0, 0))
     doc_item_image = PILImage.new(mode="RGB", size=(20, 40), color=(255, 0, 0))
@@ -891,7 +891,7 @@ def test_docitem_get_image():
 
 def test_floatingitem_get_image():
     # Prepare the document
-    doc = DoclingDocument(name="Dummy")
+    doc = SdsDocument(name="Dummy")
 
     page1_image = PILImage.new(mode="RGB", size=(200, 400), color=(0, 0, 0))
     floating_item_image = PILImage.new(mode="RGB", size=(20, 40), color=(255, 0, 0))
@@ -957,7 +957,7 @@ def test_save_pictures(sample_doc):
 
 def test_save_pictures_with_page():
     # Given
-    doc = DoclingDocument(name="Dummy")
+    doc = SdsDocument(name="Dummy")
 
     doc.add_page(page_no=1, size=Size(width=2000, height=4000), image=None)
     doc.add_page(
@@ -1016,11 +1016,11 @@ def _gt_filename(filename: Path) -> Path:
 
 
 def _verify_loaded_output(filename: Path, pred=None):
-    # gt = DoclingDocument.load_from_json(Path(str(filename) + ".gt"))
-    gt = DoclingDocument.load_from_json(_gt_filename(filename=filename))
+    # gt = SdsDocument.load_from_json(Path(str(filename) + ".gt"))
+    gt = SdsDocument.load_from_json(_gt_filename(filename=filename))
 
-    pred = pred or DoclingDocument.load_from_json(Path(filename))
-    assert isinstance(pred, DoclingDocument)
+    pred = pred or SdsDocument.load_from_json(Path(filename))
+    assert isinstance(pred, SdsDocument)
 
     assert pred.export_to_dict() == gt.export_to_dict(), f"pred.export_to_dict() != gt.export_to_dict() for {filename}"
     assert pred == gt, f"pred!=gt for {filename}"
@@ -1083,7 +1083,7 @@ def test_save_to_disk(sample_doc):
     )
     _verify_saved_output(filename=filename, paths=paths)
 
-    doc_emb_loaded = DoclingDocument.load_from_json(filename)
+    doc_emb_loaded = SdsDocument.load_from_json(filename)
     _verify_loaded_output(filename=filename, pred=doc_emb_loaded)
 
     filename = test_dir / "constructed_doc.referenced.json"
@@ -1094,7 +1094,7 @@ def test_save_to_disk(sample_doc):
     )
     _verify_saved_output(filename=filename, paths=paths)
 
-    doc_ref_loaded = DoclingDocument.load_from_json(filename)
+    doc_ref_loaded = SdsDocument.load_from_json(filename)
     _verify_loaded_output(filename=filename, pred=doc_ref_loaded)
 
     ### YAML
@@ -1136,14 +1136,14 @@ def test_document_stack_operations(sample_doc):
     ], f"stack==[2, 2, 2, 0, 2, 0, 0] for stack: {stack}"
 
 
-def test_document_manipulation(sample_doc: DoclingDocument) -> None:
-    def _resolve(document: DoclingDocument, cref: str) -> NodeItem:
+def test_document_manipulation(sample_doc: SdsDocument) -> None:
+    def _resolve(document: SdsDocument, cref: str) -> NodeItem:
         ref = RefItem(cref=cref)
         return ref.resolve(doc=document)
 
     def _verify(
         filename: Path,
-        document: DoclingDocument,
+        document: SdsDocument,
         generate: bool = False,
     ):
         if generate or (not os.path.exists(_gt_filename(filename=filename))):
@@ -1153,10 +1153,10 @@ def test_document_manipulation(sample_doc: DoclingDocument) -> None:
                 image_mode=ImageRefMode.EMBEDDED,
             )
         # test if the document is still model-validating
-        DoclingDocument.load_from_json(filename=_gt_filename(filename=filename))
+        SdsDocument.load_from_json(filename=_gt_filename(filename=filename))
 
         # test if the document is the same as the stored GT
-        _verify_loaded_output(filename=filename, pred=DoclingDocument.model_validate(document))
+        _verify_loaded_output(filename=filename, pred=SdsDocument.model_validate(document))
 
     image_dir = Path("./test/data/doc/constructed_images/")
 
@@ -1485,7 +1485,7 @@ def test_document_manipulation(sample_doc: DoclingDocument) -> None:
 
 def test_misplaced_list_items():
     filename = Path("test/data/doc/misplaced_list_items.yaml")
-    doc = DoclingDocument.load_from_yaml(filename)
+    doc = SdsDocument.load_from_yaml(filename)
 
     dt_pred = doc.export_to_doctags()
     _verify_regression_test(dt_pred, filename=str(filename), ext="dt")
@@ -1494,7 +1494,7 @@ def test_misplaced_list_items():
     if GEN_TEST_DATA:
         doc.save_as_yaml(exp_file)
     else:
-        exp_doc = DoclingDocument.load_from_yaml(exp_file)
+        exp_doc = SdsDocument.load_from_yaml(exp_file)
         assert doc == exp_doc
 
     doc._normalize_references()
@@ -1502,12 +1502,12 @@ def test_misplaced_list_items():
     if GEN_TEST_DATA:
         doc.save_as_yaml(exp_file)
     else:
-        exp_doc = DoclingDocument.load_from_yaml(exp_file)
+        exp_doc = SdsDocument.load_from_yaml(exp_file)
         assert doc == exp_doc
 
 
 def test_export_with_precision():
-    doc = DoclingDocument.load_from_yaml(filename="test/data/doc/dummy_doc_2.yaml")
+    doc = SdsDocument.load_from_yaml(filename="test/data/doc/dummy_doc_2.yaml")
     act_data = doc.export_to_dict(coord_precision=2, confid_precision=1)
     exp_file = Path("test/data/doc/dummy_doc_2_prec.yaml")
     if GEN_TEST_DATA:
@@ -1525,8 +1525,8 @@ def test_concatenate():
         "test/data/doc/constructed_doc.embedded.json",
         "test/data/doc/2311.18481v1.json",
     ]
-    docs = [DoclingDocument.load_from_json(filename=f) for f in files]
-    doc = DoclingDocument.concatenate(docs=docs)
+    docs = [SdsDocument.load_from_json(filename=f) for f in files]
+    doc = SdsDocument.concatenate(docs=docs)
 
     html_data = doc.export_to_html(image_mode=ImageRefMode.EMBEDDED, split_page_view=True)
 
@@ -1538,7 +1538,7 @@ def test_concatenate():
         with open(exp_html_file, "w", encoding="utf-8") as f:
             f.write(html_data)
     else:
-        exp_doc = DoclingDocument.load_from_json(exp_json_file)
+        exp_doc = SdsDocument.load_from_json(exp_json_file)
         assert doc == exp_doc
 
         with open(exp_html_file, encoding="utf-8") as f:
@@ -1548,7 +1548,7 @@ def test_concatenate():
 
 def test_export_markdown_compact_tables():
     """Test compact_tables parameter for markdown export."""
-    doc = DoclingDocument(name="Compact Table Test")
+    doc = SdsDocument(name="Compact Table Test")
     table = doc.add_table(data=TableData(num_rows=3, num_cols=3))
 
     # Add cells with varying lengths to demonstrate padding difference
@@ -1586,7 +1586,7 @@ def test_export_markdown_compact_tables():
 
 
 def test_list_group_with_list_items():
-    good_doc = DoclingDocument(name="")
+    good_doc = SdsDocument(name="")
     l1 = good_doc.add_list_group()
     good_doc.add_list_item(text="ListItem 1", parent=l1)
     good_doc.add_list_item(text="ListItem 2", parent=l1)
@@ -1595,7 +1595,7 @@ def test_list_group_with_list_items():
 
 
 def test_list_group_with_non_list_items():
-    bad_doc = DoclingDocument(name="")
+    bad_doc = SdsDocument(name="")
     l1 = bad_doc.add_list_group()
     bad_doc.add_list_item(text="ListItem 1", parent=l1)
     bad_doc.add_text(text="non-ListItem in ListGroup", label=DocItemLabel.TEXT, parent=l1)
@@ -1606,7 +1606,7 @@ def test_list_group_with_non_list_items():
 
 def test_list_item_outside_list_group():
     def unsafe_add_list_item(
-        doc: DoclingDocument,
+        doc: SdsDocument,
         text: str,
         enumerated: bool = False,
         marker: Optional[str] = None,
@@ -1645,28 +1645,28 @@ def test_list_item_outside_list_group():
 
         return list_item
 
-    bad_doc = DoclingDocument(name="")
+    bad_doc = SdsDocument(name="")
     unsafe_add_list_item(doc=bad_doc, text="ListItem outside ListGroup")
     with pytest.raises(ValueError):
         bad_doc._validate_rules()
 
 
 def test_list_item_inside_list_group():
-    doc = DoclingDocument(name="")
+    doc = SdsDocument(name="")
     l1 = doc.add_list_group()
     doc.add_list_item(text="ListItem inside ListGroup", parent=l1)
     doc._validate_rules()
 
 
 def test_group_with_children():
-    good_doc = DoclingDocument(name="")
+    good_doc = SdsDocument(name="")
     grp = good_doc.add_group()
     good_doc.add_text(text="Text in group", label=DocItemLabel.TEXT, parent=grp)
     good_doc._validate_rules()
 
 
 def test_group_without_children():
-    bad_doc = DoclingDocument(name="")
+    bad_doc = SdsDocument(name="")
     bad_doc.add_group()
     with pytest.raises(ValueError):
         bad_doc._validate_rules()
@@ -1677,7 +1677,7 @@ def test_rich_tables(rich_table_doc):
     if GEN_TEST_DATA:
         rich_table_doc.save_as_yaml(exp_file)
 
-    exp_doc = DoclingDocument.load_from_yaml(exp_file)
+    exp_doc = SdsDocument.load_from_yaml(exp_file)
     assert rich_table_doc == exp_doc
 
 
@@ -1688,12 +1688,12 @@ def test_doc_manipulation_with_rich_tables(rich_table_doc):
     if GEN_TEST_DATA:
         rich_table_doc.save_as_yaml(exp_file)
 
-    exp_doc = DoclingDocument.load_from_yaml(exp_file)
+    exp_doc = SdsDocument.load_from_yaml(exp_file)
     assert rich_table_doc == exp_doc
 
 
 def test_invalid_rich_table_doc():
-    doc = DoclingDocument(name="")
+    doc = SdsDocument(name="")
     table_item = doc.add_table(data=TableData(num_rows=2, num_cols=2))
     rich_item = doc.add_text(
         text="rich item",
@@ -1728,11 +1728,11 @@ def test_invalid_rich_table_doc():
 
     # ensure validate_document() raises:
     with pytest.raises(ValueError):
-        DoclingDocument.validate_document(doc)
+        SdsDocument.validate_document(doc)
 
 
 def test_rich_table_item_insertion_normalization():
-    doc = DoclingDocument(name="")
+    doc = SdsDocument(name="")
     doc.add_text(label=DocItemLabel.TITLE, text="Rich tables")
 
     table_item = doc.add_table(
@@ -1773,7 +1773,7 @@ def test_rich_table_item_insertion_normalization():
     exp_file = Path("test/data/doc/rich_table_item_ins_norm_1.out.yaml")
     if GEN_TEST_DATA:
         doc.save_as_yaml(exp_file)
-    exp_doc = DoclingDocument.load_from_yaml(exp_file)
+    exp_doc = SdsDocument.load_from_yaml(exp_file)
     assert doc == exp_doc
 
     doc.insert_item_before_sibling(
@@ -1790,7 +1790,7 @@ def test_rich_table_item_insertion_normalization():
     exp_file = Path("test/data/doc/rich_table_item_ins_norm_2.out.yaml")
     if GEN_TEST_DATA:
         doc.save_as_yaml(exp_file)
-    exp_doc = DoclingDocument.load_from_yaml(exp_file)
+    exp_doc = SdsDocument.load_from_yaml(exp_file)
     assert doc == exp_doc
 
     doc._normalize_references()
@@ -1799,13 +1799,13 @@ def test_rich_table_item_insertion_normalization():
     exp_file = Path("test/data/doc/rich_table_item_ins_norm_3.out.yaml")
     if GEN_TEST_DATA:
         doc.save_as_yaml(exp_file)
-    exp_doc = DoclingDocument.load_from_yaml(exp_file)
+    exp_doc = SdsDocument.load_from_yaml(exp_file)
     assert doc == exp_doc
 
 
 def test_filter_pages():
     src = Path("./test/data/doc/2408.09869v3_enriched.json")
-    orig_doc = DoclingDocument.load_from_json(src)
+    orig_doc = SdsDocument.load_from_json(src)
     doc = orig_doc.filter(page_nrs={2, 3, 5})
 
     html_data = doc.export_to_html(image_mode=ImageRefMode.EMBEDDED, split_page_view=True)
@@ -1818,7 +1818,7 @@ def test_filter_pages():
         with open(exp_html_file, "w", encoding="utf-8") as f:
             f.write(html_data)
     else:
-        exp_doc = DoclingDocument.load_from_json(exp_json_file)
+        exp_doc = SdsDocument.load_from_json(exp_json_file)
         assert doc == exp_doc
 
         with open(exp_html_file, encoding="utf-8") as f:
@@ -1827,7 +1827,7 @@ def test_filter_pages():
 
 
 def _create_doc_for_filtering():
-    doc = DoclingDocument(
+    doc = SdsDocument(
         name="",
         pages={i: PageItem(page_no=i, size=Size(width=100, height=100), image=None) for i in range(1, 3)},
     )
@@ -1882,7 +1882,7 @@ def test_meta_migration_warnings():
     # the following should not raise any warnings
     with warnings.catch_warnings():
         warnings.simplefilter("error")
-        doc = DoclingDocument.load_from_yaml("test/data/doc/dummy_doc_2.yaml")
+        doc = SdsDocument.load_from_yaml("test/data/doc/dummy_doc_2.yaml")
 
     # the following should raise a deprecation warning
     with pytest.warns(DeprecationWarning):
@@ -1893,7 +1893,7 @@ def test_meta_migration_warnings():
 
 def test_docitem_comments_field():
     """Test that DocItem has a comments field that can hold RefItem references."""
-    doc = DoclingDocument(name="test_comments")
+    doc = SdsDocument(name="test_comments")
     doc.add_text(label=DocItemLabel.TEXT, text="Normal text without comment.")
 
     # Add a paragraph (which is a DocItem)
@@ -1911,13 +1911,13 @@ def test_docitem_comments_field():
     exp_file = Path("test/data/doc/docitem_comments_field.out.yaml")
     if GEN_TEST_DATA:
         doc.save_as_yaml(exp_file)
-    exp_doc = DoclingDocument.load_from_yaml(exp_file)
+    exp_doc = SdsDocument.load_from_yaml(exp_file)
     assert doc == exp_doc
 
 
 def test_docitem_comments_multiple():
     """Test that a DocItem can have multiple comments attached."""
-    doc = DoclingDocument(name="test_multiple_comments")
+    doc = SdsDocument(name="test_multiple_comments")
 
     text1 = doc.add_text(
         label=DocItemLabel.TEXT,
@@ -1951,13 +1951,13 @@ def test_docitem_comments_multiple():
     exp_file = Path("test/data/doc/docitem_comments_multiple.out.yaml")
     if GEN_TEST_DATA:
         doc.save_as_yaml(exp_file)
-    exp_doc = DoclingDocument.load_from_yaml(exp_file)
+    exp_doc = SdsDocument.load_from_yaml(exp_file)
     assert doc == exp_doc
 
 
 def test_docitem_comments_delete_updates_refs():
     """Test that deleting items properly updates comment references."""
-    doc = DoclingDocument(name="test_comments_delete")
+    doc = SdsDocument(name="test_comments_delete")
 
     # Add two paragraphs
     para1 = doc.add_text(

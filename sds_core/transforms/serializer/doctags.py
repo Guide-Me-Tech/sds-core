@@ -31,7 +31,7 @@ from sds_core.types.doc.document import (
     CodeItem,
     DocItem,
     DocItemLabel,
-    DoclingDocument,
+    SdsDocument,
     DocumentToken,
     FloatingItem,
     FormItem,
@@ -101,7 +101,7 @@ class DocTagsTextSerializer(BaseModel, BaseTextSerializer):
         *,
         item: TextItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         visited: Optional[set[str]] = None,
         **kwargs: Any,
     ) -> SerializationResult:
@@ -181,7 +181,7 @@ class DocTagsTableSerializer(BaseTableSerializer):
         *,
         item: TableItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         visited: Optional[set[str]] = None,
         **kwargs: Any,
     ) -> SerializationResult:
@@ -233,7 +233,7 @@ class DocTagsPictureSerializer(BasePictureSerializer):
         *,
         item: PictureItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -307,7 +307,7 @@ class DocTagsPictureSerializer(BasePictureSerializer):
                 ]:
                     chart_data = tabular_chart_annotations[0].chart_data
             if chart_data and chart_data.table_cells:
-                temp_doc = DoclingDocument(name="temp")
+                temp_doc = SdsDocument(name="temp")
                 temp_table = temp_doc.add_table(data=chart_data)
                 otsl_content = temp_table.export_to_otsl(temp_doc, add_cell_location=False)
                 body += otsl_content
@@ -336,7 +336,7 @@ class DocTagsKeyValueSerializer(BaseKeyValueSerializer):
         *,
         item: KeyValueItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -407,7 +407,7 @@ class DocTagsFormSerializer(BaseFormSerializer):
         *,
         item: FormItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""
@@ -426,7 +426,7 @@ class DocTagsListSerializer(BaseModel, BaseListSerializer):
         *,
         item: ListGroup,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         is_inline_scope: bool = False,
         visited: Optional[set[str]] = None,  # refs of visited items
@@ -464,7 +464,7 @@ class DocTagsInlineSerializer(BaseInlineSerializer):
     """DocTags-specific inline group serializer."""
 
     def _get_inline_location_tags(
-        self, doc: DoclingDocument, item: InlineGroup, params: DocTagsParams
+        self, doc: SdsDocument, item: InlineGroup, params: DocTagsParams
     ) -> SerializationResult:
         prov: Optional[ProvenanceItem] = None
         boxes: list[BoundingBox] = []
@@ -502,7 +502,7 @@ class DocTagsInlineSerializer(BaseInlineSerializer):
         *,
         item: InlineGroup,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         visited: Optional[set[str]] = None,  # refs of visited items
         **kwargs: Any,
@@ -546,7 +546,7 @@ class DocTagsFallbackSerializer(BaseFallbackSerializer):
         *,
         item: NodeItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serializes the passed item."""

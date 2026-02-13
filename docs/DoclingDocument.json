@@ -3266,11 +3266,11 @@
       "type": "object"
     }
   },
-  "description": "DoclingDocument.",
+  "description": "SdsDocument.",
   "properties": {
     "schema_name": {
-      "const": "DoclingDocument",
-      "default": "DoclingDocument",
+      "const": "SdsDocument",
+      "default": "SdsDocument",
       "title": "Schema Name",
       "type": "string"
     },
@@ -3409,6 +3409,6 @@
   "required": [
     "name"
   ],
-  "title": "DoclingDocument",
+  "title": "SdsDocument",
   "type": "object"
 }

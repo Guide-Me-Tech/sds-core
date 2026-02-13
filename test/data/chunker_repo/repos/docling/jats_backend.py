@@ -14,7 +14,7 @@ from typing_extensions import TypedDict, override
 
 from sds_core.types.doc import (
     DocItemLabel,
-    DoclingDocument,
+    SdsDocument,
     DocumentOrigin,
     GroupItem,
     GroupLabel,
@@ -138,7 +138,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         return {InputFormat.XML_JATS}
 
     @override
-    def convert(self) -> DoclingDocument:
+    def convert(self) -> SdsDocument:
         try:
             # Create empty document
             origin = DocumentOrigin(
@@ -146,7 +146,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
                 mimetype="application/xml",
                 binary_hash=self.document_hash,
             )
-            doc = DoclingDocument(name=self.file.stem or "file", origin=origin)
+            doc = SdsDocument(name=self.file.stem or "file", origin=origin)
             self.hlevel = 0
 
             # Get metadata XML components
@@ -298,7 +298,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         return xml_components
 
     def _add_abstract(
-        self, doc: DoclingDocument, xml_components: XMLComponents
+        self, doc: SdsDocument, xml_components: XMLComponents
     ) -> None:
         for abstract in xml_components["abstract"]:
             text: str = abstract["content"]
@@ -316,7 +316,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
 
         return
 
-    def _add_authors(self, doc: DoclingDocument, xml_components: XMLComponents) -> None:
+    def _add_authors(self, doc: SdsDocument, xml_components: XMLComponents) -> None:
         # TODO: once sds supports text formatting, add affiliation reference to
         # author names through superscripts
         authors: list = [item["name"] for item in xml_components["authors"]]
@@ -342,7 +342,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
 
         return
 
-    def _add_citation(self, doc: DoclingDocument, parent: NodeItem, text: str) -> None:
+    def _add_citation(self, doc: SdsDocument, parent: NodeItem, text: str) -> None:
         if isinstance(parent, GroupItem) and parent.label == GroupLabel.LIST:
             doc.add_list_item(text=text, enumerated=False, parent=parent)
         else:
@@ -480,7 +480,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         return text
 
     def _add_equation(
-        self, doc: DoclingDocument, parent: NodeItem, node: etree._Element
+        self, doc: SdsDocument, parent: NodeItem, node: etree._Element
     ) -> None:
         math_text = node.text
         math_parts = math_text.split("$$")
@@ -491,7 +491,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         return
 
     def _add_figure_captions(
-        self, doc: DoclingDocument, parent: NodeItem, node: etree._Element
+        self, doc: SdsDocument, parent: NodeItem, node: etree._Element
     ) -> None:
         label_node = node.xpath("label")
         label: Optional[str] = (
@@ -523,14 +523,14 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         return
 
     # TODO: add footnotes when DocItemLabel.FOOTNOTE and styling are supported
-    # def _add_footnote_group(self, doc: DoclingDocument, parent: NodeItem, node: etree._Element) -> None:
+    # def _add_footnote_group(self, doc: SdsDocument, parent: NodeItem, node: etree._Element) -> None:
     #     new_parent = doc.add_group(label=GroupLabel.LIST, name="footnotes", parent=parent)
     #     for child in node.iterchildren(tag="fn"):
     #         text = JatsDocumentBackend._get_text(child)
     #         doc.add_list_item(text=text, parent=new_parent)
 
     def _add_metadata(
-        self, doc: DoclingDocument, xml_components: XMLComponents
+        self, doc: SdsDocument, xml_components: XMLComponents
     ) -> None:
         self._add_title(doc, xml_components)
         self._add_authors(doc, xml_components)
@@ -539,7 +539,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         return
 
     def _add_table(
-        self, doc: DoclingDocument, parent: NodeItem, table_xml_component: Table
+        self, doc: SdsDocument, parent: NodeItem, table_xml_component: Table
     ) -> None:
         soup = BeautifulSoup(table_xml_component["content"], "html.parser")
         table_tag = soup.find("table")
@@ -564,7 +564,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         return
 
     def _add_tables(
-        self, doc: DoclingDocument, parent: NodeItem, node: etree._Element
+        self, doc: SdsDocument, parent: NodeItem, node: etree._Element
     ) -> None:
         table: Table = {"label": "", "caption": "", "content": ""}
 
@@ -604,7 +604,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
 
         return
 
-    def _add_title(self, doc: DoclingDocument, xml_components: XMLComponents) -> None:
+    def _add_title(self, doc: SdsDocument, xml_components: XMLComponents) -> None:
         self.root = doc.add_text(
             parent=None,
             text=xml_components["title"],
@@ -613,7 +613,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         return
 
     def _walk_linear(  # noqa: C901
-        self, doc: DoclingDocument, parent: NodeItem, node: etree._Element
+        self, doc: SdsDocument, parent: NodeItem, node: etree._Element
     ) -> str:
         skip_tags = ["term"]
         flush_tags = ["ack", "sec", "list", "boxed-text", "disp-formula", "fig"]

@@ -1,4 +1,4 @@
-"""Models for the Docling's adoption of Web Video Text Tracks format."""
+"""Models for the Sds's adoption of Web Video Text Tracks format."""
 
 import re
 import warnings

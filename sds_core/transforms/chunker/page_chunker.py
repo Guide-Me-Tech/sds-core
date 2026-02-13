@@ -12,7 +12,7 @@ from sds_core.transforms.chunker import BaseChunker, DocChunk, DocMeta
 from sds_core.transforms.chunker.hierarchical_chunker import (
     ChunkingSerializerProvider,
 )
-from sds_core.types import DoclingDocument as DLDocument
+from sds_core.types import SdsDocument as DLDocument
 
 
 class PageChunker(BaseChunker):

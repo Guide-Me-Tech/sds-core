@@ -8,7 +8,7 @@ from typing import Any, ClassVar
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
-from sds_core.types.doc import DoclingDocument as DLDocument
+from sds_core.types.doc import SdsDocument as DLDocument
 
 DFLT_DELIM = "\n"
 

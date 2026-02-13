@@ -1,5 +1,5 @@
 {
-  "schema_name": "DoclingDocument",
+  "schema_name": "SdsDocument",
   "version": "1.9.0",
   "name": "Document",
   "furniture": {
@@ -425,7 +425,10 @@
             "b": 0.34,
             "coord_origin": "TOPLEFT"
           },
-          "charspan": [0, 0]
+          "charspan": [
+            0,
+            0
+          ]
         }
       ],
       "captions": [

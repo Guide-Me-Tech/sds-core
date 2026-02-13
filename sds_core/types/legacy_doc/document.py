@@ -1,4 +1,4 @@
-"""Models for the Docling Document data type."""
+"""Models for the Sds Document data type."""
 
 from datetime import datetime
 from typing import Any, Generic, Optional, Union
@@ -325,7 +325,7 @@ class ExportedCCSDocument(
         CollectionNameTypeT,
     ],
 ):
-    """Document model for Docling."""
+    """Document model for Sds."""
 
     obj_type: Optional[StrictStr] = Field(
         "pdf-document",

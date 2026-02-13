@@ -60,7 +60,7 @@ ACQUISITION_TYPE = Literal["API", "FTP", "Download", "Link", "Web scraping/Crawl
 
 
 class Identifier(AliasModel, Generic[IdentifierTypeT], extra="forbid"):
-    """Unique identifier of a Docling data object."""
+    """Unique identifier of a Sds data object."""
 
     type_: IdentifierTypeT = Field(
         alias="type",
@@ -75,7 +75,7 @@ class Identifier(AliasModel, Generic[IdentifierTypeT], extra="forbid"):
         alias="_name",
         title="_Name",
         description=(
-            "A unique identifier of the data object across Docling, consisting of "
+            "A unique identifier of the data object across Sds, consisting of "
             "the concatenation of type and value in lower case, separated by hash "
             "(#)."
         ),
@@ -111,7 +111,7 @@ class Log(AliasModel, extra="forbid"):
         json_schema_extra=es_field(type="keyword", ignore_above=8191),
     )
     agent: StrictStr = Field(
-        description="The Docling agent that performed the task, e.g., CCS or CXS.",
+        description="The Sds agent that performed the task, e.g., CCS or CXS.",
         json_schema_extra=es_field(type="keyword", ignore_above=8191),
     )
     type_: StrictStr = Field(
@@ -129,7 +129,7 @@ class Log(AliasModel, extra="forbid"):
 
 
 class FileInfoObject(AliasModel):
-    """Filing information for any data object to be stored in a Docling database."""
+    """Filing information for any data object to be stored in a Sds database."""
 
     filename: StrictStr = Field(
         description="The name of a persistent object that created this data object",
@@ -142,14 +142,14 @@ class FileInfoObject(AliasModel):
         json_schema_extra=es_field(type="keyword", ignore_above=8191),
     )
     document_hash: StrictStr = Field(
-        description=("A unique identifier of this data object within a collection of a Docling database"),
+        description=("A unique identifier of this data object within a collection of a Sds database"),
         alias="document-hash",
         json_schema_extra=es_field(type="keyword", ignore_above=8191),
     )
 
 
 class CollectionTypeEnum(str, Enum):
-    """Enumeration of valid Docling collection types."""
+    """Enumeration of valid Sds collection types."""
 
     generic = "Generic"
     document = "Document"

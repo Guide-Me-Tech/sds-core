@@ -1,6 +1,6 @@
 """Define classes for Azure serialization.
 
-This serializer exports a DoclingDocument to a JSON structure that mirrors
+This serializer exports a SdsDocument to a JSON structure that mirrors
 the Azure Document Intelligence layout output used in
 `azure_document_intelligence.convert_azure_output_to_sds`.
 
@@ -12,7 +12,7 @@ accumulates structured JSON for:
 - paragraphs (with optional Azure roles)
 
 Notes:
-- Word-level segmentation is not available in the DoclingDocument, so the
+- Word-level segmentation is not available in the SdsDocument, so the
   exported `pages[*].words` array is left empty.
 - Bounding boxes are normalized to TOPLEFT origin when page size is known.
 """
@@ -48,7 +48,7 @@ from sds_core.types.doc import (
     CoordOrigin,
     DocItem,
     DocItemLabel,
-    DoclingDocument,
+    SdsDocument,
     FormItem,
     InlineGroup,
     KeyValueItem,
@@ -74,7 +74,7 @@ def _bbox_to_polygon_coords(
     return [l, t, r, t, r, b, l, b]
 
 
-def _bbox_to_polygon_for_item(doc: DoclingDocument, item: DocItem) -> Optional[list[float]]:
+def _bbox_to_polygon_for_item(doc: SdsDocument, item: DocItem) -> Optional[list[float]]:
     """Compute a TOPLEFT-origin polygon for the first provenance of the item."""
     if not item.prov:
         return None
@@ -179,7 +179,7 @@ class _AzureTextSerializer(BaseModel, BaseTextSerializer):
         *,
         item: TextItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         is_inline_scope: bool = False,
         **kwargs: Any,
     ) -> SerializationResult:
@@ -232,7 +232,7 @@ class _AzureTableSerializer(BaseTableSerializer):
         *,
         item: TableItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         assert isinstance(doc_serializer, AzureDocSerializer)
@@ -303,7 +303,7 @@ class _AzurePictureSerializer(BasePictureSerializer):
         *,
         item: PictureItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         assert isinstance(doc_serializer, AzureDocSerializer)
@@ -350,7 +350,7 @@ class _AzureKeyValueSerializer(BaseKeyValueSerializer):
         *,
         item: KeyValueItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         # Azure JSON we target does not include KeyValue/Form regions; ignore.
@@ -367,7 +367,7 @@ class _AzureFormSerializer(BaseFormSerializer):
         *,
         item: FormItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         _ = (item, doc_serializer, doc, kwargs)
@@ -383,7 +383,7 @@ class _AzureListSerializer(BaseModel, BaseListSerializer):
         *,
         item: ListGroup,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         is_inline_scope: bool = False,
         **kwargs: Any,
@@ -403,7 +403,7 @@ class _AzureInlineSerializer(BaseInlineSerializer):
         *,
         item: InlineGroup,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         **kwargs: Any,
     ) -> SerializationResult:
@@ -420,7 +420,7 @@ class _AzureFallbackSerializer(BaseFallbackSerializer):
         *,
         item: NodeItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         # No recursion; outer traversal covers children already.

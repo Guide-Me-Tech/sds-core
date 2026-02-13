@@ -769,7 +769,7 @@ pictures:
     page_no: 9
   references: []
   self_ref: '#/pictures/5'
-schema_name: DoclingDocument
+schema_name: SdsDocument
 tables:
 - captions:
   - $ref: '#/texts/373'

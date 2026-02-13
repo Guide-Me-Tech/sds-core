@@ -18,7 +18,7 @@ from typing_extensions import override
 from sds_core.transforms.visualizer.base import BaseVisualizer
 from sds_core.types.doc import (
     ContentLayer,
-    DoclingDocument,
+    SdsDocument,
     GraphCellLabel,
     GraphLinkLabel,
 )
@@ -37,7 +37,7 @@ _LABEL_BG_COLOUR = (255, 255, 255, 180)  # semi-transparent white
 
 
 class KeyValueVisualizer(BaseVisualizer):
-    """Draw key/value graphs stored in :py:attr:`DoclingDocument.key_value_items`."""
+    """Draw key/value graphs stored in :py:attr:`SdsDocument.key_value_items`."""
 
     class Params(BaseModel):
         """Parameters for KeyValueVisualizer controlling label and cell id display, and content layers to visualize."""
@@ -61,7 +61,7 @@ class KeyValueVisualizer(BaseVisualizer):
         self,
         *,
         image: Image,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         page_no: int,
         scale_x: float,
         scale_y: float,
@@ -196,7 +196,7 @@ class KeyValueVisualizer(BaseVisualizer):
     def get_visualization(
         self,
         *,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         included_content_layers: Optional[set[ContentLayer]] = None,
         **kwargs,
     ) -> dict[Optional[int], Image]:

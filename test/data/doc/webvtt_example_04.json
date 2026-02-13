@@ -1,5 +1,5 @@
 {
-  "schema_name": "DoclingDocument",
+  "schema_name": "SdsDocument",
   "version": "1.8.0",
   "name": "webvtt_example_04",
   "origin": {

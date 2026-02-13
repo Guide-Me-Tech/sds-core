@@ -23,7 +23,7 @@ from sds_core.transforms.chunker.hierarchical_chunker import (
     BaseCodeChunkingStrategy,
 )
 from sds_core.transforms.serializer.base import BaseDocSerializer
-from sds_core.types.doc.document import CodeItem, DoclingDocument
+from sds_core.types.doc.document import CodeItem, SdsDocument
 from sds_core.types.doc.labels import CodeLanguageLabel
 
 _INNER_CHUNKERS_BY_LANG: dict[CodeLanguageLabel, type[_CodeChunker]] = {
@@ -58,7 +58,7 @@ class StandardCodeChunkingStrategy(BaseCodeChunkingStrategy):
         self,
         *,
         item: CodeItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         doc_serializer: Optional[BaseDocSerializer] = None,
         visited: Optional[set[str]] = None,
         **kwargs: Any,
@@ -77,7 +77,7 @@ class StandardCodeChunkingStrategy(BaseCodeChunkingStrategy):
             return
 
         if chunker := self._get_chunker(item.code_language):
-            doc = DoclingDocument(name="", origin=doc.origin)
+            doc = SdsDocument(name="", origin=doc.origin)
             doc.add_code(text=code_text, code_language=item.code_language, orig=code_text)
             yield from chunker.chunk(doc, **kwargs)
         else:  # if no inner chunker available for language, fall back to yielding a single code block chunk

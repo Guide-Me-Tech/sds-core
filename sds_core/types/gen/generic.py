@@ -1,4 +1,4 @@
-"""Define a generic Docling type."""
+"""Define a generic Sds type."""
 
 from typing import Optional
 

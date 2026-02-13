@@ -14,7 +14,7 @@ from sds_core.transforms.chunker.code_chunking.standard_code_chunking_strategy i
     StandardCodeChunkingStrategy,
 )
 from sds_core.transforms.chunker.hierarchical_chunker import HierarchicalChunker
-from sds_core.types.doc import DoclingDocument, DocumentOrigin
+from sds_core.types.doc import SdsDocument, DocumentOrigin
 from sds_core.types.doc.labels import CodeLanguageLabel, DocItemLabel
 from sds_core.utils.legacy import _create_hash
 
@@ -35,10 +35,10 @@ def create_documents_from_repository(
     repo_url: str,
     language: CodeLanguageLabel,
     commit_id: Optional[str] = None,
-) -> list[DoclingDocument]:
-    """Build DoclingDocument objects from a local checkout, one per code file."""
+) -> list[SdsDocument]:
+    """Build SdsDocument objects from a local checkout, one per code file."""
 
-    documents: list[DoclingDocument] = []
+    documents: list[SdsDocument] = []
     if commit_id is None:
         commit_id = get_latest_commit_id(file_dir)
 
@@ -71,7 +71,7 @@ def create_documents_from_repository(
             binary_hash=_create_hash(file_content),
         )
 
-        doc = DoclingDocument(name=file_relative, origin=origin)
+        doc = SdsDocument(name=file_relative, origin=origin)
         doc.add_code(text=file_content, code_language=language)
         documents.append(doc)
 

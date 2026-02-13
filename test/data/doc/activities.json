@@ -1,5 +1,5 @@
 {
-  "schema_name": "DoclingDocument",
+  "schema_name": "SdsDocument",
   "version": "1.3.0",
   "name": "activities",
   "origin": {

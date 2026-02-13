@@ -11,7 +11,7 @@ import yaml
 
 from sds_core.transforms.serializer.latex import LaTeXDocSerializer, LaTeXParams
 from sds_core.types.doc.base import ImageRefMode
-from sds_core.types.doc.document import DoclingDocument
+from sds_core.types.doc.document import SdsDocument
 
 from .test_data_gen_flag import GEN_TEST_DATA
 
@@ -30,7 +30,7 @@ def verify_or_update(exp_file: Path, actual: str):
 
 def test_latex_basic_activities():
     src = Path("./test/data/doc/activities.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = LaTeXDocSerializer(
         doc=doc,
@@ -46,7 +46,7 @@ def test_latex_basic_activities():
 
 def test_latex_inline_and_formatting():
     src = Path("./test/data/doc/inline_and_formatting.yaml")
-    doc = DoclingDocument.load_from_yaml(src)
+    doc = SdsDocument.load_from_yaml(src)
 
     ser = LaTeXDocSerializer(
         doc=doc,
@@ -66,7 +66,7 @@ def test_dummy_doc():
     with open(src, "r", encoding="utf-8") as fp:
         dict_from_yaml = yaml.safe_load(fp)
 
-    doc = DoclingDocument.model_validate(dict_from_yaml)
+    doc = SdsDocument.model_validate(dict_from_yaml)
 
     ser = LaTeXDocSerializer(
         doc=doc,
@@ -79,7 +79,7 @@ def test_dummy_doc():
     verify_or_update(exp_file=src.with_suffix(".gt.tex"), actual=actual)
 
 
-def test_constructed_doc(sample_doc: DoclingDocument):
+def test_constructed_doc(sample_doc: SdsDocument):
     doc = sample_doc
 
     ser = LaTeXDocSerializer(
@@ -94,7 +94,7 @@ def test_constructed_doc(sample_doc: DoclingDocument):
     verify_or_update(exp_file=src.with_suffix(".gt.tex"), actual=actual)
 
 
-def test_constructed_rich_table_doc(rich_table_doc: DoclingDocument):
+def test_constructed_rich_table_doc(rich_table_doc: SdsDocument):
     doc = rich_table_doc
 
     ser = LaTeXDocSerializer(
@@ -111,7 +111,7 @@ def test_constructed_rich_table_doc(rich_table_doc: DoclingDocument):
 
 def test_latex_paper():
     src = Path("./test/data/doc/2408.09869v3_enriched.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = LaTeXDocSerializer(
         doc=doc,
@@ -126,7 +126,7 @@ def test_latex_paper():
 
 def test_latex_nested_lists():
     src = Path("./test/data/doc/polymers.json")
-    doc = DoclingDocument.load_from_json(src)
+    doc = SdsDocument.load_from_json(src)
 
     ser = LaTeXDocSerializer(
         doc=doc,

@@ -40,7 +40,7 @@ from sds_core.types.doc import (
     DescriptionAnnotation,
     DocItem,
     DocItemLabel,
-    DoclingDocument,
+    SdsDocument,
     FloatingItem,
     Formatting,
     FormItem,
@@ -80,7 +80,7 @@ class _PageBreakSerResult(SerializationResult):
 
 
 def _iterate_items(
-    doc: DoclingDocument,
+    doc: SdsDocument,
     layers: Optional[set[ContentLayer]],
     node: Optional[NodeItem] = None,
     traverse_pictures: bool = False,
@@ -233,7 +233,7 @@ class DocSerializer(BaseModel, BaseDocSerializer):
 
     model_config = ConfigDict(arbitrary_types_allowed=True, extra="forbid")
 
-    doc: DoclingDocument
+    doc: SdsDocument
 
     text_serializer: BaseTextSerializer
     table_serializer: BaseTableSerializer

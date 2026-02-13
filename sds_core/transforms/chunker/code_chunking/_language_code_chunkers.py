@@ -26,7 +26,7 @@ from sds_core.transforms.chunker.code_chunking._utils import (
     _to_str,
 )
 from sds_core.transforms.chunker.tokenizer.base import BaseTokenizer
-from sds_core.types import DoclingDocument as DLDocument
+from sds_core.types import SdsDocument as DLDocument
 from sds_core.types.doc.document import CodeItem, DocumentOrigin
 from sds_core.types.doc.labels import CodeLanguageLabel
 

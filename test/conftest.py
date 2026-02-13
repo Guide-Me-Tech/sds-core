@@ -7,7 +7,7 @@ from PIL import Image as PILImage
 from PIL import ImageDraw
 from pydantic import AnyUrl
 
-from sds_core.types import DoclingDocument
+from sds_core.types import SdsDocument
 from sds_core.types.doc import (
     CodeLanguageLabel,
     DocItemLabel,
@@ -27,10 +27,10 @@ from sds_core.types.doc import (
 
 
 # factored out of fixture to simplify IDE-level debugging
-def _construct_doc_impl() -> DoclingDocument:
-    """Fixture for a DoclingDocument to be reused across a test session."""
+def _construct_doc_impl() -> SdsDocument:
+    """Fixture for a SdsDocument to be reused across a test session."""
 
-    doc = DoclingDocument(name="Untitled 1")
+    doc = SdsDocument(name="Untitled 1")
 
     leading_list = doc.add_list_group(parent=None)
     doc.add_list_item(parent=leading_list, text="item of leading list", marker="■")
@@ -348,22 +348,22 @@ def _construct_doc_impl() -> DoclingDocument:
 
 
 @pytest.fixture(scope="session")
-def _construct_doc() -> DoclingDocument:
-    """Fixture for a DoclingDocument to be reused across a test session."""
+def _construct_doc() -> SdsDocument:
+    """Fixture for a SdsDocument to be reused across a test session."""
     return _construct_doc_impl()
 
 
 @pytest.fixture(scope="function")
-def sample_doc(_construct_doc: DoclingDocument) -> DoclingDocument:
-    """Copy of a DoclingDocument for each test function."""
+def sample_doc(_construct_doc: SdsDocument) -> SdsDocument:
+    """Copy of a SdsDocument for each test function."""
 
     return _construct_doc.model_copy(deep=True)
 
 
-def _rich_table_doc_impl() -> DoclingDocument:
+def _rich_table_doc_impl() -> SdsDocument:
     """Fixture for a rich table document to be reused across the test session."""
 
-    doc = DoclingDocument(name="")
+    doc = SdsDocument(name="")
     doc.add_text(label=DocItemLabel.TITLE, text="Rich tables")
 
     table_item = doc.add_table(
@@ -457,13 +457,13 @@ def _rich_table_doc_impl() -> DoclingDocument:
 
 
 @pytest.fixture(scope="session")
-def _rich_table_doc() -> DoclingDocument:
+def _rich_table_doc() -> SdsDocument:
     """Fixture for a rich table document to be reused across the test session."""
     return _rich_table_doc_impl()
 
 
 @pytest.fixture(scope="function")
-def rich_table_doc(_rich_table_doc: DoclingDocument) -> DoclingDocument:
+def rich_table_doc(_rich_table_doc: SdsDocument) -> SdsDocument:
     """Copy of a rich table document for each test function."""
 
     return _rich_table_doc.model_copy(deep=True)

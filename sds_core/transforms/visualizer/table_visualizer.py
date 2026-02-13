@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from typing_extensions import override
 
 from sds_core.transforms.visualizer.base import BaseVisualizer
-from sds_core.types.doc import ContentLayer, DoclingDocument, TableItem
+from sds_core.types.doc import ContentLayer, SdsDocument, TableItem
 
 _log = logging.getLogger(__name__)
 
@@ -167,7 +167,7 @@ class TableVisualizer(BaseVisualizer):
 
     def _draw_doc_tables(
         self,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         images: Optional[dict[Optional[int], Image]] = None,
         included_content_layers: Optional[set[ContentLayer]] = None,
     ):
@@ -241,7 +241,7 @@ class TableVisualizer(BaseVisualizer):
     def get_visualization(
         self,
         *,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs,
     ) -> dict[Optional[int], Image]:
         """Get visualization of the document as images by page."""

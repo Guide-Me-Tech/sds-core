@@ -126,7 +126,7 @@ class DocInputType(str, Enum):
     STREAM = "stream"
 
 
-class DoclingComponentType(str, Enum):
+class SdsComponentType(str, Enum):
     DOCUMENT_BACKEND = "document_backend"
     MODEL = "model"
     DOC_ASSEMBLER = "doc_assembler"
@@ -134,7 +134,7 @@ class DoclingComponentType(str, Enum):
 
 
 class ErrorItem(BaseModel):
-    component_type: DoclingComponentType
+    component_type: SdsComponentType
     module_name: str
     error_message: str
 

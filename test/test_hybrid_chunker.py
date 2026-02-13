@@ -16,8 +16,8 @@ from sds_core.transforms.chunker.hybrid_chunker import HybridChunker
 from sds_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
 from sds_core.transforms.chunker.tokenizer.openai import OpenAITokenizer
 from sds_core.transforms.serializer.markdown import MarkdownTableSerializer
-from sds_core.types.doc import DoclingDocument as DLDocument
-from sds_core.types.doc.document import DoclingDocument
+from sds_core.types.doc import SdsDocument as DLDocument
+from sds_core.types.doc.document import SdsDocument
 from sds_core.types.doc.labels import DocItemLabel
 
 from .test_data_gen_flag import GEN_TEST_DATA
@@ -273,7 +273,7 @@ def test_chunk_custom_serializer():
     dl_doc = DLDocument.model_validate_json(data_json)
 
     class MySerializerProvider(ChunkingSerializerProvider):
-        def get_serializer(self, doc: DoclingDocument):
+        def get_serializer(self, doc: SdsDocument):
             return ChunkingDocSerializer(
                 doc=doc,
                 table_serializer=MarkdownTableSerializer(),
@@ -362,7 +362,6 @@ def test_chunk_explicit():
 
 
 def test_shadowed_headings_wout_content():
-
     @dataclass
     class Setup:
         exp: str  # expected output file path
@@ -388,7 +387,7 @@ def test_shadowed_headings_wout_content():
     ]
 
     # prepare document with different types of empty "sections" and headings shadowing each other
-    doc = DoclingDocument(name="")
+    doc = SdsDocument(name="")
     doc.add_heading(text="Section 1", level=1)
     doc.add_heading(text="Section 1.1", level=2)
     doc.add_heading(text="Section 1.2", level=2)
@@ -405,9 +404,7 @@ def test_shadowed_headings_wout_content():
         chunker = setup.chunker
         chunk_iter = chunker.chunk(dl_doc=doc)
         chunks = list(chunk_iter)
-        act_data = dict(
-            root=[DocChunk.model_validate(n).export_json_dict() for n in chunks]
-        )
+        act_data = dict(root=[DocChunk.model_validate(n).export_json_dict() for n in chunks])
         _process(
             act_data=act_data,
             exp_path_str=setup.exp,

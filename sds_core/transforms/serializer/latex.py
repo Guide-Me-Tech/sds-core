@@ -32,7 +32,7 @@ from sds_core.types.doc.document import (
     ContentLayer,
     DescriptionAnnotation,
     DocItem,
-    DoclingDocument,
+    SdsDocument,
     FloatingItem,
     Formatting,
     FormItem,
@@ -130,7 +130,7 @@ class LaTeXTextSerializer(BaseModel, BaseTextSerializer):
         *,
         item: TextItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         is_inline_scope: bool = False,
         **kwargs: Any,
     ) -> SerializationResult:
@@ -242,7 +242,7 @@ class LaTeXAnnotationSerializer(BaseModel, BaseAnnotationSerializer):
         self,
         *,
         item: DocItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serialize supported annotations of ``item`` as LaTeX comments."""
@@ -284,7 +284,7 @@ class LaTeXTableSerializer(BaseTableSerializer):
         *,
         item: TableItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serialize a ``TableItem`` into a LaTeX ``tabular`` wrapped in ``table``."""
@@ -351,7 +351,7 @@ class LaTeXPictureSerializer(BasePictureSerializer):
         *,
         item: PictureItem,
         doc_serializer: BaseDocSerializer,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serialize a ``PictureItem`` into a LaTeX ``figure`` with optional caption and notes."""
@@ -391,7 +391,7 @@ class LaTeXPictureSerializer(BasePictureSerializer):
         if params.enable_chart_tables:
             tabular_chart_annotations = [ann for ann in item.annotations if isinstance(ann, PictureTabularChartData)]
             if tabular_chart_annotations:
-                temp_doc = DoclingDocument(name="temp")
+                temp_doc = SdsDocument(name="temp")
                 temp_table = temp_doc.add_table(data=tabular_chart_annotations[0].chart_data)
                 latex_table_content = LaTeXDocSerializer(doc=temp_doc).serialize(item=temp_table).text
                 if latex_table_content:
@@ -411,7 +411,7 @@ class LaTeXPictureSerializer(BasePictureSerializer):
         self,
         *,
         item: PictureItem,
-        doc: DoclingDocument,
+        doc: SdsDocument,
         image_mode: ImageRefMode,
         image_placeholder: str,
     ) -> SerializationResult:
@@ -443,7 +443,7 @@ class LaTeXKeyValueSerializer(BaseKeyValueSerializer):
         *,
         item: KeyValueItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serialize a ``KeyValueItem``; emits a placeholder when not excluded."""
@@ -462,7 +462,7 @@ class LaTeXFormSerializer(BaseFormSerializer):
         *,
         item: FormItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serialize a ``FormItem``; emits a placeholder when not excluded."""
@@ -481,7 +481,7 @@ class LaTeXListSerializer(BaseModel, BaseListSerializer):
         *,
         item: ListGroup,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         is_inline_scope: bool = False,
         **kwargs: Any,
@@ -510,7 +510,7 @@ class LaTeXInlineSerializer(BaseInlineSerializer):
         *,
         item: InlineGroup,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         list_level: int = 0,
         **kwargs: Any,
     ) -> SerializationResult:
@@ -534,7 +534,7 @@ class LaTeXFallbackSerializer(BaseFallbackSerializer):
         *,
         item: NodeItem,
         doc_serializer: "BaseDocSerializer",
-        doc: DoclingDocument,
+        doc: SdsDocument,
         **kwargs: Any,
     ) -> SerializationResult:
         """Serialize generic nodes by concatenating serialized children or a placeholder."""

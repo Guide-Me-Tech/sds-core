@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>2408.09869v3</title>
-    <meta name="generator" content="Docling HTML Serializer" />
+    <meta name="generator" content="Sds HTML Serializer" />
     <style>
         html {
             background-color: #e1e1e1;
@@ -112,7 +112,7 @@
                 <td>
                     <div class='page'>
 
-                        <p>Here is what Docling delivers today:</p>
+                        <p>Here is what Sds delivers today:</p>
                         <ul>
                             <li style="list-style-type: '· ';">Converts PDF documents to JSON or Markdown format, stable
                                 and lightning fast</li>
@@ -127,12 +127,12 @@
                             <li style="list-style-type: '· ';">Can leverage different accelerators (GPU, MPS, etc).</li>
                         </ul>
                         <h2>2 Getting Started</h2>
-                        <span class='inline-group'>To use Docling, you can simply install the sds package from PyPI.
+                        <span class='inline-group'>To use Sds, you can simply install the sds package from PyPI.
                             Documentation and examples are available in our GitHub repository at <a
                                 href="https://github.com/DS4SD/sds">github.com/DS4SD/sds</a> . All required model assets
                             1 are downloaded to a local huggingface datasets cache on first use, unless you choose to
                             pre-install the model assets in advance.</span>
-                        <p>Docling provides an easy code interface to convert PDF documents from file system, URLs or
+                        <p>Sds provides an easy code interface to convert PDF documents from file system, URLs or
                             binary streams, and retrieve the output in either JSON or Markdown format. For convenience,
                             separate methods are offered to convert single documents or batches of documents. A basic
                             usage example is illustrated below. Further examples are available in the Doclign code
@@ -142,10 +142,10 @@
                         <p>Optionally, you can configure custom pipeline features and runtime options, such as turning
                             on or off features (e.g. OCR, table structure recognition), enforcing limits on the input
                             document size, and defining the budget of CPU threads. Advanced usage examples and options
-                            are documented in the README file. Docling also provides a Dockerfile to demonstrate how to
+                            are documented in the README file. Sds also provides a Dockerfile to demonstrate how to
                             install and run it inside a container.</p>
                         <h2>3 Processing pipeline</h2>
-                        <p>Docling implements a linear pipeline of operations, which execute sequentially on each given
+                        <p>Sds implements a linear pipeline of operations, which execute sequentially on each given
                             document (see Fig. 1). Each document is first parsed by a PDF backend, which retrieves the
                             programmatic text tokens, consisting of string content and its coordinates on the page, and
                             also renders a bitmap image of each page to support downstream operations. Then, the
@@ -158,7 +158,7 @@
                         <p>Two basic requirements to process PDF documents in our pipeline are a) to retrieve all text
                             content and their geometric coordinates on each page and b) to render the visual
                             representation of each page as it would appear in a PDF viewer. Both these requirements are
-                            encapsulated in Docling's PDF backend interface. While there are several open-source PDF
+                            encapsulated in Sds's PDF backend interface. While there are several open-source PDF
                             parsing libraries available for python, we faced major obstacles with all of them for
                             different reasons, among which were restrictive</p>
                         <p>1 see huggingface.co/ds4sd/sds-models/</p>

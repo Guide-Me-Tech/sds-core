@@ -14,7 +14,7 @@ from sds_core.transforms.serializer.markdown import (
     MarkdownParams,
 )
 from sds_core.types.doc.base import Size
-from sds_core.types.doc.document import DoclingDocument, DocumentOrigin
+from sds_core.types.doc.document import SdsDocument, DocumentOrigin
 from sds_core.types.doc.labels import DocItemLabel
 
 
@@ -40,7 +40,7 @@ def factorial(n):
     return n * factorial(n-1)
 '''
 
-    doc = DoclingDocument(name="test")
+    doc = SdsDocument(name="test")
     code_item = doc.add_code(text=python_code, code_language=CodeLanguageLabel.PYTHON)
     strategy = StandardCodeChunkingStrategy(min_chunk_size=10, max_tokens=100)
     doc_ser = MarkdownDocSerializer(
@@ -68,7 +68,7 @@ def fibonacci(n):
     return fibonacci(n-1) + fibonacci(n-2)
 '''
 
-    doc = DoclingDocument(name="test")
+    doc = SdsDocument(name="test")
     doc.add_page(page_no=0, size=Size(width=612.0, height=792.0))
     doc.add_text(
         label=DocItemLabel.TEXT,
@@ -107,7 +107,7 @@ def test_hybrid_chunker_with_code_files(test_data_dir):
     if not python_file.exists():
         pytest.skip("Python test file not found")
 
-    doc = DoclingDocument(name="sample.py")
+    doc = SdsDocument(name="sample.py")
     doc.origin = DocumentOrigin(filename="sample.py", mimetype="text/x-python", binary_hash=12345)
 
     with open(python_file, "r", encoding="utf-8") as f:
@@ -132,7 +132,7 @@ def test_unsupported_language_fallback(test_data_dir):
 
     go_file = test_data_dir / "sample.go"
     if go_file.exists():
-        doc = DoclingDocument(name="sample.go")
+        doc = SdsDocument(name="sample.go")
         doc.origin = DocumentOrigin(filename="sample.go", mimetype="text/plain", binary_hash=12345)
 
         with open(go_file, "r", encoding="utf-8") as f:
@@ -151,7 +151,7 @@ def test_unsupported_language_fallback(test_data_dir):
 
     md_file = test_data_dir / "sample.md"
     if md_file.exists():
-        doc = DoclingDocument(name="sample.md")
+        doc = SdsDocument(name="sample.md")
         doc.origin = DocumentOrigin(filename="sample.md", mimetype="text/plain", binary_hash=12345)
 
         with open(md_file, "r", encoding="utf-8") as f:
@@ -178,7 +178,7 @@ def test_repository_processing(test_data_dir):
 
     all_chunks = []
     for file_path in test_data_dir.glob("sample.*"):
-        doc = DoclingDocument(name=file_path.name)
+        doc = SdsDocument(name=file_path.name)
         doc.origin = DocumentOrigin(filename=file_path.name, mimetype="text/plain", binary_hash=12345)
 
         with open(file_path, "r", encoding="utf-8") as f:

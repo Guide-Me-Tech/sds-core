@@ -16,7 +16,7 @@ from sds_core.types.doc import (
     BaseMeta,
     DocItem,
     DocItemLabel,
-    DoclingDocument,
+    SdsDocument,
     GroupLabel,
     MetaFieldName,
     MetaUtils,
@@ -35,7 +35,7 @@ class CustomCoordinates(BaseModel):
 
 def test_metadata_usage() -> None:
     src = Path("test/data/doc/dummy_doc_with_meta.yaml")
-    doc = DoclingDocument.load_from_yaml(filename=src)
+    doc = SdsDocument.load_from_yaml(filename=src)
 
     first_pic = doc.pictures[0]
     assert first_pic.meta
@@ -56,11 +56,11 @@ def test_metadata_usage() -> None:
     if GEN_TEST_DATA:
         doc.save_as_yaml(filename=exp_file)
     else:
-        expected = DoclingDocument.load_from_yaml(filename=exp_file)
+        expected = SdsDocument.load_from_yaml(filename=exp_file)
         assert doc.model_dump(mode="json") == expected.model_dump(mode="json")
 
     # load back the document and read the custom metadata object
-    loaded_doc = DoclingDocument.load_from_yaml(filename=exp_file)
+    loaded_doc = SdsDocument.load_from_yaml(filename=exp_file)
     loaded_item: NodeItem = RefItem(cref="#/texts/2").resolve(doc=loaded_doc)
     assert loaded_item.meta is not None
 
@@ -73,7 +73,7 @@ def test_metadata_usage() -> None:
 
 def test_metadata_relaxed_migration() -> None:
     src = Path("test/data/doc/dummy_doc_with_meta_2.yaml")
-    doc = DoclingDocument.load_from_yaml(filename=src)
+    doc = SdsDocument.load_from_yaml(filename=src)
 
     first_pic = doc.pictures[0]
     assert first_pic.meta
@@ -85,15 +85,15 @@ def test_metadata_relaxed_migration() -> None:
 
 def test_namespace_absence_raises():
     src = Path("test/data/doc/dummy_doc_with_meta.yaml")
-    doc = DoclingDocument.load_from_yaml(filename=src)
+    doc = SdsDocument.load_from_yaml(filename=src)
     example_item = RefItem(cref="#/texts/2").resolve(doc=doc)
 
     with pytest.raises(ValueError):
         example_item.meta.my_corp_programmaticaly_added_field = True
 
 
-def _create_doc_with_group_with_metadata() -> DoclingDocument:
-    doc = DoclingDocument(name="")
+def _create_doc_with_group_with_metadata() -> SdsDocument:
+    doc = SdsDocument(name="")
     doc.body.meta = BaseMeta(summary=SummaryMetaField(text="This document talks about various topics."))
     grp1 = doc.add_group(name="1", label=GroupLabel.CHAPTER)
     grp1.meta = BaseMeta(summary=SummaryMetaField(text="This chapter discusses foo and bar."))
@@ -125,7 +125,7 @@ def test_ser_deser():
     if GEN_TEST_DATA:
         doc.save_as_yaml(filename=exp_file)
     else:
-        expected = DoclingDocument.load_from_yaml(filename=exp_file)
+        expected = SdsDocument.load_from_yaml(filename=exp_file)
         assert doc == expected
 
 
@@ -236,7 +236,7 @@ def test_ser_custom_meta_serializer():
             self,
             *,
             item: NodeItem,
-            doc: DoclingDocument,
+            doc: SdsDocument,
             level: Optional[int] = None,
             **kwargs: Any,
         ) -> SerializationResult:

@@ -7,8 +7,8 @@ from sds_core.transforms.chunker.hierarchical_chunker import (
     DocChunk,
 )
 from sds_core.transforms.serializer.markdown import MarkdownTableSerializer
-from sds_core.types.doc import DoclingDocument as DLDocument
-from sds_core.types.doc.document import DoclingDocument
+from sds_core.types.doc import SdsDocument as DLDocument
+from sds_core.types.doc.document import SdsDocument
 
 from .test_data_gen_flag import GEN_TEST_DATA
 
@@ -45,7 +45,7 @@ def test_chunk_custom_serializer():
     dl_doc = DLDocument.model_validate_json(data_json)
 
     class MySerializerProvider(ChunkingSerializerProvider):
-        def get_serializer(self, doc: DoclingDocument):
+        def get_serializer(self, doc: SdsDocument):
             return ChunkingDocSerializer(
                 doc=doc,
                 table_serializer=MarkdownTableSerializer(),

@@ -8,12 +8,12 @@ from typing import Annotated, Optional
 
 import typer
 
-from sds_core.types.doc import DoclingDocument
+from sds_core.types.doc import SdsDocument
 from sds_core.types.doc.base import ImageRefMode
 from sds_core.utils.file import resolve_source_to_path
 
 app = typer.Typer(
-    name="Docling",
+    name="Sds",
     no_args_is_help=True,
     add_completion=False,
     pretty_exceptions_enable=False,
@@ -24,7 +24,7 @@ def version_callback(value: bool):
     """Callback for version inspection."""
     if value:
         sds_core_version = importlib.metadata.version("sds-core")
-        print(f"Docling Core version: {sds_core_version}")
+        print(f"Sds Core version: {sds_core_version}")
         raise typer.Exit()
 
 
@@ -35,7 +35,7 @@ def view(
         typer.Argument(
             ...,
             metavar="source",
-            help="Docling JSON or YAML file to view.",
+            help="Sds JSON or YAML file to view.",
         ),
     ],
     split_view: Annotated[
@@ -56,12 +56,12 @@ def view(
         ),
     ] = None,
 ):
-    """Display a DoclingDocument file on the default browser."""
+    """Display a SdsDocument file on the default browser."""
     path = resolve_source_to_path(source=source)
     if path.suffix == ".json":
-        doc = DoclingDocument.load_from_json(filename=path)
+        doc = SdsDocument.load_from_json(filename=path)
     elif path.suffix in [".yaml", ".yml"]:
-        doc = DoclingDocument.load_from_yaml(filename=path)
+        doc = SdsDocument.load_from_yaml(filename=path)
     else:
         raise ValueError(f"Unsupported file type: {path.suffix}")
     target_path = Path(tempfile.mkdtemp()) / f"{path.stem}.html"

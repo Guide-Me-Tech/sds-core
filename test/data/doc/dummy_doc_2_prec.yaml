@@ -141,7 +141,7 @@ pictures:
   prov: []
   references: []
   self_ref: '#/pictures/1'
-schema_name: DoclingDocument
+schema_name: SdsDocument
 tables:
 - annotations:
   - kind: description

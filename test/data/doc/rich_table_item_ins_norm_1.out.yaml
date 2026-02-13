@@ -18,7 +18,7 @@ key_value_items: []
 name: ''
 pages: {}
 pictures: []
-schema_name: DoclingDocument
+schema_name: SdsDocument
 tables:
 - annotations: []
   captions: []

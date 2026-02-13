@@ -15,7 +15,7 @@ from transformers import (
     AutoTokenizer,
     PreTrainedTokenizerBase,
 )
-from sds_core.types.doc import DoclingDocument, ImageRef
+from sds_core.types.doc import SdsDocument, ImageRef
 from sds_core.types.doc.base import ImageRefMode
 from sds_core.experimental.doclang import (
     ContentType,
@@ -157,8 +157,8 @@ def run_dump(cfg: dict[str, Any]) -> int:
         Sheet: Results
         - Dataset
         - Row ID
-        - Loaded DoclingDocument
-        - Loaded DoclingDocument Error
+        - Loaded SdsDocument
+        - Loaded SdsDocument Error
         - Serialized Doclang (mode, escape_mode, content) for all combinations
         - Serialized HTML
         - Serialized HTML Error
@@ -170,8 +170,8 @@ def run_dump(cfg: dict[str, Any]) -> int:
         cols = [
             "Dataset",
             "Row ID",
-            "Loaded DoclingDocument",
-            "Loaded DoclingDocument Error",
+            "Loaded SdsDocument",
+            "Loaded SdsDocument Error",
         ]
 
         # Add all combinations of mode, escape_mode, and content
@@ -201,7 +201,7 @@ def run_dump(cfg: dict[str, Any]) -> int:
 
         summary_rows = [
             {"Metric": "Total processed", "Count": len(norm_rows)},
-            {"Metric": "Loaded DoclingDocument", "Count": _count_yes("Loaded DoclingDocument")},
+            {"Metric": "Loaded SdsDocument", "Count": _count_yes("Loaded SdsDocument")},
         ]
 
         # Add summary rows for all combinations
@@ -324,8 +324,8 @@ def run_dump(cfg: dict[str, Any]) -> int:
         row_result: dict[str, str] = {
             "Dataset": dataset_name,
             "Row ID": str(idx),
-            "Loaded DoclingDocument": _yes(False),
-            "Loaded DoclingDocument Error": "",
+            "Loaded SdsDocument": _yes(False),
+            "Loaded SdsDocument Error": "",
             "Serialized HTML": _yes(False),
             "Serialized HTML Error": "",
         }
@@ -341,14 +341,14 @@ def run_dump(cfg: dict[str, Any]) -> int:
                     ] = ""
 
         try:
-            doc = DoclingDocument.model_validate_json(text)
+            doc = SdsDocument.model_validate_json(text)
             page_images = [__ for __ in row["GroundTruthPageImages"]]
             # page_images[0].show()
-            row_result["Loaded DoclingDocument"] = _yes(True)
+            row_result["Loaded SdsDocument"] = _yes(True)
         except Exception as exc:
             errors.append(f"Parse error: {exc} for {dataset_name}/{dataset_subset}/{dataset_split} idx={idx}")
             # Record failure outcome for this row
-            row_result["Loaded DoclingDocument Error"] = str(exc)
+            row_result["Loaded SdsDocument Error"] = str(exc)
 
             for mode in DoclangSerializationMode:
                 for esc_mode in EscapeMode:
@@ -422,7 +422,7 @@ def run_dump(cfg: dict[str, Any]) -> int:
 
     print("Overview summary:")
     print(f" - Total processed: {len(results_rows)}")
-    print(f" - Loaded DoclingDocument: {_count_yes(results_rows, 'Loaded DoclingDocument')}")
+    print(f" - Loaded SdsDocument: {_count_yes(results_rows, 'Loaded SdsDocument')}")
     for mode in [DoclangSerializationMode.HUMAN_FRIENDLY, DoclangSerializationMode.LLM_FRIENDLY]:
         for esc_mode in [True, False]:
             for content in [True, False]:

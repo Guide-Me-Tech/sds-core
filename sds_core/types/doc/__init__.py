@@ -16,7 +16,7 @@ from .document import (
     DescriptionAnnotation,
     DescriptionMetaField,
     DocItem,
-    DoclingDocument,
+    SdsDocument,
     DocTagsDocument,
     DocTagsPage,
     DocumentOrigin,
