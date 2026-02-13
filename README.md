@@ -1,3 +1,5 @@
+# This is a Fork of Docling-Core package of [Docling Project](https://github.com/docling-project/docling-core)
+
 # Sds Core
 
 [![PyPI version](https://img.shields.io/pypi/v/sds-core)](https://pypi.org/project/sds-core/)
