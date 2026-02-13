@@ -10,7 +10,7 @@ from sds_core.utils.validators import (
     validate_raw_schema,
 )
 
-logger = logging.getLogger("docling-core")
+logger = logging.getLogger("sds-core")
 
 
 def parse_arguments():

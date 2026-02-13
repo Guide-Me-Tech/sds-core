@@ -191,7 +191,7 @@ item 2 of neighboring list
 
 </ul>
 </div>
-<span class='inline-group'>Some formatting chops: <strong>bold</strong> <em>italic</em> <u>underline</u> <del>strikethrough</del> <sub>subscript</sub> <sup>superscript</sup> <a href=".">hyperlink</a> &amp; <a href="https://github.com/DS4SD/docling"><del><u><em><strong>everything at the same time.</strong></em></u></del></a></span>
+<span class='inline-group'>Some formatting chops: <strong>bold</strong> <em>italic</em> <u>underline</u> <del>strikethrough</del> <sub>subscript</sub> <sup>superscript</sup> <a href=".">hyperlink</a> &amp; <a href="https://github.com/DS4SD/sds"><del><u><em><strong>everything at the same time.</strong></em></u></del></a></span>
 <ol>
 <li style="list-style-type: '(i) ';">Item 1 in A</li>
 <li style="list-style-type: '(ii) ';">Item 2 in A</li>

@@ -4,7 +4,7 @@ version = "2.64.0"  # DO NOT EDIT, updated automatically
 description = "A python library to define and validate data types in Docling."
 license = "MIT"
 license-files = ["LICENSE"]
-keywords = ["docling", "discovery", "etl", "information retrieval", "analytics", "database", "database schema", "schema", "JSON"]
+keywords = ["sds", "discovery", "etl", "information retrieval", "analytics", "database", "database schema", "schema", "JSON"]
 readme = "README.md"
 authors = [
     { name = "Cesar Berrospi Ramis", email = "ceb@zurich.ibm.com" },
@@ -19,6 +19,7 @@ maintainers = [
     { name = "Christoph Auer", email = "cau@zurich.ibm.com" },
     { name = "Peter Staar", email = "taa@zurich.ibm.com" },
     { name = "Cesar Berrospi Ramis", email = "ceb@zurich.ibm.com" },
+    { name = "Aslon Khamidov", email = "hamidovaslon1@gmail.com" },
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -53,16 +54,16 @@ dependencies = [
 ]
 
 [project.urls]
-homepage = "https://github.com/docling-project"
-repository = "https://github.com/docling-project/docling-core"
-issues = "https://github.com/docling-project/docling-core/issues"
-changelog = "https://github.com/docling-project/docling-core/blob/main/CHANGELOG.md"
+homepage = "https://github.com/sds-project"
+repository = "https://github.com/sds-project/sds-core"
+issues = "https://github.com/sds-project/sds-core/issues"
+changelog = "https://github.com/sds-project/sds-core/blob/main/CHANGELOG.md"
 
 [project.scripts]
 # validate = "sds_core.utils.validate:main"  # use python -m sds_core.utils.validate
 # generate_jsonschema = "sds_core.utils.generate_jsonschema:main"  # use python -m sds_core.utils.generate_jsonschema
 # generate_docs = "sds_core.utils.generate_docs:main"  # use python -m sds_core.utils.generate_docs
-docling-view = "sds_core.cli.view:app"
+sds-view = "sds_core.cli.view:app"
 
 [project.optional-dependencies]
 chunking = [

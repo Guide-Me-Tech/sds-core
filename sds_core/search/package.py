@@ -20,9 +20,9 @@ class Package(BaseModel, extra="forbid"):
     The version needs to comply with Semantic Versioning 2.0.0.
     """
 
-    name: StrictStr = "docling-core"
+    name: StrictStr = "sds-core"
     version: Annotated[str, StringConstraints(strict=True, pattern=VERSION_PATTERN)] = importlib.metadata.version(
-        "docling-core"
+        "sds-core"
     )
 
     def __hash__(self):

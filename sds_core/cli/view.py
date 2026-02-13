@@ -1,4 +1,4 @@
-"""CLI for docling viewer."""
+"""CLI for sds viewer."""
 
 import importlib
 import tempfile
@@ -23,7 +23,7 @@ app = typer.Typer(
 def version_callback(value: bool):
     """Callback for version inspection."""
     if value:
-        sds_core_version = importlib.metadata.version("docling-core")
+        sds_core_version = importlib.metadata.version("sds-core")
         print(f"Docling Core version: {sds_core_version}")
         raise typer.Exit()
 

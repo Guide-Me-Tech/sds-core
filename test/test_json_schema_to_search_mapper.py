@@ -67,7 +67,7 @@ def test_json_schema_to_search_mapper_1():
         "classification": ["Public", "PI"],
         "version": [
             {"name": "my-library", "version": "0.1.0-post.6+ed04c14"},
-            {"name": "docling-core", "version": "0.1.0"},
+            {"name": "sds-core", "version": "0.1.0"},
         ],
         "document_license": {"code": ["NO-CC CODE", "CC BY"], "text": []},
         "license": "https://www.ccc",

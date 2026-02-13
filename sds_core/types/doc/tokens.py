@@ -1,4 +1,4 @@
-"""Tokens used in the docling document model."""
+"""Tokens used in the sds document model."""
 
 from enum import Enum
 

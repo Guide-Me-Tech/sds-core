@@ -34,7 +34,7 @@ jobs:
           --arg url "$RELEASE_URL" \
           --arg desc "$RELEASE_BODY" \
           --arg author_name "$REPO_NAME" \
-          --arg author_icon "https://github.com/docling-project.png" \
+          --arg author_icon "https://github.com/sds-project.png" \
           '{embeds: [{title: $title, url: $url, description: $desc, color: 5814783, author: {name: $author_name, icon_url: $author_icon}}]}')
 
           curl -H "Content-Type: application/json" \

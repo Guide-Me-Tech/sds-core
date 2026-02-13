@@ -13,7 +13,7 @@ from sds_core.transforms.chunker.tokenizer.base import BaseTokenizer
 try:
     from transformers import AutoTokenizer, PreTrainedTokenizerBase
 except ImportError:
-    raise RuntimeError("Module requires 'chunking' extra; to install, run: `pip install 'docling-core[chunking]'`")
+    raise RuntimeError("Module requires 'chunking' extra; to install, run: `pip install 'sds-core[chunking]'`")
 
 
 class HuggingFaceTokenizer(BaseTokenizer):

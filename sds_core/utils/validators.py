@@ -10,7 +10,7 @@ from typing import TypeVar
 import jsonschema
 from pydantic_core import PydanticCustomError
 
-logger = logging.getLogger("docling-core")
+logger = logging.getLogger("sds-core")
 
 T = TypeVar("T", bound=Hashable)
 
@@ -53,9 +53,7 @@ def validate_ocr_schema(file_: dict) -> tuple[bool, str]:
     """Validate an OCR file."""
     logger.debug("validate OCR schema ... ")
 
-    schema_txt = (
-        resources.files("sds_core").joinpath("resources/schemas/legacy_doc/OCR-output.json").read_text("utf-8")
-    )
+    schema_txt = resources.files("sds_core").joinpath("resources/schemas/legacy_doc/OCR-output.json").read_text("utf-8")
     schema = json.loads(schema_txt)
 
     return validate_schema(file_, schema)

@@ -1,6 +1,6 @@
-# Docling Core
+# Sds Core
 
-[![PyPI version](https://img.shields.io/pypi/v/docling-core)](https://pypi.org/project/docling-core/)
+[![PyPI version](https://img.shields.io/pypi/v/sds-core)](https://pypi.org/project/sds-core/)
 ![Python](https://img.shields.io/badge/python-3.10%20%7C%20%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -8,20 +8,20 @@
 [![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 [![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://pydantic.dev)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
-[![License MIT](https://img.shields.io/github/license/docling-project/docling-core)](https://opensource.org/licenses/MIT)
+[![License MIT](https://img.shields.io/github/license/sds-project/sds-core)](https://opensource.org/licenses/MIT)
 
-Docling Core is a library that defines core data types and transformations in [Docling](https://github.com/docling-project/docling).
+Sds Core is a library that defines core data types and transformations in [Sds](https://github.com/sds-project/sds).
 
 ## Installation
 
-To use Docling Core, simply install `docling-core` from your package manager, e.g. pip:
+To use Sds Core, simply install `sds-core` from your package manager, e.g. pip:
 ```bash
-pip install docling-core
+pip install sds-core
 ```
 
 ### Development setup
 
-To develop for Docling Core, you need Python 3.10 through 3.14 and the `uv` package. You can then install it from your local clone's root directory:
+To develop for Sds Core, you need Python 3.10 through 3.14 and the `uv` package. You can then install it from your local clone's root directory:
 ```bash
 uv sync --all-extras
 ```
@@ -33,13 +33,13 @@ uv run pytest -s test
 
 ## Main features
 
-Docling Core provides the foundational DoclingDocument data model and API, as well as
+Sds Core provides the foundational SdsDocument data model and API, as well as
 additional APIs for tasks like serialization and chunking, which are key to developing
-generative AI applications using Docling.
+generative AI applications using Sds.
 
-### DoclingDocument
+### SdsDocument
 
-Docling Core defines the DoclingDocument as a Pydantic model, allowing for advanced
+Sds Core defines the SdsDocument as a Pydantic model, allowing for advanced
 data model control, customizability, and interoperability.
 
 In addition to specifying the schema, it provides a handy API for building documents,
@@ -47,19 +47,19 @@ as well as for basic operations, e.g. exporting to various formats, like Markdow
 and others.
 
 👉 More details:
-- [Architecture docs](https://docling-project.github.io/docling/concepts/architecture/)
-- [DoclingDocument docs](https://docling-project.github.io/docling/concepts/docling_document/)
+- [Architecture docs](https://sds-project.github.io/sds/concepts/architecture/)
+- [SdsDocument docs](https://sds-project.github.io/sds/concepts/sds_document/)
 
 ### Serialization
 
 Different users can have varying requirements when it comes to serialization.
 To address this, the Serialization API introduces a design that allows easy extension,
 while providing feature-rich built-in implementations (on which the respective
-DoclingDocument helpers are actually based).
+SdsDocument helpers are actually based).
 
 👉 More details:
-- [Serialization docs](https://docling-project.github.io/docling/concepts/serialization/)
-- [Serialization example](https://docling-project.github.io/docling/examples/serialization/)
+- [Serialization docs](https://sds-project.github.io/sds/concepts/serialization/)
+- [Serialization example](https://sds-project.github.io/sds/examples/serialization/)
 
 ### Chunking
 
@@ -68,23 +68,23 @@ a design that enables easy extension, this way tackling customization requiremen
 different use cases.
 
 👉 More details:
-- [Chunking docs](https://docling-project.github.io/docling/concepts/chunking/)
-- [Hybrid chunking example](https://docling-project.github.io/docling/examples/hybrid_chunking/)
-- [Advanced chunking and serialization](https://docling-project.github.io/docling/examples/advanced_chunking_and_serialization/)
+- [Chunking docs](https://sds-project.github.io/sds/concepts/chunking/)
+- [Hybrid chunking example](https://sds-project.github.io/sds/examples/hybrid_chunking/)
+- [Advanced chunking and serialization](https://sds-project.github.io/sds/examples/advanced_chunking_and_serialization/)
 
 ## Contributing
 
-Please read [Contributing to Docling Core](./CONTRIBUTING.md) for details.
+Please read [Contributing to Sds Core](./CONTRIBUTING.md) for details.
 
 ## References
 
-If you use Docling Core in your projects, please consider citing the following:
+If you use Sds Core in your projects, please consider citing the following:
 
 ```bib
-@techreport{Docling,
+@techreport{Sds,
   author = "Deep Search Team",
   month = 8,
-  title = "Docling Technical Report",
+  title = "Sds Technical Report",
   url = "https://arxiv.org/abs/2408.09869",
   eprint = "2408.09869",
   doi = "10.48550/arXiv.2408.09869",
@@ -95,5 +95,5 @@ If you use Docling Core in your projects, please consider citing the following:
 
 ## License
 
-The Docling Core codebase is under MIT license.
+The Sds Core codebase is under MIT license.
 For individual model usage, please refer to the model licenses found in the original packages.

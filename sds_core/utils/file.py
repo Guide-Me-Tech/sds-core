@@ -69,7 +69,7 @@ def resolve_source_to_stream(
         req_headers = {k.lower(): v for k, v in _headers.items()}
         # add user-agent is not set
         if "user-agent" not in req_headers:
-            agent_name = f"docling-core/{importlib.metadata.version('docling-core')}"
+            agent_name = f"sds-core/{importlib.metadata.version('sds-core')}"
             req_headers["user-agent"] = agent_name
 
         # Google Docs, Files, PDF URLs, Spreadsheets, Presentations: convert to export URL

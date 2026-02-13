@@ -329,7 +329,7 @@ class TableCell(BaseModel):
     def from_dict_format(cls, data: Any) -> Any:
         """from_dict_format."""
         if isinstance(data, dict):
-            # Check if this is a native BoundingBox or a bbox from docling-ibm-models
+            # Check if this is a native BoundingBox or a bbox from sds-ibm-models
             if (
                 # "bbox" not in data
                 # or data["bbox"] is None
@@ -1334,7 +1334,7 @@ class BasePrediction(_ExtraAllowingModel):
     created_by: Optional[str] = Field(
         default=None,
         description="The origin of the prediction.",
-        examples=["ibm-granite/granite-docling-258M"],
+        examples=["ibm-granite/granite-sds-258M"],
     )
 
     @field_serializer("confidence")
@@ -1886,7 +1886,7 @@ class MetaUtils:
     """Metadata-related utilities."""
 
     _META_FIELD_NAMESPACE_DELIMITER: Final = "__"
-    _META_FIELD_LEGACY_NAMESPACE: Final = "docling_legacy"
+    _META_FIELD_LEGACY_NAMESPACE: Final = "sds_legacy"
 
     @classmethod
     def create_meta_field_name(

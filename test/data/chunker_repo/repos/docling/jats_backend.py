@@ -5,10 +5,10 @@ from pathlib import Path
 from typing import Final, Optional, Union
 
 from bs4 import BeautifulSoup, Tag
-from docling.backend.abstract_backend import DeclarativeDocumentBackend
-from docling.backend.html_backend import HTMLDocumentBackend
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import InputDocument
+from sds.backend.abstract_backend import DeclarativeDocumentBackend
+from sds.backend.html_backend import HTMLDocumentBackend
+from sds.datamodel.base_models import InputFormat
+from sds.datamodel.document import InputDocument
 from lxml import etree
 from typing_extensions import TypedDict, override
 
@@ -179,7 +179,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         )
         for child in list(node):
             if child.tag not in skip_tags:
-                # TODO: apply styling according to child.tag when supported by docling-core
+                # TODO: apply styling according to child.tag when supported by sds-core
                 text += JatsDocumentBackend._get_text(child, sep)
             if sep:
                 text = text.rstrip(sep) + sep
@@ -317,7 +317,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         return
 
     def _add_authors(self, doc: DoclingDocument, xml_components: XMLComponents) -> None:
-        # TODO: once docling supports text formatting, add affiliation reference to
+        # TODO: once sds supports text formatting, add affiliation reference to
         # author names through superscripts
         authors: list = [item["name"] for item in xml_components["authors"]]
         authors_str = ", ".join(authors)
@@ -695,7 +695,7 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
                 self._add_equation(doc, parent, child)
                 stop_walk = True
             elif child.tag == "inline-formula":
-                # TODO: address inline formulas when supported by docling-core
+                # TODO: address inline formulas when supported by sds-core
                 stop_walk = True
 
             # step into child

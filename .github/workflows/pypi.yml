@@ -15,7 +15,7 @@ jobs:
         python-version: ['3.12']
     environment:
       name: pypi
-      url: https://pypi.org/p/docling-core
+      url: https://pypi.org/p/sds-core
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:

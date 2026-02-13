@@ -75,11 +75,11 @@ class Meta(AliasModel, Generic[ClassificationT, DomainT], extra="forbid"):
     @field_validator("version")
     @classmethod
     def version_has_schema(cls, v):
-        """Validate that the docling-core library is always set in version field."""
-        sds_core = [item for item in v if item.name == "docling-core"]
+        """Validate that the sds-core library is always set in version field."""
+        sds_core = [item for item in v if item.name == "sds-core"]
         if not sds_core:
-            raise ValueError("the version should include at least a valid docling-core package")
+            raise ValueError("the version should include at least a valid sds-core package")
         elif len(sds_core) > 1:
-            raise ValueError("the version must not include more than 1 docling-core package")
+            raise ValueError("the version must not include more than 1 sds-core package")
         else:
             return v

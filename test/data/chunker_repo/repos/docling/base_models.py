@@ -27,7 +27,7 @@ from sds_core.types.doc.base import PydanticSerCtxKey, round_pydantic_float
 from sds_core.types.doc.page import SegmentedPdfPage, TextCell
 
 if TYPE_CHECKING:
-    from docling.backend.pdf_backend import PdfPageBackend
+    from sds.backend.pdf_backend import PdfPageBackend
 
 
 class ConversionStatus(str, Enum):
@@ -53,7 +53,7 @@ class InputFormat(str, Enum):
     XLSX = "xlsx"
     XML_USPTO = "xml_uspto"
     XML_JATS = "xml_jats"
-    JSON_DOCLING = "json_docling"
+    JSON_DOCLING = "json_sds"
     AUDIO = "audio"
 
 

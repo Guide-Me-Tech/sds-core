@@ -2,7 +2,7 @@
 
 This serializer exports a DoclingDocument to a JSON structure that mirrors
 the Azure Document Intelligence layout output used in
-`azure_document_intelligence.convert_azure_output_to_docling`.
+`azure_document_intelligence.convert_azure_output_to_sds`.
 
 It traverses the document similarly to the HTML/Markdown serializers but
 accumulates structured JSON for:
@@ -441,7 +441,7 @@ class AzureDocSerializer(DocSerializer):
     """Azure-specific document serializer.
 
     Produces a JSON string compatible with the inverse mapping in
-    `azure_document_intelligence.convert_azure_output_to_docling`.
+    `azure_document_intelligence.convert_azure_output_to_sds`.
     """
 
     text_serializer: BaseTextSerializer = _AzureTextSerializer()

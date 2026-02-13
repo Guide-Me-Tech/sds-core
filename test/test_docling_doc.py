@@ -382,11 +382,11 @@ def test_docitems():
         return yaml.safe_dump(obj.model_dump(mode="json", by_alias=True))
 
     def write(name: str, serialisation: str):
-        with open(f"./test/data/docling_document/unit/{name}.yaml", "w", encoding="utf-8") as fw:
+        with open(f"./test/data/sds_document/unit/{name}.yaml", "w", encoding="utf-8") as fw:
             fw.write(serialisation)
 
     def read(name: str):
-        with open(f"./test/data/docling_document/unit/{name}.yaml", encoding="utf-8") as fr:
+        with open(f"./test/data/sds_document/unit/{name}.yaml", encoding="utf-8") as fr:
             gold = fr.read()
         return yaml.safe_load(gold)
 
@@ -817,7 +817,7 @@ def test_formula_mathml():
 
     doc_html = doc.export_to_html(formula_to_mathml=True, html_head="")
 
-    file = "test/data/docling_document/export/formula_mathml.html"
+    file = "test/data/sds_document/export/formula_mathml.html"
     if GEN_TEST_DATA:
         with open(file, mode="w", encoding="utf8") as f:
             f.write(f"{doc_html}\n")
@@ -1545,6 +1545,7 @@ def test_concatenate():
             exp_html_data = f.read()
         assert html_data == exp_html_data
 
+
 def test_export_markdown_compact_tables():
     """Test compact_tables parameter for markdown export."""
     doc = DoclingDocument(name="Compact Table Test")
@@ -1582,7 +1583,6 @@ def test_export_markdown_compact_tables():
 
     # Verify compact is shorter
     assert len(md_compact) < len(md_padded)
-
 
 
 def test_list_group_with_list_items():

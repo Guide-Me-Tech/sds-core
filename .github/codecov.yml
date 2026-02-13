@@ -9,7 +9,7 @@ coverage:
         target: auto  # auto compares coverage to the previous base commit
         if_ci_failed: success
         flags:
-          - docling
+          - sds
 comment:
   layout: "reach, diff, flags, files"
   behavior: default

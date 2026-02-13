@@ -20,8 +20,8 @@ except ImportError:
     raise RuntimeError(
         "Extra required by module: 'chunking' by default (or 'chunking-openai' if "
         "specifically using OpenAI tokenization); to install, run: "
-        "`pip install 'docling-core[chunking]'` or "
-        "`pip install 'docling-core[chunking-openai]'`"
+        "`pip install 'sds-core[chunking]'` or "
+        "`pip install 'sds-core[chunking-openai]'`"
     )
 
 from sds_core.transforms.chunker import (
@@ -83,7 +83,7 @@ class HybridChunker(BaseChunker):
                 warnings.warn(
                     "Deprecated initialization parameter types for HybridChunker. "
                     "For updated usage check out "
-                    "https://docling-project.github.io/docling/examples/hybrid_chunking/",
+                    "https://sds-project.github.io/sds/examples/hybrid_chunking/",
                     DeprecationWarning,
                 )
 

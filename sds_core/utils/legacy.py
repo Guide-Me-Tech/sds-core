@@ -102,7 +102,7 @@ def doc_item_label_to_legacy_name(label: DocItemLabel):
     return label.value
 
 
-def docling_document_to_legacy(doc: DoclingDocument, fallback_filaname: str = "file"):
+def sds_document_to_legacy(doc: DoclingDocument, fallback_filaname: str = "file"):
     """Convert a DoclingDocument to the legacy format."""
     title = ""
     desc: DsDocumentDescription = DsDocumentDescription(logs=[])
@@ -341,7 +341,7 @@ def docling_document_to_legacy(doc: DoclingDocument, fallback_filaname: str = "f
     return legacy_doc
 
 
-def legacy_to_docling_document(legacy_doc: DsDocument) -> DoclingDocument:  # noqa: C901
+def legacy_to_sds_document(legacy_doc: DsDocument) -> DoclingDocument:  # noqa: C901
     """Convert a legacy document to DoclingDocument.
 
     It is known that the following content will not be preserved in the transformation:

@@ -319,7 +319,7 @@ def _construct_doc_impl() -> DoclingDocument:
             underline=True,
             strikethrough=True,
         ),
-        hyperlink=AnyUrl("https://github.com/DS4SD/docling"),
+        hyperlink=AnyUrl("https://github.com/DS4SD/sds"),
     )
 
     parent_A = doc.add_list_group(name="list A")
@@ -455,10 +455,12 @@ def _rich_table_doc_impl() -> DoclingDocument:
 
     return doc
 
+
 @pytest.fixture(scope="session")
 def _rich_table_doc() -> DoclingDocument:
     """Fixture for a rich table document to be reused across the test session."""
     return _rich_table_doc_impl()
+
 
 @pytest.fixture(scope="function")
 def rich_table_doc(_rich_table_doc: DoclingDocument) -> DoclingDocument:

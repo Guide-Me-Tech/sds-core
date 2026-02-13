@@ -2,7 +2,7 @@ import logging
 from collections.abc import Iterable
 from typing import Any, Union
 
-from docling.datamodel.document import ConversionResult, Page
+from sds.datamodel.document import ConversionResult, Page
 
 from sds_core.types.doc import BoundingBox, CoordOrigin
 from sds_core.types.legacy_doc.base import BaseCell, BaseText, Ref, Table

@@ -89,7 +89,7 @@ pictures:
     description:
       created_by: model2
       text: '...'
-    docling_legacy__misc:
+    sds_legacy__misc:
       myanalysis:
         prediction: abc
       something_else:
@@ -97,8 +97,8 @@ pictures:
     molecule:
       confidence: 1.0
       created_by: model3-1.0.0
-      docling_legacy__class_name: chemistry_molecular_structure
-      docling_legacy__segmentation:
+      sds_legacy__class_name: chemistry_molecular_structure
+      sds_legacy__segmentation:
       - - 0.0
         - 0.0
       - - 1.0
@@ -171,7 +171,7 @@ tables:
     description:
       created_by: model3
       text: A description annotation for this table.
-    docling_legacy__misc:
+    sds_legacy__misc:
       foo: bar
   parent:
     $ref: '#/body'

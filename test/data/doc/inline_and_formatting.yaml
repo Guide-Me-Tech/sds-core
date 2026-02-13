@@ -291,7 +291,7 @@ texts:
     script: baseline
     strikethrough: false
     underline: false
-  hyperlink: https://github.com/docling-project/docling
+  hyperlink: https://github.com/sds-project/sds
   label: text
   orig: repository
   parent:

@@ -984,7 +984,7 @@ texts:
     script: baseline
     strikethrough: true
     underline: true
-  hyperlink: https://github.com/DS4SD/docling
+  hyperlink: https://github.com/DS4SD/sds
   label: text
   orig: everything at the same time.
   parent:

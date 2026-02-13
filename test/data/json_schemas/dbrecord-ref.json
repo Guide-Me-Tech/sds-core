@@ -373,7 +373,7 @@
                "version": "0.1.0-post.6+ed04c14"
             },
             {
-               "name": "docling-core",
+               "name": "sds-core",
                "version": "0.1.0"
             }
          ],
